@@ -98,56 +98,56 @@ body{background:var(--fond);color:#fff;font-family:'Manrope',sans-serif;overflow
 .pp_id{font-size:11px;color:var(--texte-2);display:block;text-align:left}
 .chev{color:var(--texte-2)}
 
-/* ============ Grille accueil : hero, application avec téléphone intégré, athlètes à droite ============ */
-.grille_accueil{flex:1;display:grid;gap:var(--gap);grid-template-columns:23% 1fr;grid-template-rows:minmax(340px,48vh) auto;grid-template-areas:"recent hero" "recent app";min-height:0;}
+/* ============ Grille accueil : hero agrandi ============ */
+.grille_accueil{flex:1;display:grid;gap:var(--gap);grid-template-columns:23% 1fr;grid-template-rows:minmax(400px,58vh) auto;grid-template-areas:"recent hero" "recent app";min-height:0;}
 .zone_recent{grid-area:recent;min-height:0;display:flex;flex-direction:column;gap:16px;}
 .zone_hero{grid-area:hero;}
-.zone_app{grid-area:app;display:grid;grid-template-columns:minmax(0,1fr) clamp(250px,22vw,330px);gap:var(--gap);align-items:stretch;min-height:0;}
+.zone_app{grid-area:app;display:grid;grid-template-columns:minmax(0,1fr) clamp(300px,26vw,400px);gap:var(--gap);align-items:stretch;min-height:0;}
 
-/* ============ Hero vidéo compact : seulement la marque et le slogan ============ */
+/* ============ Hero vidéo agrandi ============ */
 .zone_hero{position:relative;overflow:hidden;border-radius:32px;background:linear-gradient(135deg,#123A1E,#0A0620);}
 .zone_hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(1.2) contrast(1.08) brightness(1.04);opacity:0;transition:opacity .8s ease;}
 .zone_hero video.pret{opacity:1;}
 .hero_teinte{position:absolute;inset:0;background:rgba(20,90,45,.22);mix-blend-mode:soft-light;}
 .hero_lignes{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.03) 0 1px,transparent 1px 4px);}
 .hero_voile{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,6,32,.86) 0%,rgba(10,6,32,.30) 45%,transparent 70%),linear-gradient(to right,rgba(10,6,32,.62),transparent 60%);}
-.hero_pastille{position:absolute;top:18px;left:18px;z-index:3;}
+.hero_pastille{position:absolute;top:20px;left:20px;z-index:3;}
 .pilule_info{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:var(--r-pilule);font-size:13px;font-weight:600;}
 .point_direct{width:8px;height:8px;border-radius:50%;background:var(--fuchsia);animation:pulse 1.6s ease-in-out infinite;}
 @keyframes pulse{50%{transform:scale(1.6);opacity:.5;}}
-.hero_contenu{position:absolute;left:32px;bottom:30px;right:32px;z-index:3;}
+.hero_contenu{position:absolute;left:36px;bottom:34px;right:36px;z-index:3;}
 .titre_geant{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;line-height:.85;letter-spacing:-.01em;font-size:clamp(72px,11vw,200px);}
-.zone_hero .titre_geant{font-size:clamp(46px,4.6vw,88px);}
-.hero_slogan{display:flex;align-items:center;gap:12px;font-weight:700;font-size:clamp(17px,1.5vw,22px);color:rgba(255,255,255,.95);margin-top:14px;}
-.hero_slogan::before{content:"";width:36px;height:3px;border-radius:2px;background:var(--degrade);flex:0 0 auto;}
+.zone_hero .titre_geant{font-size:clamp(54px,5.4vw,104px);}
+.hero_slogan{display:flex;align-items:center;gap:12px;font-weight:700;font-size:clamp(18px,1.7vw,24px);color:rgba(255,255,255,.95);margin-top:16px;}
+.hero_slogan::before{content:"";width:40px;height:3px;border-radius:2px;background:var(--degrade);flex:0 0 auto;}
 @keyframes tap{50%{transform:scale(.99)}}
 .zone_hero.flash{animation:tap .35s ease}
 
-/* ============ Zone application : le téléphone vit dans la carte ============ */
-.app_infos{padding:24px;display:flex;flex-direction:column;gap:16px;min-height:0;}
-.app_corps{flex:1;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center;min-height:0;}
-.app_texte{display:flex;flex-direction:column;gap:12px;min-width:0;}
-.app_texte .titre_zone{margin-top:4px;font-size:32px;}
-.app_texte .desc{color:var(--texte-2);font-size:14px;line-height:1.55;}
-.app_raccourcis{display:flex;flex-direction:column;gap:10px;margin-top:6px;}
-.carte_action{padding:14px 16px;display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;text-align:left;transition:transform .25s,border-color .25s;cursor:pointer;}
-.carte_action:hover{transform:translateX(4px)}
+/* ============ Zone application : texte en haut, téléphone au milieu, raccourcis en bas ============ */
+.app_infos{padding:24px;display:flex;flex-direction:column;gap:20px;min-height:0;}
+.app_texte{display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;flex:0 0 auto;}
+.app_texte .titre_zone{font-size:32px;}
+.app_texte .desc{color:var(--texte-2);font-size:14px;line-height:1.55;max-width:640px;}
+.app_tel{display:flex;align-items:center;justify-content:center;flex:1;min-height:0;}
+.app_tel .telephone{width:min(380px,100%);}
+.app_raccourcis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;flex:0 0 auto;}
+.carte_action{padding:14px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;transition:transform .25s;cursor:pointer;}
+.carte_action:hover{transform:translateY(-3px)}
 .carte_action .rond_ic{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;border:1.5px solid transparent;background:linear-gradient(rgba(23,11,76,.9),rgba(23,11,76,.9)) padding-box,linear-gradient(135deg,var(--violet-electrique),var(--bleu)) border-box;}
 .carte_action .rond_ic .ic{width:19px;height:19px;color:var(--cyan)}
-.carte_action b{display:block;font-size:14.5px}
-.carte_action p{display:block;font-size:12.5px;color:var(--texte-2);margin-top:3px;line-height:1.4}
-.carte_action .ic{width:18px;height:18px;color:var(--texte-2)}
-.app_tel{display:flex;align-items:center;justify-content:center;}
+.carte_action b{display:block;font-size:14px;line-height:1.25}
+.carte_action p{display:block;font-size:12px;color:var(--texte-2);margin-top:4px;line-height:1.4}
 
-/* ============ Aperçu athlètes : la zone libre sous le hero, à droite ============ */
+/* ============ Aperçu athlètes : grandes photos horizontales ============ */
 .zone_ath_mini{padding:18px;display:flex;flex-direction:column;gap:12px;min-height:0;}
 .zone_ath_mini .tete_mini{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
 .zone_ath_mini .titre_zone{font-size:24px;margin-top:4px;}
-.zone_ath_mini .grille_mini{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:10px;min-height:0;}
-.zone_ath_mini .carte_photo{aspect-ratio:auto;border-radius:16px;}
-.zone_ath_mini .carte_photo .texte_bas{left:12px;right:12px;bottom:10px;}
-.zone_ath_mini .carte_photo .texte_bas h4{font-size:13.5px;line-height:1.15;white-space:normal;}
-.zone_ath_mini .carte_photo .texte_bas p{font-size:10.5px;}
+.zone_ath_mini .grille_mini{flex:1;display:grid;grid-template-columns:1fr;grid-auto-rows:1fr;gap:10px;min-height:0;}
+.zone_ath_mini .carte_photo{aspect-ratio:auto;border-radius:16px;min-height:0;}
+.zone_ath_mini .carte_photo img{object-position:center 20%;}
+.zone_ath_mini .carte_photo .texte_bas{left:14px;right:14px;bottom:10px;display:flex;align-items:baseline;gap:8px;}
+.zone_ath_mini .carte_photo .texte_bas h4{font-size:15px;line-height:1.15;white-space:nowrap;}
+.zone_ath_mini .carte_photo .texte_bas p{font-size:11px;margin-top:0;}
 .zone_ath_mini .btn_voir_mini{margin-top:auto;justify-content:center;}
 
 /* ============ Boutons ============ */
@@ -211,7 +211,7 @@ button.tri:hover{color:#fff}
 .dots_carte:hover{background:rgba(255,255,255,.2)}
 .dots_carte .ic{width:16px;height:16px}
 
-/* ============ Page athlètes : catalogue puis profil en grand ============ */
+/* ============ Page athlètes ============ */
 .vue_catalogue{flex:1;display:flex;flex-direction:column;gap:var(--gap);min-height:0;}
 .filtres_sports{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 6px;flex:0 0 auto;}
 .filtres_sports::-webkit-scrollbar{height:0}
@@ -292,54 +292,54 @@ button.tri:hover{color:#fff}
 .services_cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;padding:6px 0 4px;}
 
 /* ============ Téléphone ============ */
-.telephone{width:360px;height:730px;border-radius:54px;padding:12px;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.18);box-shadow:0 40px 90px rgba(15,5,60,.55),inset 0 1px 0 rgba(255,255,255,.2);}
-.ecran{position:relative;width:100%;height:100%;border-radius:42px;overflow:hidden;background:#0A0620;}
-.island{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:108px;height:26px;border-radius:20px;background:#000;z-index:60;pointer-events:none}
+.telephone{aspect-ratio:9/16;border-radius:50px;padding:11px;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.18);box-shadow:0 40px 90px rgba(15,5,60,.55),inset 0 1px 0 rgba(255,255,255,.2);}
+.ecran{position:relative;width:100%;height:100%;border-radius:40px;overflow:hidden;background:#0A0620;}
+.island{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:96px;height:24px;border-radius:18px;background:#000;z-index:60;pointer-events:none}
 .tel_scroll{height:100%;overflow-y:auto;scrollbar-width:none;}
 .tel_scroll::-webkit-scrollbar{width:0}
-.app_entete{display:flex;align-items:center;gap:10px;padding:54px 16px 8px;}
-.logo_app{width:38px;height:38px;border-radius:12px;object-fit:contain;background:rgba(255,255,255,.1)}
-.app_actions{margin-left:auto;display:flex;gap:10px;align-items:center;}
-.btn_rond_sombre{position:relative;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:#fff;}
-.btn_rond_sombre .ic{width:18px;height:18px}
-.btn_rond_sombre .point_notif{top:6px;right:6px;width:9px;height:9px;border-color:#0A0620}
-.avatar_entete{width:40px;height:40px;border-radius:14px;object-fit:cover;cursor:pointer}
-.app_soustitre{font-size:13px;font-weight:600;color:rgba(255,255,255,.7);margin:18px 16px 10px;}
-.rang_avatars{display:flex;gap:12px;overflow-x:auto;padding:2px 16px 4px;scrollbar-width:none;}
+.app_entete{display:flex;align-items:center;gap:10px;padding:48px 14px 6px;}
+.logo_app{width:36px;height:36px;border-radius:11px;object-fit:contain;background:rgba(255,255,255,.1)}
+.app_actions{margin-left:auto;display:flex;gap:9px;align-items:center;}
+.btn_rond_sombre{position:relative;width:37px;height:37px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:#fff;}
+.btn_rond_sombre .ic{width:17px;height:17px}
+.btn_rond_sombre .point_notif{top:5px;right:5px;width:9px;height:9px;border-color:#0A0620}
+.avatar_entete{width:37px;height:37px;border-radius:13px;object-fit:cover;cursor:pointer}
+.app_soustitre{font-size:12.5px;font-weight:600;color:rgba(255,255,255,.7);margin:14px 14px 8px;}
+.rang_avatars{display:flex;gap:10px;overflow-x:auto;padding:2px 14px 4px;scrollbar-width:none;}
 .rang_avatars::-webkit-scrollbar{height:0}
-.avatar_btn{position:relative;padding:0;border-radius:28px;flex:0 0 auto;cursor:pointer}
-.avatar_btn img{width:64px;height:64px;border-radius:24px;object-fit:cover}
-.avatar_btn .statut{position:absolute;right:2px;bottom:2px;width:14px;height:14px;border-radius:50%;background:var(--cyan);border:3px solid #0A0620;}
+.avatar_btn{position:relative;padding:0;border-radius:24px;flex:0 0 auto;cursor:pointer}
+.avatar_btn img{width:56px;height:56px;border-radius:21px;object-fit:cover}
+.avatar_btn .statut{position:absolute;right:2px;bottom:2px;width:13px;height:13px;border-radius:50%;background:var(--cyan);border:3px solid #0A0620;}
 .avatar_btn.fuchsia .statut{background:var(--fuchsia)}
-.avatar_btn.carre{border-radius:28px;padding:2.5px;background:var(--degrade);}
-.avatar_btn.carre img{border:2.5px solid #0A0620;border-radius:22px;width:59px;height:59px}
+.avatar_btn.carre{border-radius:24px;padding:2.5px;background:var(--degrade);}
+.avatar_btn.carre img{border:2.5px solid #0A0620;border-radius:18px;width:51px;height:51px}
 .avatar_btn.actif{outline:2px solid var(--cyan);outline-offset:2px}
 .rail_mobile{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:16px;scrollbar-width:none;}
 .rail_mobile::-webkit-scrollbar{height:0}
-.telephone .rail_mobile{padding:0 16px 130px;}
-.telephone .rail_mobile>*{flex:0 0 76%;max-width:none;aspect-ratio:3/4.3;}
-.suivre_pilule{position:absolute;top:12px;left:12px;right:12px;z-index:3;display:flex;align-items:center;gap:8px;padding:6px 6px 6px 9px;border-radius:var(--r-pilule);}
-.suivre_pilule img{width:26px;height:26px;border-radius:50%;object-fit:cover}
-.nom_chaine{font-size:12px;font-weight:800;line-height:1.15}
-.nb_abo{font-size:10px;color:rgba(255,255,255,.7)}
-.btn_suivre{margin-left:auto;border:1px solid transparent;background:#fff;color:#1A0B5C;font-weight:800;font-size:12px;padding:8px 14px;border-radius:var(--r-pilule);transition:background .25s,color .25s,transform .2s;}
+.telephone .rail_mobile{padding:0 14px 118px;}
+.telephone .rail_mobile>*{flex:0 0 74%;max-width:none;aspect-ratio:3/4.2;}
+.suivre_pilule{position:absolute;top:10px;left:10px;right:10px;z-index:3;display:flex;align-items:center;gap:7px;padding:5px 5px 5px 8px;border-radius:var(--r-pilule);}
+.suivre_pilule img{width:24px;height:24px;border-radius:50%;object-fit:cover}
+.nom_chaine{font-size:11.5px;font-weight:800;line-height:1.15}
+.nb_abo{font-size:9.5px;color:rgba(255,255,255,.7)}
+.btn_suivre{margin-left:auto;border:1px solid transparent;background:#fff;color:#1A0B5C;font-weight:800;font-size:11px;padding:7px 12px;border-radius:var(--r-pilule);transition:background .25s,color .25s,transform .2s;}
 .btn_suivre:active{transform:scale(.94)}
 .btn_suivre.suivi{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.35)}
-.titre_carte_mobile{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:42px;line-height:.9;position:absolute;left:16px;right:16px;bottom:58px;z-index:2;}
-.pastilles{position:absolute;left:16px;right:16px;bottom:16px;z-index:2;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.ph{background:var(--fuchsia);color:#2B0351;font-weight:800;font-size:11px;padding:6px 10px;border-radius:var(--r-pilule);white-space:nowrap}
-.pv{display:inline-flex;align-items:center;gap:5px;background:rgba(20,10,50,.5);border:1px solid rgba(255,255,255,.18);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:6px 10px;border-radius:var(--r-pilule);font-size:11px;font-weight:600;white-space:nowrap}
-.pv .ic{width:12px;height:12px}
+.titre_carte_mobile{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:36px;line-height:.9;position:absolute;left:14px;right:14px;bottom:52px;z-index:2;}
+.pastilles{position:absolute;left:14px;right:14px;bottom:12px;z-index:2;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.ph{background:var(--fuchsia);color:#2B0351;font-weight:800;font-size:10.5px;padding:5px 9px;border-radius:var(--r-pilule);white-space:nowrap}
+.pv{display:inline-flex;align-items:center;gap:5px;background:rgba(20,10,50,.5);border:1px solid rgba(255,255,255,.18);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:5px 9px;border-radius:var(--r-pilule);font-size:10.5px;font-weight:600;white-space:nowrap}
+.pv .ic{width:11px;height:11px}
 .pile{display:flex;align-items:center;flex:0 0 auto}
-.pile img{width:20px;height:20px;border-radius:50%;border:2px solid #0A0620;object-fit:cover;margin-left:-6px}
+.pile img{width:18px;height:18px;border-radius:50%;border:2px solid #0A0620;object-fit:cover;margin-left:-6px}
 .pile img:first-child{margin-left:0}
-.pile span{font-size:11px;font-weight:700;margin-left:6px;color:rgba(255,255,255,.85)}
-.nav_mobile{position:absolute;left:14px;right:14px;bottom:14px;z-index:50;display:grid;grid-template-columns:repeat(5,1fr);align-items:center;padding:8px;border-radius:28px;}
-.nav_mobile .item{height:48px;display:grid;place-items:center;color:rgba(255,255,255,.65);border-radius:20px;transition:color .25s,background .25s;cursor:pointer;}
+.pile span{font-size:10.5px;font-weight:700;margin-left:6px;color:rgba(255,255,255,.85)}
+.nav_mobile{position:absolute;left:12px;right:12px;bottom:12px;z-index:50;display:grid;grid-template-columns:repeat(5,1fr);align-items:center;padding:7px;border-radius:26px;}
+.nav_mobile .item{height:44px;display:grid;place-items:center;color:rgba(255,255,255,.65);border-radius:18px;transition:color .25s,background .25s;cursor:pointer;}
 .nav_mobile .item:hover{color:#fff}
 .nav_mobile .item.actif{color:#fff;background:rgba(75,32,217,.35);box-shadow:0 0 24px rgba(0,200,242,.25);}
-.nav_mobile .centre{width:52px;height:52px;margin:-14px auto 0;border-radius:50%;box-shadow:0 0 28px rgba(212,44,240,.35),0 0 28px rgba(0,200,242,.25);background:var(--degrade);color:#fff;display:grid;place-items:center;}
-.nav_mobile .centre .ic{width:22px;height:22px}
+.nav_mobile .centre{width:48px;height:48px;margin:-12px auto 0;border-radius:50%;box-shadow:0 0 28px rgba(212,44,240,.35),0 0 28px rgba(0,200,242,.25);background:var(--degrade);color:#fff;display:grid;place-items:center;}
+.nav_mobile .centre .ic{width:20px;height:20px}
 
 /* ============ Page story ============ */
 .story_grille{flex:1;display:grid;grid-template-columns:auto 1fr;gap:24px;min-height:0;align-items:stretch;padding-bottom:6px;}
@@ -461,14 +461,18 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
 @media (max-width:1279px){
   .grille_accueil{grid-template-columns:32% 1fr;}
   .zone_app{grid-template-columns:1fr;}
-  .zone_ath_mini .grille_mini{grid-template-rows:none;height:230px;grid-template-columns:repeat(4,1fr);}
+  .app_raccourcis{grid-template-columns:repeat(2,1fr);}
+  .story_grille{grid-template-columns:1fr;}
+  .story_grille .story{height:auto;width:min(430px,94vw);margin:0 auto;}
+  .argument{flex:none}
+  .footer_grille{grid-template-columns:1fr 1fr;}
+  .f_liens{grid-column:1/-1}
 }
 @media (max-width:1023px){
   .entete{grid-template-columns:auto auto 1fr;gap:10px;}
   .recherche{width:170px;}
   .pp_txt{display:none}
   .pilule_profil{padding:5px}
-  .app_corps{grid-template-columns:1fr;}
 }
 @media (max-width:767px){
   .ecran_desktop{padding:0}
@@ -487,16 +491,17 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
   .onglets::-webkit-scrollbar{display:none}
   .onglet{padding:8px 15px;font-size:13.5px;flex:0 0 auto}
   .grille_accueil{display:flex;flex-direction:column;gap:18px;}
-  .zone_hero{order:-1;height:58svh;border-radius:0 0 32px 32px;}
-  .zone_hero .titre_geant{font-size:clamp(52px,15vw,84px);}
-  .hero_contenu{left:20px;right:20px;bottom:24px;}
+  .zone_hero{order:-1;height:64svh;border-radius:0 0 32px 32px;}
+  .zone_hero .titre_geant{font-size:clamp(56px,16vw,92px);}
+  .hero_contenu{left:20px;right:20px;bottom:26px;}
   .zone_app{order:1;margin:0 14px;gap:14px;}
-  .app_infos{padding:18px}
-  .app_tel .telephone{width:min(360px,86vw);height:auto;aspect-ratio:360/730;}
-  .zone_ath_mini .grille_mini{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;height:320px;}
+  .app_infos{padding:18px;gap:16px}
+  .app_tel .telephone{width:min(340px,84vw);}
+  .app_raccourcis{grid-template-columns:1fr;}
+  .zone_ath_mini .grille_mini{grid-template-columns:1fr 1fr;height:320px;}
   .zone_recent{order:2;margin:0 14px;gap:14px}
   .liste_recente{max-height:420px}
-  .une_liste{max-height:300px}
+  .une_liste{max-height:320px}
   .page{padding:0 0 18px}
   .page_tete{padding:20px 16px 0}
   .services_flux{padding:0 14px;gap:24px}
@@ -675,11 +680,31 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
                 <div><p class="ic_titre">Sprint de l ailière</p><p class="ic_sous">Aya Traoré · Olympique Lumière</p></div>
                 <span class="ic_btn" aria-hidden="true"><svg class="ic"><use href="#i-play"/></svg></span>
               </div>
+              <div class="item_compact" data-short="6">
+                <img src="j3.png" alt="Miniature du centre enroulé de Lucas Meyer">
+                <div><p class="ic_titre">Le centre enroulé</p><p class="ic_sous">Lucas Meyer · FC Horizon</p></div>
+                <span class="ic_btn" aria-hidden="true"><svg class="ic"><use href="#i-play"/></svg></span>
+              </div>
+              <div class="item_compact" data-short="7">
+                <img src="j2.png" alt="Miniature de la talonnade de Fatou Ndiaye">
+                <div><p class="ic_titre">La talonnade</p><p class="ic_sous">Fatou Ndiaye · Étoile Atlantique</p></div>
+                <span class="ic_btn" aria-hidden="true"><svg class="ic"><use href="#i-play"/></svg></span>
+              </div>
+              <div class="item_compact" data-short="8">
+                <img src="j1.png" alt="Miniature de la reprise du gauche de Diego Ramos">
+                <div><p class="ic_titre">La reprise du gauche</p><p class="ic_sous">Diego Ramos · Club Aurora</p></div>
+                <span class="ic_btn" aria-hidden="true"><svg class="ic"><use href="#i-play"/></svg></span>
+              </div>
+              <div class="item_compact" data-short="9">
+                <img src="j3.png" alt="Miniature de l arrêt réflexe de Léa Marchand">
+                <div><p class="ic_titre">L'arrêt réflexe</p><p class="ic_sous">Léa Marchand · Racing Azur</p></div>
+                <span class="ic_btn" aria-hidden="true"><svg class="ic"><use href="#i-play"/></svg></span>
+              </div>
             </div>
           </div>
         </aside>
 
-        <!-- Hero vidéo : seulement la marque et le slogan -->
+        <!-- Hero vidéo agrandi -->
         <section class="zone_hero reveal" id="zone_hero" aria-label="Vidéo à la une">
           <video id="video_hero" src="herov.mp4" autoplay muted loop playsinline preload="auto"></video>
           <div class="hero_teinte"></div>
@@ -694,115 +719,111 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
           </div>
         </section>
 
-        <!-- Application avec le téléphone intégré, et aperçu athlètes à droite -->
+        <!-- Application : texte en haut, téléphone au milieu, raccourcis en bas -->
         <section class="zone_app reveal" id="zone_app" aria-label="L application Sportvision et nos athlètes">
 
           <div class="app_infos verre leger">
-            <div class="app_corps">
-              <div class="app_texte">
-                <p class="micro">Application</p>
-                <h2 class="titre_zone">Le stade dans votre poche</h2>
-                <p class="desc">Suivez chaque joueur, chaque but et chaque temps fort depuis votre téléphone. L'écran à côté est une démonstration réelle : touchez les avatars et les cartes pour ouvrir les profils complets sur la page Athlètes.</p>
-                <div class="app_raccourcis">
-                  <button class="carte_action verre leger" data-aller="athletes">
-                    <span class="rond_ic"><svg class="ic"><use href="#i-users"/></svg></span>
-                    <span><b>Profils de joueurs</b><p>Club, poste, numéro et statistiques, en grand sur la page Athlètes.</p></span>
-                    <svg class="ic"><use href="#i-arrr"/></svg>
-                  </button>
-                  <button class="carte_action verre leger" data-ouvrir-short>
-                    <span class="rond_ic"><svg class="ic"><use href="#i-play"/></svg></span>
-                    <span><b>Shorts de 20 secondes</b><p>Un geste technique, un cadre vertical, une barre de progression.</p></span>
-                    <svg class="ic"><use href="#i-arrr"/></svg>
-                  </button>
-                  <button class="carte_action verre leger" data-aller="services">
-                    <span class="rond_ic"><svg class="ic"><use href="#i-star"/></svg></span>
-                    <span><b>Nos services</b><p>Image, contenu et communication pour joueurs, clubs et événements.</p></span>
-                    <svg class="ic"><use href="#i-arrr"/></svg>
-                  </button>
-                  <button class="carte_action verre leger" data-aller="story">
-                    <span class="rond_ic"><svg class="ic"><use href="#i-share"/></svg></span>
-                    <span><b>Notre story</b><p>Le format vertical de la marque et ses cinq engagements.</p></span>
-                    <svg class="ic"><use href="#i-arrr"/></svg>
-                  </button>
-                </div>
-              </div>
-              <div class="app_tel">
-                <div class="telephone" id="tel_accueil">
-                  <div class="ecran">
-                    <div class="island"></div>
-                    <div class="tel_scroll">
-                      <header class="app_entete">
-                        <img class="logo_app" src="logv.jpeg" onerror="this.onerror=null;this.src='logov.jpeg'" alt="Logo Sportvision">
-                        <div class="app_actions">
-                          <button class="btn_rond_sombre" id="cloche_mobile" aria-label="Notifications">
-                            <svg class="ic"><use href="#i-bell"/></svg>
-                            <span class="point_notif" id="notif_mobile"></span>
-                          </button>
-                          <button id="avatar_mobile" aria-label="Voir mon profil"><img class="avatar_entete" src="j3.png" alt="Mon avatar"></button>
-                        </div>
-                      </header>
-                      <p class="app_soustitre">À la une</p>
-                      <div class="rang_avatars" id="rang_avatars"></div>
-                      <p class="app_soustitre">Temps forts</p>
-                      <div class="rail_mobile">
-                        <article class="carte_photo" data-ath="theo" role="button" tabindex="0" aria-label="Voir le profil de Théo Lambert">
-                          <img src="j4.png" alt="But sur le dernier corner">
-                          <div class="suivre_pilule verre leger">
-                            <img src="j4.png" alt="Théo Lambert">
-                            <span><span class="nom_chaine">Théo Lambert</span><br><span class="nb_abo" data-n="512000">512 000 abonnés</span></span>
-                            <button class="btn_suivre" data-nom="Théo Lambert">Suivre</button>
-                          </div>
-                          <h3 class="titre_carte_mobile">BUT SUR<br>DERNIER CORNER</h3>
-                          <div class="pastilles">
-                            <span class="ph">Il y a 2 h</span>
-                            <span class="pv"><svg class="ic"><use href="#i-clock"/></svg>00:34</span>
-                            <span class="pile"><img src="j1.png" alt=""><img src="j3.png" alt=""><img src="j6.png" alt=""><span>+15</span></span>
-                          </div>
-                        </article>
-                        <article class="carte_photo" data-ath="aya" role="button" tabindex="0" aria-label="Voir le profil de Aya Traoré">
-                          <img src="j1.png" alt="Frappe des trente mètres">
-                          <div class="suivre_pilule verre leger">
-                            <img src="j1.png" alt="Aya Traoré">
-                            <span><span class="nom_chaine">Aya Traoré</span><br><span class="nb_abo" data-n="2400000">2 400 000 abonnés</span></span>
-                            <button class="btn_suivre" data-nom="Aya Traoré">Suivre</button>
-                          </div>
-                          <h3 class="titre_carte_mobile">FRAPPE DES<br>TRENTE MÈTRES</h3>
-                          <div class="pastilles">
-                            <span class="ph">Il y a 5 h</span>
-                            <span class="pv"><svg class="ic"><use href="#i-clock"/></svg>00:21</span>
-                            <span class="pile"><img src="j2.png" alt=""><img src="j3.png" alt=""><img src="j5.png" alt=""><span>+22</span></span>
-                          </div>
-                        </article>
-                        <article class="carte_photo" data-ath="lea" role="button" tabindex="0" aria-label="Voir le profil de Léa Marchand">
-                          <img src="j3.png" alt="Arrêt de la saison">
-                          <div class="suivre_pilule verre leger">
-                            <img src="j3.png" alt="Léa Marchand">
-                            <span><span class="nom_chaine">Léa Marchand</span><br><span class="nb_abo" data-n="640000">640 000 abonnés</span></span>
-                            <button class="btn_suivre" data-nom="Léa Marchand">Suivre</button>
-                          </div>
-                          <h3 class="titre_carte_mobile">ARRÊT DE<br>LA SAISON</h3>
-                          <div class="pastilles">
-                            <span class="ph">Il y a 1 j</span>
-                            <span class="pv"><svg class="ic"><use href="#i-clock"/></svg>00:47</span>
-                            <span class="pile"><img src="j1.png" alt=""><img src="j4.png" alt=""><img src="j6.png" alt=""><span>+15</span></span>
-                          </div>
-                        </article>
+            <div class="app_texte">
+              <p class="micro">Application</p>
+              <h2 class="titre_zone">Le stade dans votre poche</h2>
+              <p class="desc">Suivez chaque joueur, chaque but et chaque temps fort depuis votre téléphone. L'écran ci dessous est une démonstration réelle : touchez les avatars et les cartes pour ouvrir les profils complets sur la page Athlètes.</p>
+            </div>
+
+            <div class="app_tel">
+              <div class="telephone" id="tel_accueil">
+                <div class="ecran">
+                  <div class="island"></div>
+                  <div class="tel_scroll">
+                    <header class="app_entete">
+                      <img class="logo_app" src="logv.jpeg" onerror="this.onerror=null;this.src='logov.jpeg'" alt="Logo Sportvision">
+                      <div class="app_actions">
+                        <button class="btn_rond_sombre" id="cloche_mobile" aria-label="Notifications">
+                          <svg class="ic"><use href="#i-bell"/></svg>
+                          <span class="point_notif" id="notif_mobile"></span>
+                        </button>
+                        <button id="avatar_mobile" aria-label="Voir mon profil"><img class="avatar_entete" src="j3.png" alt="Mon avatar"></button>
                       </div>
+                    </header>
+                    <p class="app_soustitre">À la une</p>
+                    <div class="rang_avatars" id="rang_avatars"></div>
+                    <p class="app_soustitre">Temps forts</p>
+                    <div class="rail_mobile">
+                      <article class="carte_photo" data-ath="theo" role="button" tabindex="0" aria-label="Voir le profil de Théo Lambert">
+                        <img src="j4.png" alt="But sur le dernier corner">
+                        <div class="suivre_pilule verre leger">
+                          <img src="j4.png" alt="Théo Lambert">
+                          <span><span class="nom_chaine">Théo Lambert</span><br><span class="nb_abo" data-n="512000">512 000 abonnés</span></span>
+                          <button class="btn_suivre" data-nom="Théo Lambert">Suivre</button>
+                        </div>
+                        <h3 class="titre_carte_mobile">BUT SUR<br>DERNIER CORNER</h3>
+                        <div class="pastilles">
+                          <span class="ph">Il y a 2 h</span>
+                          <span class="pv"><svg class="ic"><use href="#i-clock"/></svg>00:34</span>
+                          <span class="pile"><img src="j1.png" alt=""><img src="j3.png" alt=""><img src="j6.png" alt=""><span>+15</span></span>
+                        </div>
+                      </article>
+                      <article class="carte_photo" data-ath="aya" role="button" tabindex="0" aria-label="Voir le profil de Aya Traoré">
+                        <img src="j1.png" alt="Frappe des trente mètres">
+                        <div class="suivre_pilule verre leger">
+                          <img src="j1.png" alt="Aya Traoré">
+                          <span><span class="nom_chaine">Aya Traoré</span><br><span class="nb_abo" data-n="2400000">2 400 000 abonnés</span></span>
+                          <button class="btn_suivre" data-nom="Aya Traoré">Suivre</button>
+                        </div>
+                        <h3 class="titre_carte_mobile">FRAPPE DES<br>TRENTE MÈTRES</h3>
+                        <div class="pastilles">
+                          <span class="ph">Il y a 5 h</span>
+                          <span class="pv"><svg class="ic"><use href="#i-clock"/></svg>00:21</span>
+                          <span class="pile"><img src="j2.png" alt=""><img src="j3.png" alt=""><img src="j5.png" alt=""><span>+22</span></span>
+                        </div>
+                      </article>
+                      <article class="carte_photo" data-ath="lea" role="button" tabindex="0" aria-label="Voir le profil de Léa Marchand">
+                        <img src="j3.png" alt="Arrêt de la saison">
+                        <div class="suivre_pilule verre leger">
+                          <img src="j3.png" alt="Léa Marchand">
+                          <span><span class="nom_chaine">Léa Marchand</span><br><span class="nb_abo" data-n="640000">640 000 abonnés</span></span>
+                          <button class="btn_suivre" data-nom="Léa Marchand">Suivre</button>
+                        </div>
+                        <h3 class="titre_carte_mobile">ARRÊT DE<br>LA SAISON</h3>
+                        <div class="pastilles">
+                          <span class="ph">Il y a 1 j</span>
+                          <span class="pv"><svg class="ic"><use href="#i-clock"/></svg>00:47</span>
+                          <span class="pile"><img src="j1.png" alt=""><img src="j4.png" alt=""><img src="j6.png" alt=""><span>+15</span></span>
+                        </div>
+                      </article>
                     </div>
-                    <nav class="nav_mobile verre fort" aria-label="Navigation de l application">
-                      <button class="item actif" data-nav="accueil" aria-label="Accueil"><svg class="ic" style="width:21px;height:21px"><use href="#i-home"/></svg></button>
-                      <button class="item" data-nav="favoris" aria-label="Favoris"><svg class="ic" style="width:21px;height:21px"><use href="#i-heart"/></svg></button>
-                      <button class="item centre" data-nav="lecture" aria-label="Lecture"><svg class="ic"><use href="#i-play"/></svg></button>
-                      <button class="item" data-nav="dl" aria-label="Téléchargements"><svg class="ic" style="width:21px;height:21px"><use href="#i-dl"/></svg></button>
-                      <button class="item" data-nav="profil" aria-label="Profil"><svg class="ic" style="width:21px;height:21px"><use href="#i-user"/></svg></button>
-                    </nav>
                   </div>
+                  <nav class="nav_mobile verre fort" aria-label="Navigation de l application">
+                    <button class="item actif" data-nav="accueil" aria-label="Accueil"><svg class="ic" style="width:19px;height:19px"><use href="#i-home"/></svg></button>
+                    <button class="item" data-nav="favoris" aria-label="Favoris"><svg class="ic" style="width:19px;height:19px"><use href="#i-heart"/></svg></button>
+                    <button class="item centre" data-nav="lecture" aria-label="Lecture"><svg class="ic"><use href="#i-play"/></svg></button>
+                    <button class="item" data-nav="dl" aria-label="Téléchargements"><svg class="ic" style="width:19px;height:19px"><use href="#i-dl"/></svg></button>
+                    <button class="item" data-nav="profil" aria-label="Profil"><svg class="ic" style="width:19px;height:19px"><use href="#i-user"/></svg></button>
+                  </nav>
                 </div>
               </div>
             </div>
+
+            <div class="app_raccourcis">
+              <button class="carte_action verre leger" data-aller="athletes">
+                <span class="rond_ic"><svg class="ic"><use href="#i-users"/></svg></span>
+                <span><b>Profils de joueurs</b><p>Club, poste, numéro et statistiques, en grand sur la page Athlètes.</p></span>
+              </button>
+              <button class="carte_action verre leger" data-ouvrir-short>
+                <span class="rond_ic"><svg class="ic"><use href="#i-play"/></svg></span>
+                <span><b>Shorts de 20 secondes</b><p>Un geste technique, un cadre vertical, une barre de progression.</p></span>
+              </button>
+              <button class="carte_action verre leger" data-aller="services">
+                <span class="rond_ic"><svg class="ic"><use href="#i-star"/></svg></span>
+                <span><b>Nos services</b><p>Image, contenu et communication pour joueurs, clubs et événements.</p></span>
+              </button>
+              <button class="carte_action verre leger" data-aller="story">
+                <span class="rond_ic"><svg class="ic"><use href="#i-share"/></svg></span>
+                <span><b>Notre story</b><p>Le format vertical de la marque et ses cinq engagements.</p></span>
+              </button>
+            </div>
           </div>
 
-          <!-- Aperçu athlètes : la zone libre sous le hero, à droite -->
+          <!-- Nos athlètes : quatre grandes photos horizontales qui remplissent tout l espace -->
           <aside class="zone_ath_mini verre leger" aria-label="Nos athlètes, aperçu">
             <div class="tete_mini">
               <div>
@@ -813,19 +834,19 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
             </div>
             <div class="grille_mini">
               <article class="carte_photo" data-ath="aya" role="button" tabindex="0" aria-label="Voir le profil de Aya Traoré">
-                <img src="j1.png" alt="Aya Traoré">
+                <img src="j1.png" alt="Aya Traoré, Olympique Lumière">
                 <div class="texte_bas"><h4>Aya Traoré</h4><p>Olympique Lumière</p></div>
               </article>
               <article class="carte_photo" data-ath="theo" role="button" tabindex="0" aria-label="Voir le profil de Théo Lambert">
-                <img src="j4.png" alt="Théo Lambert">
+                <img src="j4.png" alt="Théo Lambert, FC Horizon">
                 <div class="texte_bas"><h4>Théo Lambert</h4><p>FC Horizon</p></div>
               </article>
               <article class="carte_photo" data-ath="lea" role="button" tabindex="0" aria-label="Voir le profil de Léa Marchand">
-                <img src="j3.png" alt="Léa Marchand">
+                <img src="j3.png" alt="Léa Marchand, Racing Azur">
                 <div class="texte_bas"><h4>Léa Marchand</h4><p>Racing Azur</p></div>
               </article>
               <article class="carte_photo" data-ath="marc" role="button" tabindex="0" aria-label="Voir le profil de Marc Delaunay">
-                <img src="j6.png" alt="Marc Delaunay">
+                <img src="j6.png" alt="Marc Delaunay, Olympique Boréal">
                 <div class="texte_bas"><h4>Marc Delaunay</h4><p>Olympique Boréal</p></div>
               </article>
             </div>
@@ -1455,15 +1476,19 @@ videoH.addEventListener('canplay',()=>videoH.classList.add('pret'),{once:true});
 videoH.addEventListener('loadeddata',()=>videoH.classList.add('pret'),{once:true});
 window.addEventListener('load',()=>videoH.play().catch(()=>{}));
 
-/* ===== Lecteur de shorts : 20 secondes ===== */
+/* ===== Lecteur de shorts : 10 courts de 20 secondes ===== */
 const DUREE_SHORT=20;
 const SHORTS=[
   {titre:'La roulette',joueur:'Théo Lambert',club:'FC Horizon',start:0},
-  {titre:'Le retourné',joueur:'Sofia Reyes',club:'Club Aurora',start:3},
-  {titre:'Petit pont foudroyant',joueur:'Karim Bensaïd',club:'Étoile Atlantique',start:6},
-  {titre:'Demi volée surpuissante',joueur:'Marc Delaunay',club:'Olympique Boréal',start:9},
-  {titre:'Amortie de la poitrine',joueur:'Nour Haddad',club:'Sporting Étoile',start:12},
-  {titre:"Sprint de l ailière",joueur:'Aya Traoré',club:'Olympique Lumière',start:15},
+  {titre:'Le retourné',joueur:'Sofia Reyes',club:'Club Aurora',start:2},
+  {titre:'Petit pont foudroyant',joueur:'Karim Bensaïd',club:'Étoile Atlantique',start:4},
+  {titre:'Demi volée surpuissante',joueur:'Marc Delaunay',club:'Olympique Boréal',start:6},
+  {titre:'Amortie de la poitrine',joueur:'Nour Haddad',club:'Sporting Étoile',start:8},
+  {titre:"Sprint de l ailière",joueur:'Aya Traoré',club:'Olympique Lumière',start:10},
+  {titre:'Le centre enroulé',joueur:'Lucas Meyer',club:'FC Horizon',start:12},
+  {titre:'La talonnade',joueur:'Fatou Ndiaye',club:'Étoile Atlantique',start:14},
+  {titre:'La reprise du gauche',joueur:'Diego Ramos',club:'Club Aurora',start:16},
+  {titre:"L arrêt réflexe",joueur:'Léa Marchand',club:'Racing Azur',start:18},
 ];
 const voileS=$('#voile_short'),vS=$('#video_short');
 let shortIdx=0,t0=0,rafShort=null,shortActif=false;
