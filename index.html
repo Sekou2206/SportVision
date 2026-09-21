@@ -26,6 +26,7 @@
 
 /* ============ Base ============ */
 *{margin:0;box-sizing:border-box}
+[hidden]{display:none!important}
 button{font:inherit;background:none;border:0;cursor:pointer;color:inherit}
 img{display:block}
 input,textarea{font:inherit}
@@ -33,7 +34,7 @@ body{background:var(--fond);color:#fff;font-family:'Manrope',sans-serif;overflow
 .ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
 .cachee{display:none!important}
 
-/* ============ Fond de page : taches floues, grain, grille ============ */
+/* ============ Fond de page ============ */
 .fond{position:fixed;inset:0;z-index:-1;overflow:hidden}
 .tache{position:absolute;width:55vw;height:55vw;border-radius:50%;filter:blur(120px);opacity:.42;will-change:transform;animation:derive 36s ease-in-out infinite alternate}
 .tache.a{background:var(--violet-electrique);top:-15vw;left:-10vw}
@@ -43,7 +44,7 @@ body{background:var(--fond);color:#fff;font-family:'Manrope',sans-serif;overflow
 .grain{position:fixed;inset:0;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
 .grille_fine{position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%)}
 
-/* ============ Verre : le style central ============ */
+/* ============ Verre ============ */
 .verre{
   position:relative;border-radius:var(--r-carte);
   background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.03));
@@ -63,14 +64,13 @@ body{background:var(--fond);color:#fff;font-family:'Manrope',sans-serif;overflow
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.verre{background:rgba(20,10,60,.85);}}
 
 /* ============ Cadre et pages du router ============ */
-.cadre{position:relative;max-width:1680px;margin:0 auto;padding:24px;border-radius:var(--r-cadre);min-height:max(760px,calc(100svh - 96px));display:flex;flex-direction:column;gap:var(--gap);}
+.cadre{position:relative;max-width:1680px;margin:0 auto;padding:24px;border-radius:var(--r-cadre);min-height:max(680px,calc(100svh - 110px));display:flex;flex-direction:column;gap:var(--gap);}
 .page{flex:1;display:flex;flex-direction:column;gap:var(--gap);min-height:0;}
 .page:not([hidden]){animation:pageIn .5s cubic-bezier(.2,.8,.2,1);}
 @keyframes pageIn{from{opacity:0;transform:translateY(18px)}}
-.page_tete{text-align:center;padding:8px 12px 0;}
+.page_tete{text-align:center;padding:8px 12px 0;flex:0 0 auto;}
 .titre_section{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(44px,7vw,84px);line-height:.9;margin:10px 0 12px;}
-.page_story .titre_section{font-size:clamp(38px,4.6vw,64px);}
-.sous_section{color:var(--texte-2);font-size:15px;line-height:1.6;max-width:680px;margin:0 auto;}
+.sous_section{color:var(--texte-2);font-size:15px;line-height:1.6;max-width:720px;margin:0 auto;}
 .mot_degrade{background:var(--degrade);-webkit-background-clip:text;background-clip:text;color:transparent;}
 .micro{font-family:'Chakra Petch',sans-serif;text-transform:uppercase;letter-spacing:.12em;font-size:11px;color:var(--texte-2);}
 
@@ -93,48 +93,67 @@ body{background:var(--fond);color:#fff;font-family:'Manrope',sans-serif;overflow
 .pilule_profil{display:flex;align-items:center;gap:10px;padding:6px 12px 6px 7px;border-radius:var(--r-pilule);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);transition:background .25s;}
 .pilule_profil:hover{background:rgba(255,255,255,.14)}
 .pilule_profil img{width:32px;height:32px;border-radius:50%;object-fit:cover}
+.pp_txt{display:block;min-width:0}
 .pp_nom{font-size:13px;font-weight:700;line-height:1.15;display:block;text-align:left}
 .pp_id{font-size:11px;color:var(--texte-2);display:block;text-align:left}
+.chev{color:var(--texte-2)}
 
-/* ============ Grille accueil ============ */
-.grille_accueil{flex:1;display:grid;gap:var(--gap);grid-template-columns:23% 1fr;grid-template-rows:62% 38%;grid-template-areas:"recent hero" "recent athletes";min-height:0;}
+/* ============ Grille accueil : hero, application avec téléphone, teaser ============ */
+.grille_accueil{flex:1;display:grid;gap:var(--gap);grid-template-columns:23% 1fr;grid-template-rows:minmax(360px,52vh) auto auto;grid-template-areas:"recent hero" "recent app" "teaser teaser";min-height:0;}
 .zone_recent{grid-area:recent;min-height:0;display:flex;flex-direction:column;gap:16px;}
 .zone_hero{grid-area:hero;}
-.zone_athletes{grid-area:athletes;min-height:0;}
+.zone_app{grid-area:app;display:grid;grid-template-columns:1fr auto;gap:var(--gap);align-items:stretch;}
+.zone_teaser{grid-area:teaser;}
 
-/* ============ Hero vidéo, pur et immersif ============ */
+/* ============ Hero vidéo compact ============ */
 .zone_hero{position:relative;overflow:hidden;border-radius:32px;background:linear-gradient(135deg,#123A1E,#0A0620);}
 .zone_hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(1.2) contrast(1.08) brightness(1.04);opacity:0;transition:opacity .8s ease;}
 .zone_hero video.pret{opacity:1;}
 .hero_teinte{position:absolute;inset:0;background:rgba(20,90,45,.22);mix-blend-mode:soft-light;}
 .hero_lignes{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.03) 0 1px,transparent 1px 4px);}
 .hero_voile{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,6,32,.86) 0%,rgba(10,6,32,.30) 45%,transparent 70%),linear-gradient(to right,rgba(10,6,32,.62),transparent 60%);}
-.hero_pastille{position:absolute;top:20px;left:20px;z-index:3;}
+.hero_pastille{position:absolute;top:18px;left:18px;z-index:3;}
 .pilule_info{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:var(--r-pilule);font-size:13px;font-weight:600;}
 .point_direct{width:8px;height:8px;border-radius:50%;background:var(--fuchsia);animation:pulse 1.6s ease-in-out infinite;}
 @keyframes pulse{50%{transform:scale(1.6);opacity:.5;}}
-.hero_contenu{position:absolute;left:40px;bottom:36px;right:40px;z-index:3;max-width:900px;}
+.hero_contenu{position:absolute;left:32px;bottom:26px;right:32px;z-index:3;max-width:860px;}
 .titre_geant{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;line-height:.85;letter-spacing:-.01em;font-size:clamp(72px,11vw,200px);}
-.zone_hero .titre_geant{font-size:clamp(56px,6vw,120px);}
-.hero_pilules{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.zone_hero .titre_geant{font-size:clamp(46px,4.6vw,88px);}
+.hero_pilules{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
 .chip{padding:8px 14px;border-radius:var(--r-pilule);background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.12);font-size:13px;color:rgba(255,255,255,.85);white-space:nowrap;transition:background .25s,color .25s,border-color .25s;}
 button.chip:hover{background:rgba(255,255,255,.18);color:#fff}
-.hero_slogan{display:flex;align-items:center;gap:12px;font-weight:700;font-size:clamp(18px,1.7vw,24px);color:rgba(255,255,255,.95);margin-top:14px;}
+.hero_slogan{display:flex;align-items:center;gap:12px;font-weight:700;font-size:clamp(17px,1.5vw,22px);color:rgba(255,255,255,.95);margin-top:12px;}
 .hero_slogan::before{content:"";width:36px;height:3px;border-radius:2px;background:var(--degrade);flex:0 0 auto;}
-.hero_desc{max-width:560px;color:rgba(255,255,255,.75);font-size:14px;line-height:1.55;margin-top:10px;}
+.hero_desc{max-width:560px;color:rgba(255,255,255,.75);font-size:13.5px;line-height:1.5;margin-top:8px;}
 @keyframes tap{50%{transform:scale(.99)}}
 .zone_hero.flash{animation:tap .35s ease}
+
+/* ============ Zone application : infos, raccourcis et téléphone ============ */
+.app_infos{padding:24px;display:flex;flex-direction:column;gap:12px;}
+.app_infos .titre_zone{margin-top:4px;font-size:32px;}
+.app_infos .desc{color:var(--texte-2);font-size:14px;line-height:1.55;}
+.app_raccourcis{display:flex;flex-direction:column;gap:10px;margin-top:8px;flex:1;justify-content:flex-end;}
+.carte_action{padding:14px 16px;display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;text-align:left;transition:transform .25s,border-color .25s;cursor:pointer;}
+.carte_action:hover{transform:translateX(4px)}
+.carte_action .rond_ic{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;border:1.5px solid transparent;background:linear-gradient(rgba(23,11,76,.9),rgba(23,11,76,.9)) padding-box,linear-gradient(135deg,var(--violet-electrique),var(--bleu)) border-box;}
+.carte_action .rond_ic .ic{width:19px;height:19px;color:var(--cyan)}
+.carte_action b{display:block;font-size:14.5px}
+.carte_action p{display:block;font-size:12.5px;color:var(--texte-2);margin-top:3px;line-height:1.4}
+.carte_action .ic{width:18px;height:18px;color:var(--texte-2)}
+.app_tel{display:flex;align-items:flex-start;justify-content:center;}
+.app_tel .telephone{width:360px;height:730px;}
 
 /* ============ Boutons ============ */
 .btn_primaire{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;border-radius:var(--r-pilule);background:#fff;color:#1A0B5C;font-weight:600;box-shadow:0 10px 30px rgba(255,255,255,.15);transition:transform .2s,background .25s;}
 .btn_primaire:hover{transform:translateY(-2px)}
 .btn_primaire.petit{padding:10px 18px;font-size:13px}
+.btn_primaire .ic{width:16px;height:16px}
 .btn_verre{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;border-radius:var(--r-pilule);border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.08);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);color:#fff;font-weight:600;transition:background .25s;}
 .btn_verre:hover{background:rgba(255,255,255,.16)}
 .btn_verre.petit{padding:10px 18px;font-size:13px}
-.btn_primaire .ic,.btn_verre .ic{width:16px;height:16px}
+.btn_verre .ic{width:15px;height:15px}
 
-/* ============ Colonne gauche : retour sur match et shorts ============ */
+/* ============ Colonne gauche ============ */
 .carte_col{padding:14px;display:flex;flex-direction:column;min-height:0;}
 .carte_col.un{flex:1.35}
 .carte_col.deux{flex:1}
@@ -155,7 +174,6 @@ button.tri:hover{color:#fff}
 .carte_recente .texte_bas{position:absolute;left:14px;right:14px;bottom:12px;z-index:2;}
 .carte_recente h4{font-size:16px;font-weight:800;}
 .carte_recente p{font-size:12px;color:rgba(255,255,255,.72);margin-top:2px;}
-/* Shorts */
 .une_liste{display:flex;flex-direction:column;overflow-y:auto;scrollbar-width:none;min-height:0;mask-image:linear-gradient(to bottom,#000 90%,transparent);}
 .une_liste::-webkit-scrollbar{width:0}
 .item_compact{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;padding:10px 4px;border-radius:14px;border-top:1px solid rgba(255,255,255,.08);cursor:pointer;transition:background .2s;}
@@ -168,15 +186,20 @@ button.tri:hover{color:#fff}
 .item_compact:hover .ic_btn{background:var(--cyan);color:#082433;transform:scale(1.08)}
 .ic_btn .ic{width:13px;height:13px}
 
-/* ============ Rangée athlètes de l accueil ============ */
-.zone_athletes{display:flex;flex-direction:column;gap:12px;}
-.rang_tete{display:flex;align-items:center;gap:12px;}
+/* ============ Teaser athlètes ============ */
+.teaser_ath{width:100%;height:100%;padding:22px 26px;display:flex;align-items:center;gap:20px;text-align:left;transition:border-color .25s,transform .25s;}
+.teaser_ath:hover{transform:translateY(-2px)}
+.teaser_gauche{min-width:0;flex:1}
+.teaser_gauche .titre_zone{margin-top:6px;font-size:30px;}
+.teaser_txt{color:var(--texte-2);font-size:14px;line-height:1.55;margin-top:8px;max-width:560px;display:block;}
+.teaser_droite{display:flex;flex-direction:column;align-items:flex-end;gap:14px;flex:0 0 auto;}
+.pile_teaser{display:flex;align-items:center;}
+.pile_teaser img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.25);margin-left:-12px;transition:transform .25s;}
+.pile_teaser img:first-child{margin-left:0}
+.teaser_ath:hover .pile_teaser img{transform:translateY(-3px)}
 .titre_zone{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:26px;text-transform:uppercase;letter-spacing:.02em;line-height:1;}
-.rangee_athletes{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;flex:1;min-height:0;padding-bottom:4px;}
-.rangee_athletes::-webkit-scrollbar{height:0}
-.rangee_athletes>*{height:100%;aspect-ratio:3/4;flex:0 0 auto;scroll-snap-align:start;}
 
-/* ============ Cartes photo ============ */
+/* ============ Cartes photo des joueurs ============ */
 .carte_photo{position:relative;overflow:hidden;border-radius:var(--r-carte);aspect-ratio:3/4;box-shadow:0 20px 50px rgba(20,6,80,.4);background:#1B0B55;cursor:pointer;}
 .carte_photo img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1);}
 .carte_photo:hover img{transform:scale(1.05);}
@@ -193,47 +216,92 @@ button.tri:hover{color:#fff}
 .dots_carte:hover{background:rgba(255,255,255,.2)}
 .dots_carte .ic{width:16px;height:16px}
 
-/* ============ Page athlètes : catalogue ============ */
+/* ============ Page athlètes : catalogue puis profil en grand ============ */
+.vue_catalogue{flex:1;display:flex;flex-direction:column;gap:var(--gap);min-height:0;}
 .filtres_sports{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 6px;flex:0 0 auto;}
 .filtres_sports::-webkit-scrollbar{height:0}
 .filtre_sport.actif{background:#fff;color:#1A0B5C;border-color:#fff;}
 .grille_athletes{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;padding:2px;align-content:start;overflow-y:auto;scrollbar-width:none;min-height:0;flex:1;}
 .grille_athletes::-webkit-scrollbar{width:0}
+.vue_profil{flex:1;display:flex;flex-direction:column;gap:12px;min-height:0;}
+.profil_barre{display:flex;align-items:center;gap:10px;flex:0 0 auto;}
+.profil_barre_droite{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.pg_grille{flex:1;display:grid;grid-template-columns:minmax(320px,40%) 1fr;gap:20px;min-height:0;}
+.pg_photo{position:relative;border-radius:28px;overflow:hidden;min-height:0;background:#1B0B55;box-shadow:0 30px 70px rgba(20,6,80,.5);}
+.pg_photo img{width:100%;height:100%;object-fit:cover;}
+.pg_photo::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(10,6,32,.72),transparent 45%),linear-gradient(to bottom,rgba(10,6,32,.45),transparent 30%);pointer-events:none;}
+.pg_tags{position:absolute;top:18px;left:18px;z-index:2;display:flex;gap:8px;flex-wrap:wrap;}
+.pg_tags .chip{background:rgba(10,6,32,.55);border-color:rgba(255,255,255,.22);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);}
+.pg_num{position:absolute;right:24px;bottom:2px;z-index:2;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(90px,11vw,160px);line-height:.85;color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.5);pointer-events:none;}
+.viseur{position:absolute;inset:0;pointer-events:none;z-index:3;}
+.viseur i{position:absolute;width:22px;height:22px;border:2px solid rgba(255,255,255,.85);}
+.viseur i:nth-child(1){top:14px;left:14px;border-right:0;border-bottom:0;}
+.viseur i:nth-child(2){top:14px;right:14px;border-left:0;border-bottom:0;}
+.viseur i:nth-child(3){bottom:14px;left:14px;border-right:0;border-top:0;}
+.viseur i:nth-child(4){bottom:14px;right:14px;border-left:0;border-top:0;}
+.pg_panneau{padding:28px;display:flex;flex-direction:column;gap:0;overflow-y:auto;scrollbar-width:none;min-height:0;}
+.pg_panneau::-webkit-scrollbar{width:0}
+.nom_profil{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(44px,5vw,76px);line-height:.88;}
+.profil_id{color:var(--texte-2);font-size:14px;margin-top:8px;font-family:'Chakra Petch',sans-serif;}
+.profil_desc{font-size:14.5px;line-height:1.6;color:rgba(255,255,255,.88);margin-top:12px;}
+.fiche_club{border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;margin-top:16px;flex:0 0 auto;}
+.club_rang{display:flex;align-items:center;gap:12px;}
+.club_sigle{width:46px;height:46px;border-radius:12px;background:var(--degrade);display:grid;place-items:center;font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:0 0 auto}
+.club_txt{min-width:0}
+.club_nom{display:block;font-weight:800;font-size:15px}
+.club_sous{display:block;font-size:11.5px;color:var(--texte-2);margin-top:2px}
+.numero_maillot{margin-left:auto;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:40px;line-height:1;color:rgba(255,255,255,.92);}
+.fiche_lignes{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+.fiche_lignes>div{display:flex;justify-content:space-between;align-items:baseline;gap:8px;border-top:1px solid rgba(255,255,255,.09);padding:8px 0}
+.fiche_lignes span{color:var(--texte-2);font-family:'Chakra Petch',sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:10px}
+.fiche_lignes b{font-weight:700;font-size:13px;text-align:right}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0;}
+.stat .chiffre{font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:32px;line-height:1;}
+.stat .libelle{font-family:'Chakra Petch',sans-serif;text-transform:uppercase;letter-spacing:.12em;font-size:10px;color:var(--texte-2);margin-top:6px;}
+.profil_chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+.profil_chips::-webkit-scrollbar{height:0}
+.vignettes{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-top:16px;}
+.vignettes::-webkit-scrollbar{height:0}
+.vignettes img{flex:0 0 130px;height:130px;border-radius:20px;object-fit:cover;scroll-snap-align:start;}
+.vignettes_nav{display:flex;gap:10px;justify-content:center;margin-top:12px;}
+.fleche_ronde{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.22);display:grid;place-items:center;color:#fff;transition:background .25s;cursor:pointer;}
+.fleche_ronde:hover{background:rgba(255,255,255,.28)}
+.fleche_ronde .ic{width:17px;height:17px}
+.commentaire{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:18px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);margin-top:18px;}
+.commentaire img{width:38px;height:38px;border-radius:50%;object-fit:cover}
+.com_texte{font-size:13.5px;line-height:1.5;color:rgba(255,255,255,.85)}
+.com_nom{font-weight:700;font-size:13px;margin-top:8px}
+.com_id{color:var(--texte-2);font-size:12px}
+.btn_noir{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:var(--r-pilule);background:#0B0B0F;color:#fff;font-weight:700;font-size:13px;border:1px solid rgba(255,255,255,.16);box-shadow:0 10px 24px rgba(0,0,0,.45);}
+.btn_noir .ic{width:15px;height:15px}
+.btn_noir.suivi{background:var(--cyan);color:#082433}
+@keyframes panneauMonte{from{transform:translateY(30px);opacity:.2}}
+.pg_panneau.montre{animation:panneauMonte .5s cubic-bezier(.2,.8,.2,1)}
 
-/* ============ Page contact ============ */
-.contact_grille{flex:1;display:grid;grid-template-columns:38% 1fr;gap:var(--gap);min-height:0;}
-.carte_infos,.carte_form{padding:26px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;scrollbar-width:none;min-height:0;}
-.carte_infos::-webkit-scrollbar,.carte_form::-webkit-scrollbar{height:0}
-.contact_phrase{font-size:14px;color:var(--texte-2);line-height:1.55}
-.contact_lignes{display:flex;flex-direction:column;gap:2px;}
-.ligne_contact{display:flex;align-items:center;gap:10px;font-size:14px;color:rgba(255,255,255,.88);padding:10px 10px;border-radius:12px;text-align:left}
-.ligne_contact .ic{width:17px;height:17px;color:var(--cyan)}
-button.ligne_contact:hover{background:rgba(255,255,255,.08)}
-.contact_fans{font-size:11px;color:var(--texte-2);font-family:'Chakra Petch',sans-serif;letter-spacing:.1em;text-transform:uppercase;}
-.sujets_rapides{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;}
-.grille_form{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.champ{display:flex;flex-direction:column;gap:6px;}
-.champ.large{grid-column:1/-1}
-.champ label{font-size:12px;font-weight:700;color:var(--texte-2);letter-spacing:.04em;text-transform:uppercase;font-family:'Chakra Petch',sans-serif;}
-.champ input,.champ textarea{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:12px 14px;color:#fff;outline:none;transition:border-color .25s;resize:vertical;}
-.champ textarea{min-height:110px}
-.champ input:focus,.champ textarea:focus{border-color:var(--cyan)}
-.champ .err{display:none;font-size:12px;color:var(--fuchsia)}
-.champ.erreur input,.champ.erreur textarea{border-color:var(--fuchsia)}
-.champ.erreur .err{display:block}
-.actions_form{display:flex;justify-content:flex-end;margin-top:4px;}
+/* ============ Page services ============ */
+.services_flux{display:flex;flex-direction:column;gap:34px;}
+.bloc_service{display:flex;flex-direction:column;gap:14px;}
+.bloc_tete{display:flex;flex-direction:column;gap:8px;padding:20px 22px;}
+.bloc_tete .titre_zone{font-size:clamp(26px,3vw,36px);}
+.bloc_tete p{color:var(--texte-2);font-size:14px;line-height:1.55;max-width:760px;}
+.filet_degrade{height:3px;width:min(320px,60%);background:var(--degrade);border-radius:2px;}
+.sous_bloc_titre{font-family:'Chakra Petch',sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:12px;color:var(--cyan);margin-top:6px;}
+.grille_services{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;}
+.carte_service{padding:16px;display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start;}
+.carte_service .rond_ic{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;border:1.5px solid transparent;background:linear-gradient(rgba(23,11,76,.9),rgba(23,11,76,.9)) padding-box,linear-gradient(135deg,var(--violet-electrique),var(--bleu)) border-box;}
+.carte_service .rond_ic .ic{width:19px;height:19px;color:var(--cyan)}
+.carte_service b{display:block;font-size:14px;text-transform:uppercase;letter-spacing:.02em;line-height:1.25}
+.carte_service p{display:block;font-size:12.5px;color:var(--texte-2);margin-top:5px;line-height:1.45}
+.note_formats{font-size:14px;line-height:1.6;color:rgba(255,255,255,.85);padding:14px 18px;border-radius:16px;background:rgba(0,200,242,.08);border:1px solid rgba(0,200,242,.2);}
+.note_formats b{color:var(--cyan)}
+.services_cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;padding:6px 0 4px;}
 
-/* ============ Téléphones ============ */
-.telephones{display:flex;gap:44px;justify-content:center;flex-wrap:wrap;align-items:flex-start;}
-.telephone{width:375px;height:780px;border-radius:54px;padding:12px;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.18);box-shadow:0 40px 90px rgba(15,5,60,.55),inset 0 1px 0 rgba(255,255,255,.2);}
+/* ============ Téléphone ============ */
+.telephone{width:360px;height:730px;border-radius:54px;padding:12px;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.18);box-shadow:0 40px 90px rgba(15,5,60,.55),inset 0 1px 0 rgba(255,255,255,.2);}
 .ecran{position:relative;width:100%;height:100%;border-radius:42px;overflow:hidden;background:#0A0620;}
 .island{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:108px;height:26px;border-radius:20px;background:#000;z-index:60;pointer-events:none}
 .tel_scroll{height:100%;overflow-y:auto;scrollbar-width:none;}
 .tel_scroll::-webkit-scrollbar{width:0}
-@keyframes telPulse{50%{transform:scale(1.02)}}
-.telephone.pulse{animation:telPulse .5s ease}
-.legende_tel{margin-top:18px;text-align:center;font-family:'Chakra Petch',sans-serif;letter-spacing:.16em;text-transform:uppercase;font-size:11px;color:var(--texte-2);}
-.bloc_tel{display:flex;flex-direction:column;align-items:center}
 .app_entete{display:flex;align-items:center;gap:10px;padding:54px 16px 8px;}
 .logo_app{width:38px;height:38px;border-radius:12px;object-fit:contain;background:rgba(255,255,255,.1)}
 .app_actions{margin-left:auto;display:flex;gap:10px;align-items:center;}
@@ -278,57 +346,7 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
 .nav_mobile .centre{width:52px;height:52px;margin:-14px auto 0;border-radius:50%;box-shadow:0 0 28px rgba(212,44,240,.35),0 0 28px rgba(0,200,242,.25);background:var(--degrade);color:#fff;display:grid;place-items:center;}
 .nav_mobile .centre .ic{width:22px;height:22px}
 
-/* ============ Panneau profil du téléphone : fiche club complète ============ */
-.profil_wrap{position:relative;height:52%;overflow:hidden}
-.profil_wrap img{width:100%;height:100%;object-fit:cover}
-.viseur{position:absolute;inset:0;pointer-events:none;}
-.viseur i{position:absolute;width:22px;height:22px;border:2px solid rgba(255,255,255,.85);}
-.viseur i:nth-child(1){top:14px;left:14px;border-right:0;border-bottom:0;}
-.viseur i:nth-child(2){top:14px;right:14px;border-left:0;border-bottom:0;}
-.viseur i:nth-child(3){bottom:14px;left:14px;border-right:0;border-top:0;}
-.viseur i:nth-child(4){bottom:14px;right:14px;border-left:0;border-top:0;}
-.profil_actions{position:absolute;top:52px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:center;z-index:5;}
-.btn_retour{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;cursor:pointer;}
-.btn_noir{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:var(--r-pilule);background:#0B0B0F;color:#fff;font-weight:700;font-size:13px;border:1px solid rgba(255,255,255,.16);box-shadow:0 10px 24px rgba(0,0,0,.45);}
-.btn_noir .ic{width:15px;height:15px}
-.btn_noir.suivi{background:var(--cyan);color:#082433}
-.profil_panneau{position:relative;margin-top:-72px;padding:28px 20px 28px;border-radius:32px 32px 0 0;}
-.poignee{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:44px;height:4px;border-radius:4px;background:rgba(255,255,255,.55);}
-@keyframes panneauMonte{from{transform:translateY(46px);opacity:.3}}
-.profil_panneau.montre{animation:panneauMonte .55s cubic-bezier(.2,.8,.2,1)}
-.nom_profil{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:54px;line-height:.88;}
-.profil_id{color:var(--texte-2);font-size:13px;margin-top:8px;font-family:'Chakra Petch',sans-serif;}
-.profil_desc{font-size:13.5px;line-height:1.55;color:rgba(255,255,255,.85);margin-top:12px;}
-.fiche_club{border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:12px;margin-top:16px;}
-.club_rang{display:flex;align-items:center;gap:12px;}
-.club_sigle{width:44px;height:44px;border-radius:12px;background:var(--degrade);display:grid;place-items:center;font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:0 0 auto}
-.club_txt{min-width:0}
-.club_nom{display:block;font-weight:800;font-size:14px}
-.club_sous{display:block;font-size:11px;color:var(--texte-2);margin-top:2px}
-.numero_maillot{margin-left:auto;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:38px;line-height:1;color:rgba(255,255,255,.92);}
-.fiche_lignes{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
-.fiche_lignes>div{display:flex;justify-content:space-between;align-items:baseline;gap:8px;border-top:1px solid rgba(255,255,255,.09);padding:8px 0}
-.fiche_lignes span{color:var(--texte-2);font-family:'Chakra Petch',sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:10px}
-.fiche_lignes b{font-weight:700;font-size:12.5px;text-align:right}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0;}
-.stat .chiffre{font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:30px;line-height:1;}
-.stat .libelle{font-family:'Chakra Petch',sans-serif;text-transform:uppercase;letter-spacing:.12em;font-size:10px;color:var(--texte-2);margin-top:6px;}
-.profil_chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
-.profil_chips::-webkit-scrollbar{height:0}
-.vignettes{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;}
-.vignettes::-webkit-scrollbar{height:0}
-.vignettes img{flex:0 0 120px;height:120px;border-radius:20px;object-fit:cover;scroll-snap-align:start;}
-.vignettes_nav{display:flex;gap:10px;justify-content:center;margin-top:12px;}
-.fleche_ronde{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.22);display:grid;place-items:center;color:#fff;transition:background .25s;cursor:pointer;}
-.fleche_ronde:hover{background:rgba(255,255,255,.28)}
-.fleche_ronde .ic{width:17px;height:17px}
-.commentaire{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:18px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);margin-top:18px;}
-.commentaire img{width:38px;height:38px;border-radius:50%;object-fit:cover}
-.com_texte{font-size:13px;line-height:1.5;color:rgba(255,255,255,.85)}
-.com_nom{font-weight:700;font-size:13px;margin-top:8px}
-.com_id{color:var(--texte-2);font-size:12px}
-
-/* ============ Page story : tout l écran est occupé ============ */
+/* ============ Page story ============ */
 .story_grille{flex:1;display:grid;grid-template-columns:auto 1fr;gap:24px;min-height:0;align-items:stretch;padding-bottom:6px;}
 .story_grille .story{height:100%;min-height:520px;width:auto;aspect-ratio:9/16;max-width:min(470px,100%);justify-self:center;}
 .story_arguments{display:flex;flex-direction:column;gap:14px;min-height:0;overflow-y:auto;scrollbar-width:none;}
@@ -340,9 +358,6 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
 .argument .titre{font-weight:800;text-transform:uppercase;font-size:15px;display:block}
 .argument .texte{color:rgba(255,255,255,.75);font-size:13.5px;display:block;margin-top:3px;line-height:1.45}
 .story_cta{display:flex;gap:10px;flex-wrap:wrap;padding-top:2px;}
-.centre_cta{text-align:center;}
-
-/* Story elle même */
 .story{border-radius:34px;overflow:hidden;position:relative;
   background:radial-gradient(120% 80% at 85% 0%,rgba(0,110,232,.38),transparent 55%),
              linear-gradient(180deg,#3E1AC6 0%,#22106B 48%,#0A0620 100%);
@@ -365,12 +380,11 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
 .story_slogan{font-size:10px;letter-spacing:.42em;color:rgba(255,255,255,.72);margin-top:8px;padding-left:.42em;}
 .story_corps{display:flex;flex-direction:column;gap:14px;}
 .story .titre_geant{font-size:clamp(44px,4.4vw,56px);line-height:.88;}
-.filet_degrade{height:3px;width:min(320px,70%);background:var(--degrade);border-radius:2px;}
 .story_sous{font-family:'Chakra Petch',sans-serif;color:var(--cyan);font-weight:600;font-size:13px;letter-spacing:.18em;text-transform:uppercase;}
 .story_phrase{font-size:14px;line-height:1.6;color:rgba(255,255,255,.92);}
 .cyan{color:var(--cyan);font-weight:700}
 
-/* ============ Lecteur de shorts : vertical, 20 secondes, contours assombris ============ */
+/* ============ Lecteur de shorts ============ */
 .voile_short{position:fixed;inset:0;z-index:260;display:grid;place-items:center;padding:16px;background:rgba(4,2,16,.88);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);opacity:0;pointer-events:none;transition:opacity .3s;}
 .voile_short.ouvre{opacity:1;pointer-events:auto}
 .short_scene{display:flex;align-items:center;gap:20px;}
@@ -379,7 +393,6 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
   transform:scale(.92);transition:transform .35s cubic-bezier(.2,.8,.2,1);}
 .voile_short.ouvre .short_cadre{transform:scale(1)}
 .short_cadre video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
-/* Contours assombris : vignette interne plus dégradés haut et bas */
 .short_voile{position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(to bottom,rgba(4,2,16,.85) 0%,transparent 24%,transparent 68%,rgba(4,2,16,.92) 100%),
              linear-gradient(to right,rgba(4,2,16,.45),transparent 22%,transparent 78%,rgba(4,2,16,.45));
@@ -396,6 +409,40 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
 .short_fin_titre{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:46px;line-height:.9;margin-top:8px;}
 .short_fin_actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;justify-content:center;}
 
+/* ============ Pied de page : prise de contact ============ */
+.footer_global{position:relative;max-width:1680px;margin:0 auto;padding:20px 24px 26px;scroll-margin-top:24px;}
+.footer_grille{display:grid;grid-template-columns:26% 1fr 17%;gap:var(--gap);align-items:stretch;}
+.f_marque,.f_form,.f_liens{padding:24px;display:flex;flex-direction:column;gap:12px;}
+.f_tete{display:flex;align-items:center;gap:12px;}
+.f_tete img{width:42px;height:42px;border-radius:50%;object-fit:contain;background:rgba(255,255,255,.1)}
+.f_tete b{font-size:18px}
+.f_tete p{font-size:14px;color:var(--texte-2);line-height:1.55}
+.f_titre{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:22px;}
+.contact_lignes{display:flex;flex-direction:column;gap:2px;}
+.ligne_contact{display:flex;align-items:center;gap:10px;font-size:14px;color:rgba(255,255,255,.88);padding:10px 10px;border-radius:12px;text-align:left}
+.ligne_contact .ic{width:17px;height:17px;color:var(--cyan)}
+button.ligne_contact:hover{background:rgba(255,255,255,.08)}
+.contact_fans{font-size:11px;color:var(--texte-2);font-family:'Chakra Petch',sans-serif;letter-spacing:.1em;text-transform:uppercase;}
+.sujets_rapides{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;}
+.grille_form{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.champ{display:flex;flex-direction:column;gap:6px;}
+.champ.large{grid-column:1/-1}
+.champ label{font-size:12px;font-weight:700;color:var(--texte-2);letter-spacing:.04em;text-transform:uppercase;font-family:'Chakra Petch',sans-serif;}
+.champ input,.champ textarea{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:12px 14px;color:#fff;outline:none;transition:border-color .25s;resize:vertical;}
+.champ textarea{min-height:110px}
+.champ input:focus,.champ textarea:focus{border-color:var(--cyan)}
+.champ .err{display:none;font-size:12px;color:var(--fuchsia)}
+.champ.erreur input,.champ.erreur textarea{border-color:var(--fuchsia)}
+.champ.erreur .err{display:block}
+.actions_form{display:flex;justify-content:flex-end;margin-top:4px;}
+.f_liens{gap:8px;}
+.lien_pied{display:flex;align-items:center;gap:10px;padding:10px 10px;border-radius:12px;font-size:14px;font-weight:600;color:rgba(255,255,255,.85);text-align:left;transition:background .2s,color .2s;}
+.lien_pied:hover{background:rgba(255,255,255,.08);color:#fff}
+.lien_pied .ic{width:16px;height:16px;color:var(--cyan)}
+.f_copy{margin-top:auto;font-size:11px;color:var(--texte-2);font-family:'Chakra Petch',sans-serif;letter-spacing:.08em;}
+.footer_bas{display:flex;align-items:center;justify-content:center;gap:10px;padding:22px 8px 0;color:rgba(255,255,255,.55);font-size:12.5px;flex-wrap:wrap}
+.footer_bas .sep{opacity:.4}
+
 /* ============ Popover et toasts ============ */
 .popover{position:fixed;z-index:280;width:min(280px,90vw);padding:10px;border-radius:18px;}
 .pop_titre{padding:8px 12px 6px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--texte-2);font-family:'Chakra Petch',sans-serif;}
@@ -409,11 +456,6 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
 .toast .ic{width:17px;height:17px;color:var(--cyan)}
 .toast.part{opacity:0;transform:translateY(10px)}
 
-/* ============ Pied de page ============ */
-.pied{display:flex;align-items:center;justify-content:center;gap:12px;padding:40px 20px 50px;color:rgba(255,255,255,.6);font-size:13px;flex-wrap:wrap}
-.pied img{width:28px;height:28px;border-radius:50%;object-fit:contain;background:rgba(255,255,255,.1)}
-.pied .sep{opacity:.4}
-
 /* ============ Apparition au scroll, accessibilité ============ */
 .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s,transform .7s;}
 .reveal.visible{opacity:1;transform:none;}
@@ -423,41 +465,68 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
 /* ============ Points de rupture ============ */
 @media (max-width:1279px){
   .grille_accueil{grid-template-columns:30% 1fr;}
-  .contact_grille{grid-template-columns:1fr;}
+  .zone_app{grid-template-columns:1fr;}
+  .app_tel{order:-1}
+  .app_tel .telephone{margin:0 auto}
   .story_grille{grid-template-columns:1fr;}
   .story_grille .story{height:auto;width:min(430px,94vw);margin:0 auto;}
   .argument{flex:none}
+  .footer_grille{grid-template-columns:1fr 1fr;}
+  .f_liens{grid-column:1/-1}
 }
 @media (max-width:1023px){
   .entete{grid-template-columns:auto auto 1fr;gap:10px;}
-  .recherche{width:180px;}
+  .recherche{width:170px;}
+  .pp_txt{display:none}
+  .pilule_profil{padding:5px}
 }
 @media (max-width:767px){
   .ecran_desktop{padding:0}
   .cadre{padding:0;border-radius:0;background:none;box-shadow:none;min-height:100svh}
-  .entete{position:sticky;top:0;z-index:80;display:flex;flex-wrap:wrap;gap:10px;padding:10px 14px;border-radius:0;background:linear-gradient(rgba(12,7,36,.92),rgba(12,7,36,.8));}
-  .bouton_logo{width:40px;height:40px}
-  .recherche{order:1;flex:1 1 auto;min-width:0;width:auto;height:40px}
-  .entete_actions{order:2;margin-left:auto}
-  .onglets{order:3;width:100%;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
-  .onglets::-webkit-scrollbar{height:0}
-  .onglet{padding:9px 16px;font-size:14px}
+  /* En tête mobile : une ligne d actions puis les onglets, toujours visibles */
+  .entete{position:sticky;top:0;z-index:80;display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 12px;border-radius:0;background:linear-gradient(rgba(10,6,32,.95),rgba(10,6,32,.88));-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);}
+  .entete_gauche{flex:1 1 auto;min-width:0}
+  .bouton_logo{width:38px;height:38px}
+  .bouton_logo img{width:26px;height:26px}
+  .recherche{flex:1 1 110px;height:38px;padding:0 12px;min-width:0}
+  .entete_actions{gap:8px}
+  .bouton_rond{width:38px;height:38px}
+  .pilule_profil{padding:3px;border-radius:50%}
+  .pilule_profil img{width:34px;height:34px}
+  .chev{display:none}
+  .onglets{order:3;flex:1 1 100%;overflow-x:auto;scrollbar-width:none;gap:6px;padding-bottom:2px;-webkit-overflow-scrolling:touch}
+  .onglets::-webkit-scrollbar{display:none}
+  .onglet{padding:8px 15px;font-size:13.5px;flex:0 0 auto}
+  /* Ordre mobile : hero, application, retour sur match, shorts, teaser */
   .grille_accueil{display:flex;flex-direction:column;gap:18px;}
-  .zone_hero{order:-1;height:74svh;border-radius:0 0 36px 36px;}
-  .zone_hero .titre_geant{font-size:clamp(58px,17vw,96px);}
-  .hero_contenu{left:20px;right:20px;bottom:24px;}
-  .zone_recent,.zone_athletes{margin:0 14px;gap:14px}
-  .liste_recente{max-height:440px}
-  .une_liste{max-height:320px}
-  .rangee_athletes{flex:none;height:300px}
+  .zone_hero{order:-1;height:58svh;border-radius:0 0 32px 32px;}
+  .zone_hero .titre_geant{font-size:clamp(52px,15vw,84px);}
+  .hero_contenu{left:20px;right:20px;bottom:22px;}
+  .zone_app{order:1;margin:0 14px;flex-direction:column;gap:14px;}
+  .app_tel{order:-1}
+  .app_tel .telephone{width:min(360px,92vw);height:auto;aspect-ratio:375/720;}
+  .app_infos{padding:18px}
+  .zone_recent{order:2;margin:0 14px;gap:14px}
+  .liste_recente{max-height:420px}
+  .une_liste{max-height:300px}
+  .zone_teaser{order:3;margin:0 14px;}
+  .teaser_ath{flex-direction:column;align-items:flex-start;gap:16px;}
+  .teaser_droite{flex-direction:row;width:100%;justify-content:space-between;align-items:center;}
   .page{padding:0 0 18px}
   .page_tete{padding:20px 16px 0}
-  .grille_athletes{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));padding:2px 14px 10px;overflow:visible}
-  .contact_grille{padding:0 14px}
-  .carte_infos,.carte_form{overflow:visible}
-  .grille_form{grid-template-columns:1fr}
+  .services_flux{padding:0 14px;gap:24px}
+  .grille_services{grid-template-columns:1fr}
+  .vue_catalogue{padding:0 14px}
+  .grille_athletes{grid-template-columns:repeat(2,1fr);overflow:visible}
+  .vue_profil{min-height:auto}
+  .pg_grille{grid-template-columns:1fr;gap:16px;}
+  .pg_photo{height:46svh;flex:0 0 auto;}
+  .pg_panneau{overflow:visible;padding:20px}
+  .profil_barre{flex-wrap:wrap}
   .story_grille{padding:0 14px 10px;gap:18px}
-  .telephone{width:min(375px,92vw);height:auto;aspect-ratio:375/770;}
+  .footer_global{padding:16px 14px 22px;scroll-margin-top:100px}
+  .footer_grille{grid-template-columns:1fr}
+  .grille_form{grid-template-columns:1fr}
   .short_scene{gap:10px}
   .short_cadre{width:min(390px,calc(100vw - 108px))}
   .short_scene .fleche_ronde{width:34px;height:34px}
@@ -477,7 +546,6 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
   <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
   <symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></symbol>
   <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></symbol>
-  <symbol id="i-arrl" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></symbol>
   <symbol id="i-arrr" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></symbol>
   <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></symbol>
   <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
@@ -490,7 +558,6 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
   <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
   <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
-  <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></symbol>
   <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></symbol>
   <symbol id="i-dl" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></symbol>
   <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
@@ -498,6 +565,12 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
   <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
   <symbol id="i-vol" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 6a9 9 0 0 1 0 12"/></symbol>
   <symbol id="i-mute" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M23 9l-6 6M17 9l6 6"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></symbol>
+  <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></symbol>
+  <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></symbol>
 </svg>
 
 <!-- Décor de fond -->
@@ -508,7 +581,7 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
 <div class="ecran_desktop" style="padding:28px 24px 12px">
   <div class="cadre verre">
 
-    <!-- En tête global : 4 onglets, la story n est plus dedans -->
+    <!-- En tête global -->
     <header class="entete verre leger">
       <div class="entete_gauche">
         <button class="bouton_logo" data-aller="accueil" aria-label="Aller à l accueil">
@@ -522,8 +595,8 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
       <nav class="onglets" aria-label="Navigation principale">
         <button class="onglet actif" data-page="accueil">Accueil</button>
         <button class="onglet" data-page="athletes">Athlètes</button>
-        <button class="onglet" data-page="application">Application</button>
-        <button class="onglet" data-page="contact">Contact</button>
+        <button class="onglet" data-page="services">Services</button>
+        <button class="onglet" data-scroll="footer">Contact</button>
       </nav>
       <div class="entete_actions">
         <button class="bouton_rond verre leger" data-pop="bell" aria-label="Notifications">
@@ -532,8 +605,8 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
         </button>
         <button class="pilule_profil" data-pop="profil">
           <img src="j3.png" alt="Avatar de Amina Diallo">
-          <span><span class="pp_nom">Amina Diallo</span><span class="pp_id">@amina.dv</span></span>
-          <svg class="ic" style="width:16px;height:16px;color:var(--texte-2)"><use href="#i-chevdown"/></svg>
+          <span class="pp_txt"><span class="pp_nom">Amina Diallo</span><span class="pp_id">@amina.dv</span></span>
+          <svg class="ic chev" style="width:16px;height:16px"><use href="#i-chevdown"/></svg>
         </button>
       </div>
     </header>
@@ -542,7 +615,6 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
     <section class="page" id="page_accueil">
       <div class="grille_accueil">
 
-        <!-- Colonne gauche -->
         <aside class="zone_recent reveal">
           <div class="carte_col un verre leger">
             <div class="carte_tete">
@@ -590,39 +662,39 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
             <div class="une_liste" id="une_liste">
               <div class="item_compact" data-short="0">
                 <img src="j4.png" alt="Miniature de la roulette de Théo Lambert">
-                <div><p class="ic_titre">La roulette</p><p class="ic_sous">Théo Lambert · 24 000 vues</p></div>
+                <div><p class="ic_titre">La roulette</p><p class="ic_sous">Théo Lambert · FC Horizon</p></div>
                 <span class="ic_btn" aria-hidden="true"><svg class="ic"><use href="#i-play"/></svg></span>
               </div>
               <div class="item_compact" data-short="1">
                 <img src="j7.png" alt="Miniature du retourné de Sofia Reyes">
-                <div><p class="ic_titre">Le retourné</p><p class="ic_sous">Sofia Reyes · 31 000 vues</p></div>
+                <div><p class="ic_titre">Le retourné</p><p class="ic_sous">Sofia Reyes · Club Aurora</p></div>
                 <span class="ic_btn" aria-hidden="true"><svg class="ic"><use href="#i-play"/></svg></span>
               </div>
               <div class="item_compact" data-short="2">
                 <img src="j2.png" alt="Miniature du petit pont de Karim Bensaïd">
-                <div><p class="ic_titre">Petit pont foudroyant</p><p class="ic_sous">Karim Bensaïd · 18 500 vues</p></div>
+                <div><p class="ic_titre">Petit pont foudroyant</p><p class="ic_sous">Karim Bensaïd · Étoile Atlantique</p></div>
                 <span class="ic_btn" aria-hidden="true"><svg class="ic"><use href="#i-play"/></svg></span>
               </div>
               <div class="item_compact" data-short="3">
                 <img src="j6.png" alt="Miniature de la demi volée de Marc Delaunay">
-                <div><p class="ic_titre">Demi volée surpuissante</p><p class="ic_sous">Marc Delaunay · 15 200 vues</p></div>
+                <div><p class="ic_titre">Demi volée surpuissante</p><p class="ic_sous">Marc Delaunay · Olympique Boréal</p></div>
                 <span class="ic_btn" aria-hidden="true"><svg class="ic"><use href="#i-play"/></svg></span>
               </div>
               <div class="item_compact" data-short="4">
                 <img src="j5.png" alt="Miniature de l amortie de Nour Haddad">
-                <div><p class="ic_titre">Amortie de la poitrine</p><p class="ic_sous">Nour Haddad · 11 900 vues</p></div>
+                <div><p class="ic_titre">Amortie de la poitrine</p><p class="ic_sous">Nour Haddad · Sporting Étoile</p></div>
                 <span class="ic_btn" aria-hidden="true"><svg class="ic"><use href="#i-play"/></svg></span>
               </div>
               <div class="item_compact" data-short="5">
                 <img src="j1.png" alt="Miniature du sprint de l ailière">
-                <div><p class="ic_titre">Sprint de l ailière</p><p class="ic_sous">Aya Traoré · 27 300 vues</p></div>
+                <div><p class="ic_titre">Sprint de l ailière</p><p class="ic_sous">Aya Traoré · Olympique Lumière</p></div>
                 <span class="ic_btn" aria-hidden="true"><svg class="ic"><use href="#i-play"/></svg></span>
               </div>
             </div>
           </div>
         </aside>
 
-        <!-- Hero vidéo : la vidéo parle de football, aucun bouton, seulement la marque -->
+        <!-- Hero vidéo compact -->
         <section class="zone_hero reveal" id="zone_hero" aria-label="Vidéo à la une">
           <video id="video_hero" src="herov.mp4" autoplay muted loop playsinline preload="auto"></video>
           <div class="hero_teinte"></div>
@@ -644,219 +716,323 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
           </div>
         </section>
 
-        <!-- Rangée aperçu : le catalogue complet reste derrière l onglet et voir tout -->
-        <section class="zone_athletes reveal" aria-label="Nos athlètes">
-          <div class="rang_tete">
-            <h2 class="titre_zone">Nos athlètes</h2>
-            <span class="micro" id="compte_ath"></span>
-            <button class="btn_verre petit" data-aller="athletes" style="margin-left:auto">Voir tout<svg class="ic" style="width:15px;height:15px"><use href="#i-arrr"/></svg></button>
+        <!-- Zone application, désormais sur la page d accueil, avec le téléphone -->
+        <section class="zone_app reveal" id="zone_app" aria-label="L application Sportvision">
+          <div class="app_infos verre leger">
+            <p class="micro">Application</p>
+            <h2 class="titre_zone">Le stade dans votre poche</h2>
+            <p class="desc">Suivez chaque joueur, chaque but et chaque temps fort depuis votre téléphone. L'écran à côté est une démonstration réelle : touchez les avatars et les cartes pour ouvrir les profils complets sur la page Athlètes.</p>
+            <div class="app_raccourcis">
+              <button class="carte_action verre leger" data-aller="athletes">
+                <span class="rond_ic"><svg class="ic"><use href="#i-users"/></svg></span>
+                <span><b>Profils de joueurs</b><p>Club, poste, numéro et statistiques, en grand sur la page Athlètes.</p></span>
+                <svg class="ic"><use href="#i-arrr"/></svg>
+              </button>
+              <button class="carte_action verre leger" data-ouvrir-short>
+                <span class="rond_ic"><svg class="ic"><use href="#i-play"/></svg></span>
+                <span><b>Shorts de 20 secondes</b><p>Un geste technique, un cadre vertical, une barre de progression.</p></span>
+                <svg class="ic"><use href="#i-arrr"/></svg>
+              </button>
+              <button class="carte_action verre leger" data-aller="services">
+                <span class="rond_ic"><svg class="ic"><use href="#i-star"/></svg></span>
+                <span><b>Nos services</b><p>Image, contenu et communication pour joueurs, clubs et événements.</p></span>
+                <svg class="ic"><use href="#i-arrr"/></svg>
+              </button>
+              <button class="carte_action verre leger" data-aller="story">
+                <span class="rond_ic"><svg class="ic"><use href="#i-share"/></svg></span>
+                <span><b>Notre story</b><p>Le format vertical de la marque et ses cinq engagements.</p></span>
+                <svg class="ic"><use href="#i-arrr"/></svg>
+              </button>
+            </div>
           </div>
-          <div class="rangee_athletes" id="rangee_ath"></div>
+          <div class="app_tel">
+            <div class="telephone" id="tel_accueil">
+              <div class="ecran">
+                <div class="island"></div>
+                <div class="tel_scroll">
+                  <header class="app_entete">
+                    <img class="logo_app" src="logv.jpeg" onerror="this.onerror=null;this.src='logov.jpeg'" alt="Logo Sportvision">
+                    <div class="app_actions">
+                      <button class="btn_rond_sombre" id="cloche_mobile" aria-label="Notifications">
+                        <svg class="ic"><use href="#i-bell"/></svg>
+                        <span class="point_notif" id="notif_mobile"></span>
+                      </button>
+                      <button id="avatar_mobile" aria-label="Voir mon profil"><img class="avatar_entete" src="j3.png" alt="Mon avatar"></button>
+                    </div>
+                  </header>
+                  <p class="app_soustitre">À la une</p>
+                  <div class="rang_avatars" id="rang_avatars"></div>
+                  <p class="app_soustitre">Temps forts</p>
+                  <div class="rail_mobile">
+                    <article class="carte_photo" data-ath="theo" role="button" tabindex="0" aria-label="Voir le profil de Théo Lambert">
+                      <img src="j4.png" alt="But sur le dernier corner">
+                      <div class="suivre_pilule verre leger">
+                        <img src="j4.png" alt="Théo Lambert">
+                        <span><span class="nom_chaine">Théo Lambert</span><br><span class="nb_abo" data-n="512000">512 000 abonnés</span></span>
+                        <button class="btn_suivre" data-nom="Théo Lambert">Suivre</button>
+                      </div>
+                      <h3 class="titre_carte_mobile">BUT SUR<br>DERNIER CORNER</h3>
+                      <div class="pastilles">
+                        <span class="ph">Il y a 2 h</span>
+                        <span class="pv"><svg class="ic"><use href="#i-clock"/></svg>00:34</span>
+                        <span class="pile"><img src="j1.png" alt=""><img src="j3.png" alt=""><img src="j6.png" alt=""><span>+15</span></span>
+                      </div>
+                    </article>
+                    <article class="carte_photo" data-ath="aya" role="button" tabindex="0" aria-label="Voir le profil de Aya Traoré">
+                      <img src="j1.png" alt="Frappe des trente mètres">
+                      <div class="suivre_pilule verre leger">
+                        <img src="j1.png" alt="Aya Traoré">
+                        <span><span class="nom_chaine">Aya Traoré</span><br><span class="nb_abo" data-n="2400000">2 400 000 abonnés</span></span>
+                        <button class="btn_suivre" data-nom="Aya Traoré">Suivre</button>
+                      </div>
+                      <h3 class="titre_carte_mobile">FRAPPE DES<br>TRENTE MÈTRES</h3>
+                      <div class="pastilles">
+                        <span class="ph">Il y a 5 h</span>
+                        <span class="pv"><svg class="ic"><use href="#i-clock"/></svg>00:21</span>
+                        <span class="pile"><img src="j2.png" alt=""><img src="j3.png" alt=""><img src="j5.png" alt=""><span>+22</span></span>
+                      </div>
+                    </article>
+                    <article class="carte_photo" data-ath="lea" role="button" tabindex="0" aria-label="Voir le profil de Léa Marchand">
+                      <img src="j3.png" alt="Arrêt de la saison">
+                      <div class="suivre_pilule verre leger">
+                        <img src="j3.png" alt="Léa Marchand">
+                        <span><span class="nom_chaine">Léa Marchand</span><br><span class="nb_abo" data-n="640000">640 000 abonnés</span></span>
+                        <button class="btn_suivre" data-nom="Léa Marchand">Suivre</button>
+                      </div>
+                      <h3 class="titre_carte_mobile">ARRÊT DE<br>LA SAISON</h3>
+                      <div class="pastilles">
+                        <span class="ph">Il y a 1 j</span>
+                        <span class="pv"><svg class="ic"><use href="#i-clock"/></svg>00:47</span>
+                        <span class="pile"><img src="j1.png" alt=""><img src="j4.png" alt=""><img src="j6.png" alt=""><span>+15</span></span>
+                      </div>
+                    </article>
+                  </div>
+                </div>
+                <nav class="nav_mobile verre fort" aria-label="Navigation de l application">
+                  <button class="item actif" data-nav="accueil" aria-label="Accueil"><svg class="ic" style="width:21px;height:21px"><use href="#i-home"/></svg></button>
+                  <button class="item" data-nav="favoris" aria-label="Favoris"><svg class="ic" style="width:21px;height:21px"><use href="#i-heart"/></svg></button>
+                  <button class="item centre" data-nav="lecture" aria-label="Lecture"><svg class="ic"><use href="#i-play"/></svg></button>
+                  <button class="item" data-nav="dl" aria-label="Téléchargements"><svg class="ic" style="width:21px;height:21px"><use href="#i-dl"/></svg></button>
+                  <button class="item" data-nav="profil" aria-label="Profil"><svg class="ic" style="width:21px;height:21px"><use href="#i-user"/></svg></button>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Porte vers le catalogue -->
+        <section class="zone_teaser reveal" aria-label="Accès à l effectif">
+          <button class="teaser_ath verre leger" data-aller="athletes" aria-label="Ouvrir le catalogue des athlètes">
+            <span class="teaser_gauche">
+              <span class="micro">Effectif</span>
+              <span class="titre_zone" style="display:block">Nos athlètes</span>
+              <span class="teaser_txt">Dix joueurs, sept clubs, un championnat Élite. Cliquez pour ouvrir le catalogue et découvrir le profil complet de chacun, club, poste et statistiques compris.</span>
+            </span>
+            <span class="teaser_droite">
+              <span class="pile_teaser" aria-hidden="true">
+                <img src="j1.png" alt=""><img src="j2.png" alt=""><img src="j4.png" alt=""><img src="j6.png" alt=""><img src="j7.png" alt="">
+              </span>
+              <span class="btn_verre petit">Voir l'effectif<svg class="ic"><use href="#i-arrr"/></svg></span>
+            </span>
+          </button>
         </section>
 
       </div>
     </section>
 
-    <!-- ================= PAGE ATHLÈTES : catalogue complet ================= -->
+    <!-- ================= PAGE ATHLÈTES ================= -->
     <section class="page" id="page_athletes" hidden>
-      <div class="page_tete reveal">
-        <p class="micro">Effectif</p>
-        <h2 class="titre_section">NOS <span class="mot_degrade">ATHLÈTES</span></h2>
-        <p class="sous_section">Dix joueurs, un seul ballon. Filtrez par ligne de jeu puis cliquez sur une carte pour ouvrir le profil complet avec le club et la fiche du joueur.</p>
-      </div>
-      <div class="filtres_sports reveal" id="filtres_sports" role="group" aria-label="Filtrer par ligne de jeu"></div>
-      <div class="grille_athletes reveal" id="grille_ath"></div>
-    </section>
 
-    <!-- ================= PAGE APPLICATION ================= -->
-    <section class="page" id="page_application" hidden>
-      <div class="page_tete reveal">
-        <p class="micro">Application</p>
-        <h2 class="titre_section">LE STADE DANS<br>VOTRE <span class="mot_degrade">POCHE</span></h2>
-        <p class="sous_section">Explorez les temps forts, suivez vos joueurs, ouvrez les profils. Les deux écrans sont entièrement interactifs.</p>
-      </div>
-      <div class="telephones">
-        <!-- Téléphone 1 : accueil -->
-        <div class="bloc_tel reveal">
-          <div class="telephone" id="tel_accueil">
-            <div class="ecran">
-              <div class="island"></div>
-              <div class="tel_scroll">
-                <header class="app_entete">
-                  <img class="logo_app" src="logv.jpeg" onerror="this.onerror=null;this.src='logov.jpeg'" alt="Logo Sportvision">
-                  <div class="app_actions">
-                    <button class="btn_rond_sombre" id="cloche_mobile" aria-label="Notifications">
-                      <svg class="ic"><use href="#i-bell"/></svg>
-                      <span class="point_notif" id="notif_mobile"></span>
-                    </button>
-                    <button id="avatar_mobile" aria-label="Voir mon profil"><img class="avatar_entete" src="j3.png" alt="Mon avatar"></button>
-                  </div>
-                </header>
-                <p class="app_soustitre">À la une</p>
-                <div class="rang_avatars" id="rang_avatars"></div>
-                <p class="app_soustitre">Temps forts</p>
-                <div class="rail_mobile">
-                  <article class="carte_photo" data-ath="theo" role="button" tabindex="0" aria-label="Voir le profil de Théo Lambert">
-                    <img src="j4.png" alt="But sur le dernier corner">
-                    <div class="suivre_pilule verre leger">
-                      <img src="j4.png" alt="Théo Lambert">
-                      <span><span class="nom_chaine">Théo Lambert</span><br><span class="nb_abo" data-n="512000">512 000 abonnés</span></span>
-                      <button class="btn_suivre" data-nom="Théo Lambert">Suivre</button>
-                    </div>
-                    <h3 class="titre_carte_mobile">BUT SUR<br>DERNIER CORNER</h3>
-                    <div class="pastilles">
-                      <span class="ph">Il y a 2 h</span>
-                      <span class="pv"><svg class="ic"><use href="#i-clock"/></svg>00:34</span>
-                      <span class="pv"><svg class="ic"><use href="#i-eye"/></svg>128 000</span>
-                      <span class="pile"><img src="j1.png" alt=""><img src="j3.png" alt=""><img src="j6.png" alt=""><span>+15</span></span>
-                    </div>
-                  </article>
-                  <article class="carte_photo" data-ath="aya" role="button" tabindex="0" aria-label="Voir le profil de Aya Traoré">
-                    <img src="j1.png" alt="Frappe des trente mètres">
-                    <div class="suivre_pilule verre leger">
-                      <img src="j1.png" alt="Aya Traoré">
-                      <span><span class="nom_chaine">Aya Traoré</span><br><span class="nb_abo" data-n="2400000">2 400 000 abonnés</span></span>
-                      <button class="btn_suivre" data-nom="Aya Traoré">Suivre</button>
-                    </div>
-                    <h3 class="titre_carte_mobile">FRAPPE DES<br>TRENTE MÈTRES</h3>
-                    <div class="pastilles">
-                      <span class="ph">Il y a 5 h</span>
-                      <span class="pv"><svg class="ic"><use href="#i-clock"/></svg>00:21</span>
-                      <span class="pv"><svg class="ic"><use href="#i-eye"/></svg>964 000</span>
-                      <span class="pile"><img src="j2.png" alt=""><img src="j3.png" alt=""><img src="j5.png" alt=""><span>+22</span></span>
-                    </div>
-                  </article>
-                  <article class="carte_photo" data-ath="lea" role="button" tabindex="0" aria-label="Voir le profil de Léa Marchand">
-                    <img src="j3.png" alt="Arrêt de la saison">
-                    <div class="suivre_pilule verre leger">
-                      <img src="j3.png" alt="Léa Marchand">
-                      <span><span class="nom_chaine">Léa Marchand</span><br><span class="nb_abo" data-n="640000">640 000 abonnés</span></span>
-                      <button class="btn_suivre" data-nom="Léa Marchand">Suivre</button>
-                    </div>
-                    <h3 class="titre_carte_mobile">ARRÊT DE<br>LA SAISON</h3>
-                    <div class="pastilles">
-                      <span class="ph">Il y a 1 j</span>
-                      <span class="pv"><svg class="ic"><use href="#i-clock"/></svg>00:47</span>
-                      <span class="pv"><svg class="ic"><use href="#i-eye"/></svg>240 000</span>
-                      <span class="pile"><img src="j1.png" alt=""><img src="j4.png" alt=""><img src="j6.png" alt=""><span>+15</span></span>
-                    </div>
-                  </article>
-                </div>
-              </div>
-              <nav class="nav_mobile verre fort" aria-label="Navigation de l application">
-                <button class="item actif" data-nav="accueil" aria-label="Accueil"><svg class="ic" style="width:21px;height:21px"><use href="#i-home"/></svg></button>
-                <button class="item" data-nav="favoris" aria-label="Favoris"><svg class="ic" style="width:21px;height:21px"><use href="#i-heart"/></svg></button>
-                <button class="item centre" data-nav="lecture" aria-label="Lecture"><svg class="ic"><use href="#i-play"/></svg></button>
-                <button class="item" data-nav="dl" aria-label="Téléchargements"><svg class="ic" style="width:21px;height:21px"><use href="#i-dl"/></svg></button>
-                <button class="item" data-nav="profil" aria-label="Profil"><svg class="ic" style="width:21px;height:21px"><use href="#i-user"/></svg></button>
-              </nav>
-            </div>
-          </div>
-          <p class="legende_tel">Écran d'accueil</p>
+      <div class="vue_catalogue" id="vue_catalogue">
+        <div class="page_tete reveal">
+          <p class="micro">Effectif</p>
+          <h2 class="titre_section">NOS <span class="mot_degrade">ATHLÈTES</span></h2>
+          <p class="sous_section">Dix joueurs, sept clubs, un seul ballon. Filtrez par ligne de jeu puis cliquez sur une carte : le profil complet s'ouvre ici même, en grand.</p>
         </div>
-        <!-- Téléphone 2 : profil joueur complet -->
-        <div class="bloc_tel reveal">
-          <div class="telephone" id="tel_profil">
-            <div class="ecran">
-              <div class="island"></div>
-              <div class="tel_scroll">
-                <div class="profil_wrap">
-                  <img id="profil_img" src="j1.png" alt="Photo de Aya Traoré">
-                  <div class="viseur" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-                </div>
-                <div class="profil_panneau verre fort montre" id="profil_panneau">
-                  <span class="poignee"></span>
-                  <h3 class="nom_profil" id="profil_nom"></h3>
-                  <p class="profil_id" id="profil_id"></p>
-                  <p class="profil_desc" id="profil_desc"></p>
-                  <div class="fiche_club verre leger" id="profil_fiche"></div>
-                  <div class="stats" id="profil_stats"></div>
-                  <div class="profil_chips" id="profil_chips"></div>
-                  <div class="vignettes" id="profil_vignettes" style="margin-top:18px">
-                    <img src="j2.png" alt="Temps fort 1"><img src="j3.png" alt="Temps fort 2"><img src="j4.png" alt="Temps fort 3"><img src="j5.png" alt="Temps fort 4"><img src="j6.png" alt="Temps fort 5"><img src="j7.png" alt="Temps fort 6">
-                  </div>
-                  <div class="vignettes_nav">
-                    <button class="fleche_ronde" id="vig_g" aria-label="Vignettes précédentes"><svg class="ic"><use href="#i-chevleft"/></svg></button>
-                    <button class="fleche_ronde" id="vig_d" aria-label="Vignettes suivantes"><svg class="ic"><use href="#i-chevright"/></svg></button>
-                  </div>
-                  <div class="commentaire">
-                    <img src="j2.png" alt="Avatar de Karim Bensaïd">
-                    <div>
-                      <p class="com_texte">Cette reprise de volée est irréelle. Le ballon a frémi avant d'entrer sous la barre.</p>
-                      <p class="com_nom">Karim Bensaïd</p>
-                      <p class="com_id">@karim.bs</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="profil_actions">
-                <button class="btn_retour verre leger" id="btn_retour_profil" aria-label="Retour"><svg class="ic" style="width:19px;height:19px"><use href="#i-arrl"/></svg></button>
-                <button class="btn_noir" id="btn_suivre_profil"><svg class="ic"><use href="#i-plus" id="use_suiv_p"/></svg><span>Suivre</span></button>
-              </div>
-            </div>
+        <div class="filtres_sports reveal" id="filtres_sports" role="group" aria-label="Filtrer par ligne de jeu"></div>
+        <div class="grille_athletes reveal" id="grille_ath"></div>
+      </div>
+
+      <div class="vue_profil" id="vue_profil" hidden>
+        <div class="profil_barre">
+          <button class="btn_verre petit" id="btn_retour_cat"><svg class="ic"><use href="#i-chevleft"/></svg>Retour à l'effectif</button>
+          <div class="profil_barre_droite">
+            <button class="fleche_ronde" id="pg_prev" aria-label="Joueur précédent"><svg class="ic"><use href="#i-chevleft"/></svg></button>
+            <button class="fleche_ronde" id="pg_next" aria-label="Joueur suivant"><svg class="ic"><use href="#i-chevright"/></svg></button>
+            <button class="btn_noir" id="btn_suivre_profil"><svg class="ic"><use href="#i-plus" id="use_suiv_p"/></svg><span>Suivre</span></button>
           </div>
-          <p class="legende_tel">Profil joueur</p>
+        </div>
+        <div class="pg_grille">
+          <div class="pg_photo">
+            <img id="profil_img" src="j1.png" alt="Photo du joueur">
+            <div class="viseur" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            <div class="pg_tags">
+              <span class="chip" id="profil_poste"></span>
+              <span class="chip" id="profil_pays"></span>
+            </div>
+            <span class="pg_num" id="profil_num"></span>
+          </div>
+          <div class="pg_panneau verre fort" id="pg_panneau">
+            <h3 class="nom_profil" id="profil_nom"></h3>
+            <p class="profil_id" id="profil_id"></p>
+            <p class="profil_desc" id="profil_desc"></p>
+            <div class="fiche_club verre leger" id="profil_fiche"></div>
+            <div class="stats" id="profil_stats"></div>
+            <div class="profil_chips" id="profil_chips"></div>
+            <div class="vignettes" id="profil_vignettes">
+              <img src="j2.png" alt="Temps fort 1"><img src="j3.png" alt="Temps fort 2"><img src="j4.png" alt="Temps fort 3"><img src="j5.png" alt="Temps fort 4"><img src="j6.png" alt="Temps fort 5"><img src="j7.png" alt="Temps fort 6">
+            </div>
+            <div class="vignettes_nav">
+              <button class="fleche_ronde" id="vig_g" aria-label="Vignettes précédentes"><svg class="ic"><use href="#i-chevleft"/></svg></button>
+              <button class="fleche_ronde" id="vig_d" aria-label="Vignettes suivantes"><svg class="ic"><use href="#i-chevright"/></svg></button>
+            </div>
+            <div class="commentaire" id="profil_com"></div>
+          </div>
         </div>
       </div>
-      <div class="centre_cta reveal">
-        <button class="btn_verre" data-aller="story"><svg class="ic" style="width:15px;height:15px"><use href="#i-play"/></svg>Découvrir notre story</button>
-      </div>
+
     </section>
 
-    <!-- ================= PAGE CONTACT ================= -->
-    <section class="page" id="page_contact" hidden>
+    <!-- ================= PAGE SERVICES ================= -->
+    <section class="page" id="page_services" hidden>
       <div class="page_tete reveal">
-        <p class="micro">Contact</p>
-        <h2 class="titre_section">PARLONS <span class="mot_degrade">FOOT</span></h2>
-        <p class="sous_section">Une question, un partenariat, un résumé de match à proposer ? Écrivez nous, la réponse arrive vite.</p>
+        <p class="micro">Accompagnement</p>
+        <h2 class="titre_section">NOS <span class="mot_degrade">SERVICES</span></h2>
+        <p class="sous_section">Un accompagnement sur mesure pour développer votre image, valoriser votre parcours et atteindre vos objectifs. Pour les joueurs, les coachs, les académies, les clubs, les associations et vos événements.</p>
       </div>
-      <div class="contact_grille">
-        <aside class="carte_infos verre leger reveal">
-          <h3 class="titre_zone" style="font-size:26px">Coordonnées</h3>
-          <p class="contact_phrase">Notre équipe répond du lundi au vendredi, de 9 h à 19 h.</p>
-          <div class="contact_lignes">
-            <button class="ligne_contact" id="copie_mail"><svg class="ic"><use href="#i-mail"/></svg>bonjour@sportvision.app</button>
-            <span class="ligne_contact"><svg class="ic"><use href="#i-phone"/></svg>+33 1 84 80 20 25</span>
-            <span class="ligne_contact"><svg class="ic"><use href="#i-pin"/></svg>Paris, France</span>
-          </div>
-          <p class="contact_fans">120 000 fans de foot nous suivent déjà</p>
-          <div class="sujets_rapides" role="group" aria-label="Sujets rapides">
-            <button class="chip" data-sujet="Partenariat club">Partenariat club</button>
-            <button class="chip" data-sujet="Presse">Presse</button>
-            <button class="chip" data-sujet="Support">Support</button>
-            <button class="chip" data-sujet="Recrutement">Recrutement</button>
-          </div>
-        </aside>
-        <form class="carte_form verre leger reveal" id="form_contact" novalidate>
-          <div class="grille_form">
-            <div class="champ">
-              <label for="f_nom">Votre nom</label>
-              <input id="f_nom" name="nom" placeholder="Amina Diallo" autocomplete="name">
-              <span class="err">Ajoutez votre nom</span>
+      <div class="services_flux">
+
+        <!-- Bloc 1 : joueurs, coachs, académies -->
+        <section class="bloc_service reveal">
+          <header class="bloc_tete verre leger">
+            <span class="filet_degrade"></span>
+            <h3 class="titre_zone">Joueurs, coachs et académies</h3>
+            <p>Un accompagnement sur mesure pour développer votre image, valoriser votre parcours et atteindre vos objectifs.</p>
+          </header>
+          <p class="sous_bloc_titre">Votre image</p>
+          <div class="grille_services">
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-star"/></svg></span>
+              <div><b>Développement d'image</b><p>Construction et valorisation de votre image pour renforcer votre identité et votre impact.</p></div>
             </div>
-            <div class="champ">
-              <label for="f_mail">Votre email</label>
-              <input id="f_mail" name="email" type="email" placeholder="amina@exemple.fr" autocomplete="email">
-              <span class="err">Cet email semble invalide</span>
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-doc"/></svg></span>
+              <div><b>Mise en avant du CV sportif</b><p>Création de contenus professionnels pour mettre en valeur votre parcours et vos performances.</p></div>
             </div>
-            <div class="champ large">
-              <label for="f_sujet">Sujet</label>
-              <input id="f_sujet" name="sujet" placeholder="De quoi voulez vous parler ?">
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-film"/></svg></span>
+              <div><b>Montage vidéo</b><p>Montage dynamique et qualitatif de vos actions, matchs et entraînements.</p></div>
             </div>
-            <div class="champ large">
-              <label for="f_msg">Votre message</label>
-              <textarea id="f_msg" name="message" placeholder="Bonjour, je voudrais proposer un résumé de match…"></textarea>
-              <span class="err">Votre message est vide</span>
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-zap"/></svg></span>
+              <div><b>Stratégie et conseils</b><p>Conseils personnalisés pour atteindre vos objectifs et vous démarquer.</p></div>
             </div>
-            <div class="actions_form large" style="grid-column:1/-1">
-              <button type="submit" class="btn_primaire"><svg class="ic" style="width:15px;height:15px"><use href="#i-send"/></svg>Envoyer le message</button>
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-share"/></svg></span>
+              <div><b>Visibilité et réseaux</b><p>Gestion et promotion de votre présence en ligne pour augmenter votre visibilité.</p></div>
             </div>
           </div>
-        </form>
+          <p class="sous_bloc_titre">Nos formats</p>
+          <div class="grille_services">
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-mic"/></svg></span>
+              <div><b>Interviews</b><p>Paroles de joueurs, coachs, dirigeants. Des contenus vrais et inspirants.</p></div>
+            </div>
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-eye"/></svg></span>
+              <div><b>Inside</b><p>Accès exclusif dans les coulisses de votre club ou événement.</p></div>
+            </div>
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-video"/></svg></span>
+              <div><b>Reportages</b><p>Captation complète de vos événements, matchs, tournois et moments forts.</p></div>
+            </div>
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-play"/></svg></span>
+              <div><b>Reels</b><p>Vidéos courtes, dynamiques et engageantes pour vos réseaux sociaux.</p></div>
+            </div>
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-music"/></svg></span>
+              <div><b>TikTok</b><p>Contenus tendances adaptés à TikTok pour toucher votre communauté.</p></div>
+            </div>
+          </div>
+          <p class="note_formats">Interviews, inside, reportages, reels, <b>TikTok</b>… pour raconter votre histoire et valoriser votre image.</p>
+        </section>
+
+        <!-- Bloc 2 : clubs et associations -->
+        <section class="bloc_service reveal">
+          <header class="bloc_tete verre leger">
+            <span class="filet_degrade"></span>
+            <h3 class="titre_zone">Clubs et associations</h3>
+            <p>Nous accompagnons votre communication au quotidien. Des solutions professionnelles pour aider les clubs et associations à mieux communiquer, se développer et valoriser leurs partenaires.</p>
+          </header>
+          <div class="grille_services">
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-share"/></svg></span>
+              <div><b>Gestion des réseaux sociaux</b><p>Publication, animation et suivi de vos réseaux.</p></div>
+            </div>
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-mail"/></svg></span>
+              <div><b>Aide à la communication</b><p>Visuels, messages et accompagnement stratégique.</p></div>
+            </div>
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-users"/></svg></span>
+              <div><b>Accompagnement sponsoring</b><p>Mise en valeur de vos partenaires et activations.</p></div>
+            </div>
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-camera"/></svg></span>
+              <div><b>Création de contenu</b><p>Photos, vidéos et contenus adaptés à votre club.</p></div>
+            </div>
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-check"/></svg></span>
+              <div><b>Suivi club et association</b><p>Organisation, conseil et accompagnement sur mesure.</p></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Bloc 3 : événements -->
+        <section class="bloc_service reveal">
+          <header class="bloc_tete verre leger">
+            <span class="filet_degrade"></span>
+            <h3 class="titre_zone">Vos événements</h3>
+            <p>Stages, tournois, temps forts : nous capturons tout, nous animons en direct et nous livrons vite.</p>
+          </header>
+          <div class="grille_services">
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-pin"/></svg></span>
+              <div><b>Couverture de stages</b><p>Reportage photo et vidéo complet de vos stages pour mettre en valeur chaque moment.</p></div>
+            </div>
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-trophy"/></svg></span>
+              <div><b>Couverture de tournois</b><p>Présence sur un ou plusieurs jours pour capturer tous les temps forts de votre événement.</p></div>
+            </div>
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-camera"/></svg></span>
+              <div><b>Création de contenu</b><p>Photos, vidéos, interviews, reels et contenus adaptés à vos besoins et à vos objectifs.</p></div>
+            </div>
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-zap"/></svg></span>
+              <div><b>Réseaux en temps réel</b><p>Publication et animation en direct pendant vos événements pour maximiser votre visibilité.</p></div>
+            </div>
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-dl"/></svg></span>
+              <div><b>Banque de vidéos</b><p>Mise à disposition d'une banque de vidéos pour vos futures communications.</p></div>
+            </div>
+            <div class="carte_service verre leger">
+              <span class="rond_ic"><svg class="ic"><use href="#i-send"/></svg></span>
+              <div><b>Livraison rapide et sécurisée</b><p>Contenus triés, montés et livrés rapidement via une plateforme sécurisée.</p></div>
+            </div>
+          </div>
+        </section>
+
+        <div class="services_cta reveal">
+          <button class="btn_primaire" data-scroll="footer"><svg class="ic" style="width:15px;height:15px"><use href="#i-send"/></svg>Parlons de votre projet</button>
+          <button class="btn_verre" data-aller="athletes"><svg class="ic" style="width:15px;height:15px"><use href="#i-users"/></svg>Voir nos athlètes</button>
+        </div>
+
       </div>
     </section>
 
-    <!-- ================= PAGE STORY : occupe tout l écran ================= -->
+    <!-- ================= PAGE STORY ================= -->
     <section class="page page_story" id="page_story" hidden>
       <div class="page_tete reveal">
         <p class="micro">Notre story</p>
@@ -908,8 +1084,8 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
             <span class="ligne_texte"><span class="titre">Partage instantané</span><span class="texte">Un geste et votre moment préféré du match est en ligne pour vos amis.</span></span>
           </div>
           <div class="story_cta">
-            <button class="btn_primaire" data-aller="application"><svg class="ic" style="width:15px;height:15px"><use href="#i-home"/></svg>Ouvrir l'application</button>
-            <button class="btn_verre" data-aller="contact"><svg class="ic" style="width:15px;height:15px"><use href="#i-send"/></svg>Nous écrire</button>
+            <button class="btn_primaire" data-scroll="footer"><svg class="ic" style="width:15px;height:15px"><use href="#i-send"/></svg>Nous écrire</button>
+            <button class="btn_verre" data-aller="services"><svg class="ic" style="width:15px;height:15px"><use href="#i-star"/></svg>Nos services</button>
           </div>
         </div>
       </div>
@@ -918,13 +1094,67 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
   </div>
 </div>
 
-<footer class="pied">
-  <img src="logv.jpeg" onerror="this.onerror=null;this.src='logov.jpeg'" alt="Logo Sportvision">
-  <span style="font-weight:700;color:rgba(255,255,255,.85)">Sportvision</span>
-  <span class="sep">·</span>
-  <button class="btn_verre petit" data-aller="story"><svg class="ic" style="width:14px;height:14px"><use href="#i-play"/></svg>Notre story</button>
-  <span class="sep">·</span><span>© 2025</span>
-  <span class="sep">·</span><span>Voir le foot autrement</span>
+<!-- ================= PIED DE PAGE : la prise de contact ================= -->
+<footer class="footer_global" id="footer_contact">
+  <div class="footer_grille">
+    <aside class="f_marque verre leger reveal">
+      <div class="f_tete">
+        <img src="logv.jpeg" onerror="this.onerror=null;this.src='logov.jpeg'" alt="Logo Sportvision">
+        <div><b>Sportvision</b><p>Voir le foot autrement. Les temps forts, les profils, les shorts de 20 secondes.</p></div>
+      </div>
+      <div class="contact_lignes">
+        <button class="ligne_contact" id="copie_mail"><svg class="ic"><use href="#i-mail"/></svg>bonjour@sportvision.app</button>
+        <span class="ligne_contact"><svg class="ic"><use href="#i-phone"/></svg>+33 1 84 80 20 25</span>
+        <span class="ligne_contact"><svg class="ic"><use href="#i-pin"/></svg>Paris, France</span>
+      </div>
+      <p class="contact_fans">120 000 fans de foot nous suivent déjà</p>
+      <div class="sujets_rapides" role="group" aria-label="Sujets rapides">
+        <button class="chip" data-sujet="Partenariat club">Partenariat club</button>
+        <button class="chip" data-sujet="Presse">Presse</button>
+        <button class="chip" data-sujet="Support">Support</button>
+        <button class="chip" data-sujet="Recrutement">Recrutement</button>
+      </div>
+    </aside>
+    <form class="f_form verre leger reveal" id="form_contact" novalidate>
+      <h3 class="f_titre">Écrivez nous</h3>
+      <div class="grille_form">
+        <div class="champ">
+          <label for="f_nom">Votre nom</label>
+          <input id="f_nom" name="nom" placeholder="Amina Diallo" autocomplete="name">
+          <span class="err">Ajoutez votre nom</span>
+        </div>
+        <div class="champ">
+          <label for="f_mail">Votre email</label>
+          <input id="f_mail" name="email" type="email" placeholder="amina@exemple.fr" autocomplete="email">
+          <span class="err">Cet email semble invalide</span>
+        </div>
+        <div class="champ large">
+          <label for="f_sujet">Sujet</label>
+          <input id="f_sujet" name="sujet" placeholder="De quoi voulez vous parler ?">
+        </div>
+        <div class="champ large">
+          <label for="f_msg">Votre message</label>
+          <textarea id="f_msg" name="message" placeholder="Bonjour, je voudrais proposer un résumé de match…"></textarea>
+          <span class="err">Votre message est vide</span>
+        </div>
+        <div class="actions_form large" style="grid-column:1/-1">
+          <button type="submit" class="btn_primaire"><svg class="ic" style="width:15px;height:15px"><use href="#i-send"/></svg>Envoyer le message</button>
+        </div>
+      </div>
+    </form>
+    <nav class="f_liens verre leger reveal" aria-label="Liens du site">
+      <p class="f_titre">Explorer</p>
+      <button class="lien_pied" data-aller="accueil"><svg class="ic"><use href="#i-home"/></svg>Accueil</button>
+      <button class="lien_pied" data-aller="athletes"><svg class="ic"><use href="#i-users"/></svg>Nos athlètes</button>
+      <button class="lien_pied" data-aller="services"><svg class="ic"><use href="#i-star"/></svg>Nos services</button>
+      <button class="lien_pied" data-aller="story"><svg class="ic"><use href="#i-play"/></svg>Notre story</button>
+      <p class="f_copy">Sportvision · © 2025</p>
+    </nav>
+  </div>
+  <p class="footer_bas">
+    <span>Voir le foot autrement</span><span class="sep">·</span>
+    <span>On ne suit pas les standards, on les impose.</span>
+  </p>
 </footer>
 
 <!-- Lecteur de shorts -->
@@ -944,7 +1174,6 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
       </div>
       <div class="short_bas">
         <span class="ph" id="short_reste">20 s</span>
-        <span class="pv"><svg class="ic"><use href="#i-eye"/></svg><span id="short_vues"></span></span>
       </div>
       <div class="short_progress"><i id="short_barre"></i></div>
       <div class="short_fin" id="short_fin">
@@ -1004,51 +1233,61 @@ function toast(msg,ic='i-check'){
   setTimeout(()=>{t.classList.add('part');setTimeout(()=>t.remove(),320);},2600);
 }
 
-/* ===== Données : dix footballeurs, avec club, poste, numéro et fiche ===== */
+/* ===== Données : dix footballeurs ===== */
 const ATH={
   aya:{img:'j1.png',poste:'Attaquante',groupe:'Attaque',club:'Olympique Lumière',sigle:'OL',champ:'Championnat Élite',pays:'Sénégal',taille:'1,74 m',numero:9,sel:'28 sélections',l1:'AYA',l2:'TRAORÉ',id:'@aya.tr',
     desc:"Attaquante de l'Olympique Lumière. Dès que la surface s'ouvre, le ballon finit au fond des filets.",
     stats:[['24','Buts'],['9','Passes déc.'],['31','Matchs']],
-    chips:['Numéro 9','Olympique Lumière','Championnat Élite','Sénégal','Meilleure buteuse']},
+    chips:['Numéro 9','Olympique Lumière','Championnat Élite','Sénégal','Meilleure buteuse'],
+    com:["Cette frappe des trente mètres est passée entre trois défenseurs. Irréel.",'theo']},
   karim:{img:'j2.png',poste:'Milieu relayeur',groupe:'Milieu',club:'Étoile Atlantique',sigle:'EA',champ:'Championnat Élite',pays:'Maroc',taille:'1,80 m',numero:8,sel:'17 sélections',l1:'KARIM',l2:'BENSAÏD',id:'@karim.bs',
-    desc:"Milieu de l'Étoile Atlantique. Il récupère, il relance, il recommence, quatre vingt dix minutes durant.",
+    desc:"Milieu de l'Étoile Atlantique. Il récupère, il relance, il recommence, pendant 90 minutes.",
     stats:[['7','Buts'],['14','Passes déc.'],['30','Matchs']],
-    chips:['Numéro 8','Étoile Atlantique','Championnat Élite','Maroc','Homme du match']},
+    chips:['Numéro 8','Étoile Atlantique','Championnat Élite','Maroc','Homme du match'],
+    com:["Sa reprise sous la barre a fait taire tout le stade.",'fatou']},
   lea:{img:'j3.png',poste:'Gardienne',groupe:'Gardien',club:'Racing Azur',sigle:'RA',champ:'Championnat Élite',pays:'France',taille:'1,76 m',numero:1,sel:'12 sélections',l1:'LÉA',l2:'MARCHAND',id:'@lea.mh',
     desc:"Gardienne du Racing Azur. Sur sa ligne comme dans les duels aériens, rien ne passe.",
     stats:[['96','Arrêts'],['12','Clean sheets'],['31','Matchs']],
-    chips:['Numéro 1','Racing Azur','Championnat Élite','France',"Gant d'or"]},
+    chips:['Numéro 1','Racing Azur','Championnat Élite','France',"Gant d'or"],
+    com:["Trois arrêts en dix minutes. La gardienne du moment.",'nour']},
   theo:{img:'j4.png',poste:'Ailier droit',groupe:'Attaque',club:'FC Horizon',sigle:'FH',champ:'Championnat Élite',pays:'France',taille:'1,78 m',numero:7,sel:'5 sélections',l1:'THÉO',l2:'LAMBERT',id:'@theo.lb',
     desc:"Ailier droit du FC Horizon. Vitesse pure sur son couloir et centre enroulé au second poteau.",
     stats:[['11','Buts'],['16','Passes déc.'],['29','Matchs']],
-    chips:['Numéro 7','FC Horizon','Championnat Élite','France','Débordement']},
+    chips:['Numéro 7','FC Horizon','Championnat Élite','France','Débordement'],
+    com:["Son centre enroulé, personne ne le voit venir.",'aya']},
   nour:{img:'j5.png',poste:'Défenseure centrale',groupe:'Défense',club:'Sporting Étoile',sigle:'SE',champ:'Championnat Élite',pays:'Tunisie',taille:'1,72 m',numero:4,sel:'21 sélections',l1:'NOUR',l2:'HADDAD',id:'@nour.hd',
     desc:"Défenseure centrale et capitaine du Sporting Étoile. Un placement de glace et un sens du duel redoutable.",
     stats:[['2','Buts'],['3','Passes déc.'],['32','Matchs']],
-    chips:['Numéro 4','Sporting Étoile','Championnat Élite','Tunisie','Capitaine']},
+    chips:['Numéro 4','Sporting Étoile','Championnat Élite','Tunisie','Capitaine'],
+    com:["Un tacle parfait dans les arrêts de jeu. Capitaine exemplaire.",'lea']},
   marc:{img:'j6.png',poste:'Milieu offensif',groupe:'Milieu',club:'Olympique Boréal',sigle:'OB',champ:'Championnat Élite',pays:'France',taille:'1,83 m',numero:10,sel:'9 sélections',l1:'MARC',l2:'DELAUNAY',id:'@marc.dl',
     desc:"Numéro dix de l'Olympique Boréal. Une frappe de loin qui ne pardonne jamais deux fois.",
     stats:[['13','Buts'],['11','Passes déc.'],['28','Matchs']],
-    chips:['Numéro 10','Olympique Boréal','Championnat Élite','France','Coup franc']},
+    chips:['Numéro 10','Olympique Boréal','Championnat Élite','France','Coup franc'],
+    com:["Le coup franc est rentré sans toucher personne. Colossal.",'karim']},
   sofia:{img:'j7.png',poste:'Attaquante',groupe:'Attaque',club:'Club Aurora',sigle:'CA',champ:'Championnat Élite',pays:'Espagne',taille:'1,68 m',numero:11,sel:'33 sélections',l1:'SOFIA',l2:'REYES',id:'@sofia.ry',
     desc:"Attaquante du Club Aurora. Elle vit pour les balles de match et les retournés impossibles.",
     stats:[['19','Buts'],['6','Passes déc.'],['30','Matchs']],
-    chips:['Numéro 11','Club Aurora','Championnat Élite','Espagne','Retourné']},
+    chips:['Numéro 11','Club Aurora','Championnat Élite','Espagne','Retourné'],
+    com:["Le retourné de la saison, il faut le revoir en boucle.",'aya']},
   diego:{img:'j1.png',poste:'Milieu défensif',groupe:'Milieu',club:'Club Aurora',sigle:'CA',champ:'Championnat Élite',pays:'Espagne',taille:'1,85 m',numero:6,sel:'14 sélections',l1:'DIEGO',l2:'RAMOS',id:'@diego.rm',
     desc:"Sentinelle du Club Aurora. Il ferme l'axe central comme personne et relance toujours propre.",
     stats:[['3','Buts'],['5','Passes déc.'],['31','Matchs']],
-    chips:['Numéro 6','Club Aurora','Championnat Élite','Espagne','Récupération']},
+    chips:['Numéro 6','Club Aurora','Championnat Élite','Espagne','Récupération'],
+    com:["Il a éteint le meilleur buteur du championnat pendant 90 minutes.",'sofia']},
   fatou:{img:'j2.png',poste:'Ailière gauche',groupe:'Attaque',club:'Étoile Atlantique',sigle:'EA',champ:'Championnat Élite',pays:'Sénégal',taille:'1,70 m',numero:11,sel:'19 sélections',l1:'FATOU',l2:'NDIAYE',id:'@fatou.nd',
     desc:"Ailière gauche de l'Étoile Atlantique. Le petit pont fait partie de sa signature depuis toujours.",
     stats:[['15','Buts'],['12','Passes déc.'],['30','Matchs']],
-    chips:['Numéro 11','Étoile Atlantique','Championnat Élite','Sénégal','Petit pont']},
+    chips:['Numéro 11','Étoile Atlantique','Championnat Élite','Sénégal','Petit pont'],
+    com:["Le petit pont devant le gardien, c'est sa signature.",'karim']},
   lucas:{img:'j3.png',poste:'Latéral droit',groupe:'Défense',club:'FC Horizon',sigle:'FH',champ:'Championnat Élite',pays:'Allemagne',taille:'1,81 m',numero:2,sel:'7 sélections',l1:'LUCAS',l2:'MEYER',id:'@lucas.my',
     desc:"Latéral droit du FC Horizon. Montées éclair, centre téléguidé, retour défensif systématique.",
     stats:[['1','But'],['8','Passes déc.'],['27','Matchs']],
-    chips:['Numéro 2','FC Horizon','Championnat Élite','Allemagne','Montée']},
+    chips:['Numéro 2','FC Horizon','Championnat Élite','Allemagne','Montée'],
+    com:["Son centre a trouvé la tête du numéro 9 au millimètre.",'theo']},
 };
 
-/* ===== Fabrique des cartes joueurs, cliquables vers le profil ===== */
+/* ===== Fabrique des cartes joueurs ===== */
 function carteAthlete(k){
   const a=ATH[k];
   const el=document.createElement('article');
@@ -1067,11 +1306,7 @@ function carteAthlete(k){
     <span class="fleche"><svg class="ic" style="width:18px;height:18px"><use href="#i-arrr"/></svg></span>`;
   return el;
 }
-/* Aperçu sur l accueil : sept joueurs */
-const rangeeAth=$('#rangee_ath');
-['aya','theo','sofia','marc','karim','lea','nour'].forEach(k=>rangeeAth.appendChild(carteAthlete(k)));
- $('#compte_ath').textContent='7 joueurs sur 10';
-/* Catalogue complet sur la page athlètes : dix joueurs */
+/* Catalogue complet, uniquement sur la page athlètes */
 const grilleAth=$('#grille_ath');
 Object.keys(ATH).forEach(k=>grilleAth.appendChild(carteAthlete(k)));
 /* Filtres par ligne de jeu */
@@ -1104,7 +1339,7 @@ const rangAv=$('#rang_avatars');
   rangAv.appendChild(b);
 });
 
-/* ===== Profil : chargement avec la fiche club complète ===== */
+/* ===== Profil du joueur : affiché en grand sur la page athlètes ===== */
 let profilKey='aya';
 function loadProfil(k){
   const a=ATH[k];if(!a)return;profilKey=k;
@@ -1113,6 +1348,9 @@ function loadProfil(k){
   $('#profil_nom').innerHTML=a.l1+'<br>'+a.l2;
   $('#profil_id').textContent=a.id;
   $('#profil_desc').textContent=a.desc;
+  $('#profil_poste').textContent=a.poste;
+  $('#profil_pays').textContent=a.pays;
+  $('#profil_num').textContent=a.numero;
   $('#profil_fiche').innerHTML=`
     <div class="club_rang">
       <span class="club_sigle">${a.sigle}</span>
@@ -1127,21 +1365,42 @@ function loadProfil(k){
     </div>`;
   $('#profil_stats').innerHTML=a.stats.map(s=>`<div class="stat"><div class="chiffre">${s[0]}</div><div class="libelle">${s[1]}</div></div>`).join('');
   $('#profil_chips').innerHTML=a.chips.map(c=>`<span class="chip">${c}</span>`).join('');
+  const [txt,cle]=a.com,au=ATH[cle];
+  $('#profil_com').innerHTML=`<img src="${au.img}" alt="Avatar de ${au.l1} ${au.l2}"><div><p class="com_texte"></p><p class="com_nom"></p><p class="com_id"></p></div>`;
+  $('#profil_com .com_texte').textContent=txt;
+  $('#profil_com .com_nom').textContent=au.l1.charAt(0)+au.l1.slice(1).toLowerCase()+' '+au.l2.charAt(0)+au.l2.slice(1).toLowerCase();
+  $('#profil_com .com_id').textContent=au.id;
   const bs=$('#btn_suivre_profil');
   bs.classList.remove('suivi');bs.querySelector('span').textContent='Suivre';
   $('#use_suiv_p').setAttribute('href','#i-plus');
-  const pan=$('#profil_panneau');pan.classList.remove('montre');void pan.offsetWidth;pan.classList.add('montre');
+  rejouerAnim();
+}
+function rejouerAnim(){
+  const p=$('#pg_panneau');
+  p.classList.remove('montre');void p.offsetWidth;p.classList.add('montre');
+  p.scrollTop=0;
 }
 function openProfil(k){
+  if(!ATH[k])return;
   loadProfil(k);
-  $$('#rang_avatars .avatar_btn').forEach(x=>x.classList.toggle('actif',x.dataset.ath===k));
-  const aller=()=>{
-    scrollVers('#tel_profil','center');
-    const t=$('#tel_profil');t.classList.remove('pulse');void t.offsetWidth;t.classList.add('pulse');
-  };
-  if(pageCourante!=='application'){location.hash='#/application';setTimeout(aller,90);}else aller();
+  vueProfilOuverte=true;
+  $('#vue_catalogue').hidden=true;
+  $('#vue_profil').hidden=false;
+  if(pageCourante!=='athletes'){location.hash='#/athletes';}
+  else window.scrollTo({top:0,behavior:reduced?'auto':'smooth'});
 }
-/* Un seul point d entrée : tout ce qui porte data ath ouvre le profil du joueur */
+function showCatalogue(){
+  vueProfilOuverte=false;
+  $('#vue_profil').hidden=true;
+  $('#vue_catalogue').hidden=false;
+}
+ $('#btn_retour_cat').addEventListener('click',()=>{showCatalogue();window.scrollTo({top:0,behavior:reduced?'auto':'smooth'});});
+const clesAth=Object.keys(ATH);
+function voisin(k,d){const i=clesAth.indexOf(k);return clesAth[(i+d+clesAth.length)%clesAth.length];}
+ $('#pg_prev').addEventListener('click',()=>loadProfil(voisin(profilKey,-1)));
+ $('#pg_next').addEventListener('click',()=>loadProfil(voisin(profilKey,1)));
+
+/* Un seul point d entrée : tout ce qui porte data ath ouvre le profil sur la page */
 document.addEventListener('click',e=>{
   const el=e.target.closest('[data-ath]');
   if(!el)return;
@@ -1149,45 +1408,68 @@ document.addEventListener('click',e=>{
   openProfil(el.dataset.ath);
 });
 document.addEventListener('keydown',e=>{
-  if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-ath][role="button"]')){e.preventDefault();openProfil(e.target.dataset.ath);}
+  if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('[data-ath][role="button"]')){e.preventDefault();openProfil(e.target.dataset.ath);}
 });
 
-/* ===== Router en verre : quatre onglets plus la page story en accès direct ===== */
-const PAGES=['accueil','athletes','application','contact','story'];
+/* ===== Router en verre : accueil, athlètes, services, story ; contact dans le pied de page ===== */
+const PAGES=['accueil','athletes','services','story'];
 function pageDepuisHash(){
   const h=(location.hash||'').replace(/^#\/?/,'').toLowerCase();
   return PAGES.includes(h)?h:'accueil';
 }
-let pageCourante='accueil';
+let pageCourante='accueil',vueProfilOuverte=false;
+function majOngletActif(){
+  $$('.onglet').forEach(o=>o.classList.toggle('actif',o.dataset.page===pageCourante));
+}
 function naviguerPage(){
   const cible=pageDepuisHash();
   PAGES.forEach(p=>{document.getElementById('page_'+p).hidden=(p!==cible);});
-  $$('.onglet').forEach(o=>o.classList.toggle('actif',o.dataset.page===cible));
   pageCourante=cible;
+  if(cible==='athletes'&&!vueProfilOuverte)showCatalogue();
+  majOngletActif();
   window.scrollTo({top:0,left:0,behavior:'auto'});
   const page=document.getElementById('page_'+cible);
-  requestAnimationFrame(()=>$$('.reveal',page).forEach(el=>io.observe(el)));
+  requestAnimationFrame(()=>{
+    $$('.reveal',page).forEach(el=>io.observe(el));
+    if(cible==='athletes'&&vueProfilOuverte)rejouerAnim();
+  });
+}
+function aller(p){
+  if(p==='athletes')vueProfilOuverte=false;
+  if(location.hash==='#/'+p){naviguerPage();}
+  else location.hash='#/'+p;
 }
 window.addEventListener('hashchange',naviguerPage);
- $$('.onglet').forEach(o=>o.addEventListener('click',()=>{location.hash='#/'+o.dataset.page;}));
- $$('[data-aller]').forEach(b=>b.addEventListener('click',()=>{location.hash='#/'+b.dataset.aller;}));
+ $$('.onglet').forEach(o=>o.addEventListener('click',()=>{
+  if(o.dataset.scroll){scrollVers('#footer_contact','start');return;}
+  aller(o.dataset.page);
+}));
+ $$('[data-aller]').forEach(b=>b.addEventListener('click',()=>aller(b.dataset.aller)));
+ $$('[data-scroll]').forEach(b=>b.addEventListener('click',()=>scrollVers('#footer_contact','start')));
 naviguerPage();
 
-/* ===== Hero : vidéo qui apparaît en fondu quand elle est prête ===== */
+/* L onglet Contact s active quand le pied de page est visible */
+const ongletContact=$$('.onglet').find(o=>o.dataset.scroll);
+new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){$$('.onglet').forEach(x=>x.classList.remove('actif'));ongletContact.classList.add('actif');}
+  else if(ongletContact.classList.contains('actif'))majOngletActif();
+}),{threshold:.2}).observe($('#footer_contact'));
+
+/* ===== Hero : vidéo qui apparaît en fondu ===== */
 const videoH=$('#video_hero');
 videoH.addEventListener('canplay',()=>videoH.classList.add('pret'),{once:true});
 videoH.addEventListener('loadeddata',()=>videoH.classList.add('pret'),{once:true});
 window.addEventListener('load',()=>videoH.play().catch(()=>{}));
 
-/* ===== Lecteur de shorts : vidéo verticale de 20 secondes, contours assombris ===== */
+/* ===== Lecteur de shorts : 20 secondes, sans compteurs de vues ===== */
 const DUREE_SHORT=20;
 const SHORTS=[
-  {titre:'La roulette',joueur:'Théo Lambert',club:'FC Horizon',vues:'24 000',start:0},
-  {titre:'Le retourné',joueur:'Sofia Reyes',club:'Club Aurora',vues:'31 000',start:3},
-  {titre:'Petit pont foudroyant',joueur:'Karim Bensaïd',club:'Étoile Atlantique',vues:'18 500',start:6},
-  {titre:'Demi volée surpuissante',joueur:'Marc Delaunay',club:'Olympique Boréal',vues:'15 200',start:9},
-  {titre:'Amortie de la poitrine',joueur:'Nour Haddad',club:'Sporting Étoile',vues:'11 900',start:12},
-  {titre:"Sprint de l'ailière",joueur:'Aya Traoré',club:'Olympique Lumière',vues:'27 300',start:15},
+  {titre:'La roulette',joueur:'Théo Lambert',club:'FC Horizon',start:0},
+  {titre:'Le retourné',joueur:'Sofia Reyes',club:'Club Aurora',start:3},
+  {titre:'Petit pont foudroyant',joueur:'Karim Bensaïd',club:'Étoile Atlantique',start:6},
+  {titre:'Demi volée surpuissante',joueur:'Marc Delaunay',club:'Olympique Boréal',start:9},
+  {titre:'Amortie de la poitrine',joueur:'Nour Haddad',club:'Sporting Étoile',start:12},
+  {titre:"Sprint de l ailière",joueur:'Aya Traoré',club:'Olympique Lumière',start:15},
 ];
 const voileS=$('#voile_short'),vS=$('#video_short');
 let shortIdx=0,t0=0,rafShort=null,shortActif=false;
@@ -1195,7 +1477,6 @@ function infosShort(i){
   const s=SHORTS[i];
   $('#short_titre').textContent=s.titre;
   $('#short_sous').textContent=s.joueur+' · '+s.club;
-  $('#short_vues').textContent=s.vues+' vues';
   $('#short_fin_titre').textContent=s.titre;
 }
 function lancerChrono(){
@@ -1234,6 +1515,7 @@ function fermerShort(){
   vS.pause();
 }
  $$('.item_compact').forEach(el=>el.addEventListener('click',()=>ouvrirShort(parseInt(el.dataset.short,10))));
+ $$('[data-ouvrir-short]').forEach(b=>b.addEventListener('click',()=>ouvrirShort(0)));
  $('#short_fermer').addEventListener('click',fermerShort);
  $('#short_rejouer').addEventListener('click',()=>{
   vS.currentTime=SHORTS[shortIdx].start||0;
@@ -1294,13 +1576,13 @@ const POPOVERS={
     {ic:'i-share',label:'Copier le lien',act:()=>copierLien()},
   ]},
   bell:{titre:'Notifications',items:[
-    {ic:'i-zap',label:'Le match de la journée 32 commence, rejoignez le direct',meta:'à l instant',act:()=>{location.hash='#/accueil';setTimeout(()=>{const h=$('#zone_hero');h.classList.remove('flash');void h.offsetWidth;h.classList.add('flash');scrollVers('#zone_hero','center');},90);}},
+    {ic:'i-zap',label:'Le match de la journée 32 commence, rejoignez le direct',meta:'à l instant',act:()=>{aller('accueil');setTimeout(()=>{const h=$('#zone_hero');h.classList.remove('flash');void h.offsetWidth;h.classList.add('flash');scrollVers('#zone_hero','center');},90);}},
     {ic:'i-play',label:'Nouveau résumé de Aya Traoré',meta:'Il y a 12 min',act:()=>openProfil('aya')},
     {ic:'i-eye',label:'Votre court a dépassé 100 000 vues',meta:'Il y a 1 h',act:()=>toast('Bravo pour les vues !','i-eye')},
   ]},
   profil:{titre:'Amina Diallo',items:[
     {ic:'i-user',label:'Mon profil',act:()=>openProfil('aya')},
-    {ic:'i-heart',label:'Mes favoris',act:()=>{location.hash='#/accueil';setTimeout(()=>scrollVers('#liste_recente','start'),90);}},
+    {ic:'i-heart',label:'Mes favoris',act:()=>{aller('accueil');setTimeout(()=>scrollVers('#liste_recente','start'),90);}},
     {ic:'i-x',label:'Se déconnecter',act:()=>toast('À bientôt, Amina !','i-user')},
   ]},
 };
@@ -1312,7 +1594,7 @@ function copierLien(texte='https://sportvision.app/journee32',msg='Lien copié')
 /* ===== Recherche : filtre en direct ===== */
  $('#champ_recherche').addEventListener('input',e=>{
   const q=e.target.value.trim().toLowerCase();
-  $$('#rangee_ath .carte_photo, #liste_recente .carte_recente').forEach(c=>{
+  $$('#liste_recente .carte_recente').forEach(c=>{
     const t=(c.dataset.nom||'').toLowerCase();
     c.classList.toggle('cachee',!!q&&!t.includes(q));
   });
@@ -1332,7 +1614,7 @@ tri.addEventListener('click',()=>{
   ordre.forEach(c=>listeR.appendChild(c));
 });
 
-/* ===== Boutons suivre des cartes mobiles ===== */
+/* ===== Boutons suivre des cartes du téléphone ===== */
  $$('.btn_suivre').forEach(b=>b.addEventListener('click',e=>{
   e.stopPropagation();
   const suivi=b.classList.toggle('suivi');
@@ -1342,6 +1624,17 @@ tri.addEventListener('click',()=>{
   nb.textContent=n.toLocaleString('fr-FR')+' abonnés';
   toast(suivi?`Vous suivez ${b.dataset.nom}`:'Suivi retiré','i-heart');
 }));
+
+/* ===== Suivre depuis le profil en grand ===== */
+const bsP=$('#btn_suivre_profil');let suiviP=false;
+bsP.addEventListener('click',()=>{
+  suiviP=!suiviP;bsP.classList.toggle('suivi',suiviP);
+  bsP.querySelector('span').textContent=suiviP?'Suivi':'Suivre';
+  $('#use_suiv_p').setAttribute('href',suiviP?'#i-check':'#i-plus');
+  const a=ATH[profilKey];
+  const nomComplet=a.l1.charAt(0)+a.l1.slice(1).toLowerCase()+' '+a.l2.charAt(0)+a.l2.slice(1).toLowerCase();
+  toast(suiviP?`Vous suivez ${nomComplet}`:'Suivi retiré','i-heart');
+});
 
 /* ===== Navigation du téléphone ===== */
  $('#cloche_mobile').addEventListener('click',()=>{
@@ -1359,28 +1652,17 @@ tri.addEventListener('click',()=>{
   if(b.dataset.nav==='profil')openProfil(profilKey);
 }));
 
-/* ===== Vignettes et boutons du panneau profil ===== */
+/* ===== Vignettes du profil en grand ===== */
  $('#vig_g').addEventListener('click',()=>$('#profil_vignettes').scrollBy({left:-150,behavior:'smooth'}));
  $('#vig_d').addEventListener('click',()=>$('#profil_vignettes').scrollBy({left:150,behavior:'smooth'}));
- $('#btn_retour_profil').addEventListener('click',()=>{
-  const pan=$('#profil_panneau');pan.classList.remove('montre');void pan.offsetWidth;pan.classList.add('montre');
-});
-const bsP=$('#btn_suivre_profil');let suiviP=false;
-bsP.addEventListener('click',()=>{
-  suiviP=!suiviP;bsP.classList.toggle('suivi',suiviP);
-  bsP.querySelector('span').textContent=suiviP?'Suivi':'Suivre';
-  $('#use_suiv_p').setAttribute('href',suiviP?'#i-check':'#i-plus');
-  const a=ATH[profilKey];
-  const nomComplet=a.l1.charAt(0)+a.l1.slice(1).toLowerCase()+' '+a.l2.charAt(0)+a.l2.slice(1).toLowerCase();
-  toast(suiviP?`Vous suivez ${nomComplet}`:'Suivi retiré','i-heart');
-});
 
-/* ===== Page contact : copie, sujets rapides et formulaire ===== */
+/* ===== Pied de page : copie, sujets rapides et formulaire ===== */
  $('#copie_mail').addEventListener('click',()=>copierLien('bonjour@sportvision.app','Adresse copiée'));
  $$('.sujets_rapides .chip').forEach(c=>c.addEventListener('click',()=>{
   $('#f_sujet').value=c.dataset.sujet;
   toast('Sujet ajouté : '+c.dataset.sujet,'i-check');
   $('#f_msg').focus();
+  scrollVers('#form_contact','center');
 }));
  $('#form_contact').addEventListener('submit',e=>{
   e.preventDefault();
@@ -1396,7 +1678,7 @@ bsP.addEventListener('click',()=>{
 });
  $$('#form_contact input,#form_contact textarea').forEach(el=>el.addEventListener('input',()=>el.closest('.champ').classList.remove('erreur')));
 
-/* ===== Inclinaison douce des téléphones et de la story ===== */
+/* ===== Inclinaison douce du téléphone et de la story ===== */
 if(matchMedia('(pointer:fine)').matches&&!reduced){
   $$('.telephone,.story').forEach(el=>{
     el.addEventListener('pointerenter',()=>{el.style.transition='transform .2s ease-out';});
