@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sportvision, voir le sport autrement</title>
+<link rel="icon" href="logov.jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Chakra+Petch:wght@500;600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============ Variables ============ */
+:root{
+  --violet-profond:#3514A8;
+  --violet-electrique:#4B20D9;
+  --bleu:#006FE8;
+  --cyan:#00C8F2;
+  --magenta:#D42CF0;
+  --fuchsia:#F04BE8;
+  --blanc:#FFFFFF;
+  --fond:#0A0620;
+  --texte-2:rgba(255,255,255,.66);
+  --degrade:linear-gradient(90deg,#00C8F2 0%,#006FE8 35%,#4B20D9 65%,#D42CF0 100%);
+  --r-cadre:36px; --r-carte:24px; --r-pilule:999px; --gap:16px;
+}
+
+/* ============ Base ============ */
+*{margin:0;box-sizing:border-box}
+button{font:inherit;background:none;border:0;cursor:pointer;color:inherit}
+img{display:block}
+input,textarea{font:inherit}
+body{background:var(--fond);color:#fff;font-family:'Manrope',sans-serif;overflow-x:hidden}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+
+/* ============ Fond de page : taches floues, grain, grille ============ */
+.fond{position:fixed;inset:0;z-index:-1;overflow:hidden;}
+.tache{position:absolute;width:55vw;height:55vw;border-radius:50%;filter:blur(120px);opacity:.42;will-change:transform;animation:derive 36s ease-in-out infinite alternate;}
+.tache.a{background:var(--violet-electrique);top:-15vw;left:-10vw;}
+.tache.b{background:var(--bleu);bottom:-20vw;right:-10vw;animation-duration:32s;}
+.tache.c{background:var(--magenta);top:30vh;left:40vw;opacity:.3;animation-duration:40s;}
+@keyframes derive{to{transform:translate3d(6vw,4vw,0) scale(1.1);}}
+.grain{position:fixed;inset:0;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+.grille_fine{position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%);}
+
+/* ============ Verre : le style central ============ */
+.verre{
+  position:relative;border-radius:var(--r-carte);
+  background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.03));
+  -webkit-backdrop-filter:blur(28px) saturate(150%);backdrop-filter:blur(28px) saturate(150%);
+  box-shadow:0 30px 80px rgba(20,6,80,.45),inset 0 1px 0 rgba(255,255,255,.18);
+  isolation:isolate;
+}
+.verre::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
+  background:linear-gradient(135deg,rgba(255,255,255,.55),rgba(255,255,255,.06) 40%,rgba(255,255,255,.02) 60%,rgba(0,200,242,.25));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;}
+.verre::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;
+  background:radial-gradient(400px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.08),transparent 45%);}
+.verre:hover::after{opacity:1;}
+@media (hover:none){.verre::after{display:none}}
+.verre.leger{-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);}
+.verre.fort{background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.05));-webkit-backdrop-filter:blur(40px) saturate(160%);backdrop-filter:blur(40px) saturate(160%);}
+.verre.teinte{background:linear-gradient(135deg,rgba(75,32,217,.30),rgba(75,32,217,.12));}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.verre{background:rgba(20,10,60,.85);}}
+@media (max-width:767px){.verre,.verre.fort{-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);}}
+
+/* ============ Grand cadre et grille des 4 zones desktop ============ */
+.cadre{position:relative;max-width:1680px;margin:0 auto;padding:24px;border-radius:var(--r-cadre);min-height:max(760px,calc(100svh - 96px));display:flex;flex-direction:column;gap:var(--gap);}
+.grille_accueil{flex:1;display:grid;gap:var(--gap);grid-template-columns:22% 1fr 26%;grid-template-rows:62% 38%;grid-template-areas:"recent hero hero" "recent athletes contact";min-height:0;}
+.zone_recent{grid-area:recent;}
+.zone_hero{grid-area:hero;}
+.zone_athletes{grid-area:athletes;}
+.zone_contact{grid-area:contact;}
+.zone_recent,.zone_athletes,.zone_contact{scroll-margin-top:24px;min-width:0;min-height:0;}
+
+/* ============ En tête ============ */
+.entete{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:10px 12px;border-radius:var(--r-pilule);}
+.onglets{display:flex;gap:4px;}
+.onglet{padding:10px 20px;border-radius:var(--r-pilule);color:rgba(255,255,255,.7);font-weight:500;transition:background .25s,color .25s;white-space:nowrap;}
+.onglet:hover{color:#fff;background:rgba(255,255,255,.08);}
+.onglet.actif{background:#fff;color:#1A0B5C;}
+.recherche{display:flex;align-items:center;gap:10px;height:44px;padding:0 16px;border-radius:var(--r-pilule);color:var(--texte-2);width:min(280px,100%);}
+.recherche input{flex:1;background:none;border:0;outline:none;color:#fff;font-size:14px;min-width:0}
+.recherche input::placeholder{color:var(--texte-2)}
+.entete_actions{display:flex;align-items:center;gap:10px;justify-self:end;}
+.bouton_rond{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;}
+.point_notif{position:absolute;top:9px;right:9px;width:8px;height:8px;border-radius:50%;background:var(--fuchsia);border:2px solid rgba(10,6,32,.9);}
+.pilule_profil{display:flex;align-items:center;gap:10px;padding:6px 12px 6px 7px;border-radius:var(--r-pilule);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);transition:background .25s;}
+.pilule_profil:hover{background:rgba(255,255,255,.14)}
+.pilule_profil img{width:32px;height:32px;border-radius:50%;object-fit:cover;}
+.pp_nom{font-size:13px;font-weight:700;line-height:1.15;text-align:left}
+.pp_id{font-size:11px;color:var(--texte-2);text-align:left}
+
+/* ============ Dock vertical flottant ============ */
+.dock{position:absolute;left:-20px;top:50%;transform:translateY(-50%);z-index:5;display:flex;flex-direction:column;gap:8px;padding:8px;border-radius:var(--r-pilule);}
+.dock .icone{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:rgba(255,255,255,.75);transition:background .25s,color .25s,transform .25s;}
+.dock .icone:hover{color:#fff;background:rgba(255,255,255,.1)}
+.dock .icone.actif{background:rgba(255,255,255,.18);color:#fff;}
+
+/* ============ Hero vidéo ============ */
+.zone_hero{position:relative;overflow:hidden;border-radius:32px;background:linear-gradient(135deg,#2A0F86,#0A0620);}
+.zone_hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.hero_voile{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,6,32,.88) 0%,rgba(10,6,32,.35) 45%,transparent 70%),linear-gradient(to right,rgba(10,6,32,.7),transparent 60%);}
+.hero_teinte{position:absolute;inset:0;background:rgba(53,20,168,.35);mix-blend-mode:soft-light;}
+.hero_lignes{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.03) 0 1px,transparent 1px 4px);}
+.hero_contenu{position:absolute;left:40px;bottom:40px;right:200px;z-index:3;}
+.hero_pastille{position:absolute;top:20px;left:20px;z-index:3;}
+.titre_geant{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;line-height:.85;letter-spacing:-.01em;font-size:clamp(72px,11vw,200px);}
+.titre_sous{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;line-height:.9;font-size:clamp(32px,4vw,64px);}
+.mot_degrade{background:var(--degrade);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.micro{font-family:'Chakra Petch',sans-serif;text-transform:uppercase;letter-spacing:.12em;font-size:11px;color:var(--texte-2);}
+.hero_desc{max-width:540px;color:rgba(255,255,255,.78);font-size:14px;line-height:1.55;margin:14px 0 18px;}
+.hero_pilules{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.hero_actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.hero_nav{position:absolute;right:24px;bottom:24px;z-index:3;display:flex;gap:8px;}
+#hero_swap{transition:opacity .25s,transform .25s;}
+#hero_swap.echange{opacity:0;transform:translateY(10px);}
+@keyframes tap{50%{transform:scale(.99)}}
+.zone_hero.flash{animation:tap .35s ease}
+
+/* ============ Boutons et pilules ============ */
+.btn_primaire{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;border-radius:var(--r-pilule);background:#fff;color:#1A0B5C;font-weight:600;box-shadow:0 10px 30px rgba(255,255,255,.15);transition:transform .2s,background .25s;}
+.btn_primaire:hover{transform:translateY(-2px)}
+.btn_primaire.petit{padding:9px 18px;font-size:13px}
+.btn_primaire.ajoute{background:var(--cyan)}
+.btn_primaire .ic,.btn_verre .ic{width:16px;height:16px}
+.btn_verre{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;border-radius:var(--r-pilule);border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.08);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);color:#fff;font-weight:600;transition:background .25s;}
+.btn_verre:hover{background:rgba(255,255,255,.16)}
+.btn_verre.petit{padding:10px 18px;font-size:13px}
+.btn_verre.ajoute{border-color:var(--cyan);color:var(--cyan)}
+.pilule_info{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:var(--r-pilule);font-size:13px;font-weight:600;}
+.chip{padding:8px 14px;border-radius:var(--r-pilule);background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.12);font-size:13px;color:rgba(255,255,255,.85);white-space:nowrap;}
+.point_direct{width:8px;height:8px;border-radius:50%;background:var(--fuchsia);animation:pulse 1.6s ease-in-out infinite;}
+@keyframes pulse{50%{transform:scale(1.6);opacity:.5;}}
+
+/* ============ Cartes photo portrait ============ */
+.carte_photo{position:relative;overflow:hidden;border-radius:var(--r-carte);aspect-ratio:3/4;box-shadow:0 20px 50px rgba(20,6,80,.4);background:#1B0B55}
+.carte_photo img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1);}
+.carte_photo:hover img{transform:scale(1.05);}
+.carte_photo::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(10,6,32,.88) 0%,rgba(10,6,32,.2) 45%,transparent 65%);}
+.carte_photo .pastille_haut{position:absolute;top:12px;left:12px;z-index:2;}
+.carte_photo .texte_bas{position:absolute;left:16px;right:64px;bottom:16px;z-index:2;}
+.carte_photo .fleche{position:absolute;right:12px;bottom:12px;z-index:2;width:44px;height:44px;border-radius:50%;background:#fff;color:#1A0B5C;display:grid;place-items:center;transition:background .25s,transform .25s;}
+.carte_photo:hover .fleche{background:var(--cyan);}
+.carte_photo .texte_bas h4{font-size:15px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.carte_photo .texte_bas p{font-size:12px;color:rgba(255,255,255,.7);margin-top:2px}
+.carte_photo .chip{padding:5px 11px;font-size:11px;font-weight:700;background:rgba(20,10,50,.5);border-color:rgba(255,255,255,.2);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);}
+.dots_carte{position:absolute;top:10px;right:10px;z-index:2;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:rgba(10,6,32,.55);border:1px solid rgba(255,255,255,.22);color:#fff;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:background .25s;}
+.dots_carte:hover{background:rgba(255,255,255,.2)}
+.dots_carte .ic{width:16px;height:16px}
+.cachee{display:none!important}
+
+/* ============ Colonne récente ============ */
+.zone_recent{display:flex;flex-direction:column;gap:16px;}
+.carte_col{padding:14px;display:flex;flex-direction:column;min-height:0;}
+.carte_col.un{flex:1.3}
+.carte_col.deux{flex:1}
+.carte_tete{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.carte_tete h3{font-size:14px;font-weight:800;letter-spacing:.01em}
+.carte_tete .ic{width:16px;height:16px;color:var(--cyan)}
+.tri{margin-left:auto;font-size:11px;color:var(--texte-2);font-family:'Chakra Petch',sans-serif;letter-spacing:.08em;text-transform:uppercase;}
+.tri:hover{color:#fff}
+.liste_recente{display:flex;flex-direction:column;gap:12px;overflow-y:auto;scroll-snap-type:y mandatory;padding-bottom:40px;mask-image:linear-gradient(to bottom,#000 80%,transparent);scrollbar-width:none;}
+.liste_recente::-webkit-scrollbar{width:0}
+.liste_recente>*{scroll-snap-align:start;flex:0 0 auto;}
+.liste_recente .carte_photo{aspect-ratio:16/10;border-radius:18px;flex:0 0 auto}
+.liste_recente .texte_bas{right:58px}
+.mini_lecture{position:absolute;right:12px;bottom:12px;z-index:2;width:34px;height:34px;border-radius:50%;background:#fff;color:#1A0B5C;display:grid;place-items:center;transition:background .25s,transform .25s;}
+.mini_lecture .ic{width:14px;height:14px}
+.mini_lecture:hover{background:var(--cyan);transform:scale(1.08)}
+.une_liste{display:flex;flex-direction:column;overflow-y:auto;scrollbar-width:none}
+.une_liste::-webkit-scrollbar{height:0;width:0}
+.item_compact{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;padding:9px 0;border-top:1px solid rgba(255,255,255,.08);}
+.item_compact:first-child{border-top:0}
+.item_compact img{width:40px;height:56px;border-radius:10px;object-fit:cover}
+.ic_titre{font-size:13px;font-weight:700;line-height:1.25}
+.ic_sous{font-size:11px;color:var(--texte-2);margin-top:2px}
+.ic_btn{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);color:#fff;transition:background .25s}
+.ic_btn:hover{background:var(--cyan);color:#082433}
+.ic_btn .ic{width:13px;height:13px}
+
+/* ============ Rangée athlètes ============ */
+.zone_athletes{display:flex;flex-direction:column;gap:12px;}
+.rang_tete{display:flex;align-items:center;gap:12px;}
+.titre_zone{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:26px;text-transform:uppercase;letter-spacing:.02em;line-height:1;}
+.rangee_athletes{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;flex:1;min-height:0;}
+.rangee_athletes::-webkit-scrollbar{height:0}
+.rangee_athletes>*{height:100%;aspect-ratio:3/4;flex:0 0 auto;scroll-snap-align:start;}
+.rangee_athletes .extra{display:none}
+.rangee_athletes.etendu .extra{display:block}
+
+/* ============ Carte contact ============ */
+.zone_contact{padding:20px;display:flex;flex-direction:column;gap:10px;overflow:auto;}
+.contact_tete{display:flex;align-items:center;gap:12px;justify-content:space-between;}
+.contact_phrase{font-size:13px;color:var(--texte-2);line-height:1.5}
+.contact_lignes{display:flex;flex-direction:column;gap:2px;margin-top:auto}
+.ligne_contact{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.85);padding:7px 8px;border-radius:12px;text-align:left}
+.ligne_contact .ic{width:16px;height:16px;color:var(--cyan)}
+button.ligne_contact:hover{background:rgba(255,255,255,.08)}
+.contact_fans{font-size:11px;color:var(--texte-2);font-family:'Chakra Petch',sans-serif;letter-spacing:.1em;text-transform:uppercase;margin-top:6px}
+
+/* ============ Sections vitrine ============ */
+.section_app,.section_stories{padding:110px 24px;}
+.section_app{max-width:1240px;margin:0 auto}
+.tete_section{text-align:center;max-width:680px;margin:0 auto;}
+.titre_section{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(44px,7vw,84px);line-height:.9;margin:12px 0 16px;}
+.sous_section{color:var(--texte-2);font-size:15px;line-height:1.6}
+
+/* ============ Téléphones ============ */
+.telephones{display:flex;gap:48px;justify-content:center;flex-wrap:wrap;margin-top:60px;}
+.telephone{width:375px;height:780px;border-radius:54px;padding:12px;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.18);box-shadow:0 40px 90px rgba(15,5,60,.55),inset 0 1px 0 rgba(255,255,255,.2);}
+.ecran{position:relative;width:100%;height:100%;border-radius:42px;overflow:hidden;background:#0A0620;}
+.island{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:108px;height:26px;border-radius:20px;background:#000;z-index:60;pointer-events:none}
+.tel_scroll{height:100%;overflow-y:auto;scrollbar-width:none;}
+.tel_scroll::-webkit-scrollbar{width:0}
+@keyframes telPulse{50%{transform:scale(1.02)}}
+.telephone.pulse{animation:telPulse .5s ease}
+.legende_tel{margin-top:18px;text-align:center;font-family:'Chakra Petch',sans-serif;letter-spacing:.16em;text-transform:uppercase;font-size:11px;color:var(--texte-2);}
+.bloc_tel{display:flex;flex-direction:column;align-items:center}
+
+/* En tête, sous titres et avatars du téléphone */
+.app_entete{display:flex;align-items:center;gap:10px;padding:54px 16px 8px;}
+.app_entete .logo_app{width:38px;height:38px;border-radius:12px;object-fit:contain;background:rgba(255,255,255,.1)}
+.app_actions{margin-left:auto;display:flex;gap:10px;align-items:center;}
+.btn_rond_sombre{position:relative;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:#fff;}
+.btn_rond_sombre .ic{width:18px;height:18px}
+.btn_rond_sombre .point_notif{top:6px;right:6px;width:9px;height:9px;border-color:#0A0620}
+.avatar_entete{width:40px;height:40px;border-radius:14px;object-fit:cover;cursor:pointer}
+.app_soustitre{font-size:13px;font-weight:600;color:rgba(255,255,255,.7);margin:18px 16px 10px;}
+.rang_avatars{display:flex;gap:12px;overflow-x:auto;padding:2px 16px 4px;scrollbar-width:none;}
+.rang_avatars::-webkit-scrollbar{height:0}
+.avatar_btn{position:relative;padding:0;border-radius:28px;flex:0 0 auto}
+.avatar_btn img{width:64px;height:64px;border-radius:24px;object-fit:cover}
+.avatar_btn .statut{position:absolute;right:2px;bottom:2px;width:14px;height:14px;border-radius:50%;background:var(--cyan);border:3px solid #0A0620;}
+.avatar_btn.fuchsia .statut{background:var(--fuchsia)}
+.avatar_btn.carre{border-radius:28px;padding:2.5px;background:var(--degrade);}
+.avatar_btn.carre img{border:2.5px solid #0A0620;border-radius:22px;width:59px;height:59px}
+.avatar_btn.actif{outline:2px solid var(--cyan);outline-offset:2px}
+
+/* Cartes verticales du fil mobile */
+.telephone .rail_mobile{padding:0 16px 130px;}
+.telephone .rail_mobile>*{flex:0 0 76%;max-width:none;aspect-ratio:3/4.3;}
+.rail_mobile{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:16px;scrollbar-width:none;}
+.rail_mobile>*{flex:0 0 72vw;max-width:300px;aspect-ratio:3/4.4;scroll-snap-align:start;}
+.rail_mobile::-webkit-scrollbar{height:0}
+.suivre_pilule{position:absolute;top:12px;left:12px;right:12px;z-index:3;display:flex;align-items:center;gap:8px;padding:6px 6px 6px 9px;border-radius:var(--r-pilule);}
+.suivre_pilule img{width:26px;height:26px;border-radius:50%;object-fit:cover}
+.nom_chaine{font-size:12px;font-weight:800;line-height:1.15}
+.nb_abo{font-size:10px;color:rgba(255,255,255,.7)}
+.btn_suivre{margin-left:auto;border:1px solid transparent;background:#fff;color:#1A0B5C;font-weight:800;font-size:12px;padding:8px 14px;border-radius:var(--r-pilule);transition:background .25s,color .25s,transform .2s;}
+.btn_suivre:active{transform:scale(.94)}
+.btn_suivre.suivi{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.35)}
+.titre_carte_mobile{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:44px;line-height:.9;position:absolute;left:16px;right:16px;bottom:56px;z-index:2;}
+.pastilles{position:absolute;left:16px;right:16px;bottom:16px;z-index:2;display:flex;align-items:center;gap:8px;}
+.ph{background:var(--fuchsia);color:#2B0351;font-weight:800;font-size:11px;padding:6px 10px;border-radius:var(--r-pilule);white-space:nowrap}
+.pv{display:inline-flex;align-items:center;gap:5px;background:rgba(20,10,50,.5);border:1px solid rgba(255,255,255,.18);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:6px 10px;border-radius:var(--r-pilule);font-size:11px;font-weight:600;white-space:nowrap}
+.pv .ic{width:12px;height:12px}
+.pile{display:flex;align-items:center;flex:0 0 auto}
+.pile img{width:20px;height:20px;border-radius:50%;border:2px solid #0A0620;object-fit:cover;margin-left:-6px}
+.pile img:first-child{margin-left:0}
+.pile span{font-size:11px;font-weight:700;margin-left:6px;color:rgba(255,255,255,.85)}
+
+/* Barre de navigation mobile flottante */
+.nav_mobile{position:fixed;left:16px;right:16px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:50;display:grid;grid-template-columns:repeat(5,1fr);align-items:center;padding:8px;border-radius:28px;}
+.telephone .nav_mobile{position:absolute;left:14px;right:14px;bottom:14px;}
+.nav_mobile .item{height:48px;display:grid;place-items:center;color:rgba(255,255,255,.65);border-radius:20px;transition:color .25s,background .25s;}
+.nav_mobile .item:hover{color:#fff}
+.nav_mobile .item.actif{color:#fff;background:rgba(75,32,217,.35);box-shadow:0 0 24px rgba(0,200,242,.25);}
+.nav_mobile .centre{width:52px;height:52px;margin:-14px auto 0;border-radius:50%;box-shadow:0 0 28px rgba(212,44,240,.35),0 0 28px rgba(0,200,242,.25);background:var(--degrade);color:#fff;display:grid;place-items:center;}
+.nav_mobile .centre .ic{width:22px;height:22px}
+
+/* Écran profil du téléphone */
+.telephone .profil_photo{position:relative;height:56%;}
+.profil_photo{position:fixed;inset:0;height:62svh;}
+.profil_photo img{width:100%;height:100%;object-fit:cover;}
+.profil_wrap{position:relative;height:56%;overflow:hidden}
+.profil_wrap img{width:100%;height:100%;object-fit:cover}
+.viseur{position:relative;}
+.viseur{position:absolute;inset:0;pointer-events:none;}
+.viseur i{position:absolute;width:22px;height:22px;border:2px solid rgba(255,255,255,.85);}
+.viseur i:nth-child(1){top:14px;left:14px;border-right:0;border-bottom:0;}
+.viseur i:nth-child(2){top:14px;right:14px;border-left:0;border-bottom:0;}
+.viseur i:nth-child(3){bottom:14px;left:14px;border-right:0;border-top:0;}
+.viseur i:nth-child(4){bottom:14px;right:14px;border-left:0;border-top:0;}
+.profil_actions{position:absolute;top:52px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:center;z-index:5;}
+.btn_retour{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;}
+.btn_noir{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:var(--r-pilule);background:#0B0B0F;color:#fff;font-weight:700;font-size:13px;border:1px solid rgba(255,255,255,.16);box-shadow:0 10px 24px rgba(0,0,0,.45);}
+.btn_noir .ic{width:15px;height:15px}
+.profil_panneau{position:relative;margin-top:38svh;padding:28px 20px calc(96px + env(safe-area-inset-bottom));border-radius:32px 32px 0 0;}
+.telephone .profil_panneau{margin-top:-72px;padding:28px 20px 28px;}
+.profil_panneau .poignee{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:44px;height:4px;border-radius:4px;background:rgba(255,255,255,.55);}
+@keyframes panneauMonte{from{transform:translateY(46px);opacity:.3}}
+.profil_panneau.montre{animation:panneauMonte .55s cubic-bezier(.2,.8,.2,1)}
+.nom_profil{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(56px,16vw,96px);line-height:.88;}
+.telephone .nom_profil{font-size:54px;}
+.profil_id{color:var(--texte-2);font-size:13px;margin-top:8px;font-family:'Chakra Petch',sans-serif;}
+.profil_desc{font-size:13.5px;line-height:1.55;color:rgba(255,255,255,.85);margin-top:12px;}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0;}
+.stat .chiffre{font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:34px;line-height:1;}
+.stat .libelle{font-family:'Chakra Petch',sans-serif;text-transform:uppercase;letter-spacing:.12em;font-size:11px;color:var(--texte-2);margin-top:6px;}
+.profil_chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+.profil_chips::-webkit-scrollbar{height:0}
+.vignettes{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;}
+.vignettes::-webkit-scrollbar{height:0}
+.vignettes img{flex:0 0 120px;height:120px;border-radius:20px;object-fit:cover;scroll-snap-align:start;}
+.vignettes_nav{display:flex;gap:10px;justify-content:center;margin-top:12px;}
+.fleche_ronde{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.22);display:grid;place-items:center;color:#fff;transition:background .25s;}
+.fleche_ronde:hover{background:rgba(255,255,255,.28)}
+.fleche_ronde .ic{width:17px;height:17px}
+.commentaire{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:18px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);margin-top:18px;}
+.commentaire img{width:38px;height:38px;border-radius:50%;object-fit:cover}
+.com_texte{font-size:13px;line-height:1.5;color:rgba(255,255,255,.85)}
+.com_nom{font-weight:700;font-size:13px;margin-top:8px}
+.com_id{color:var(--texte-2);font-size:12px}
+
+/* ============ Story de la marque ============ */
+.section_stories{display:flex;flex-direction:column;align-items:center;}
+.story{width:min(430px,92vw);aspect-ratio:9/16;max-height:86svh;border-radius:34px;overflow:hidden;position:relative;background:linear-gradient(180deg,#3514A8 0%,#1B0B55 55%,#0A0620 100%);box-shadow:0 50px 110px rgba(20,6,80,.6);}
+.traits{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+.traits::before,.traits::after{content:"";position:absolute;width:2px;height:70%;transform:rotate(38deg);filter:blur(1px);animation:traitDerive 8s ease-in-out infinite alternate;}
+.traits::before{top:-10%;right:12%;background:linear-gradient(to bottom,transparent,var(--cyan),transparent);}
+.traits::after{bottom:-15%;left:8%;background:linear-gradient(to bottom,transparent,var(--magenta),transparent);animation-delay:2s}
+@keyframes traitDerive{to{transform:rotate(38deg) translateY(70px);}}
+.story_interieur{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;padding:36px 30px;}
+.story_marque{display:flex;flex-direction:column;align-items:center;text-align:center;}
+.story_logo{position:relative;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);display:grid;place-items:center;}
+.story_logo img{width:34px;height:34px;border-radius:50%;object-fit:contain}
+.story_logo::before,.story_logo::after{content:"";position:absolute;height:3px;border-radius:3px;background:var(--degrade);filter:blur(.5px)}
+.story_logo::before{width:26px;right:100%;margin-right:8px;top:32%;opacity:.9}
+.story_logo::after{width:16px;right:100%;margin-right:8px;top:62%;opacity:.5}
+.story_nom{font-weight:800;letter-spacing:.34em;font-size:20px;margin-top:16px;padding-left:.34em}
+.story_slogan{font-size:10px;letter-spacing:.42em;color:rgba(255,255,255,.6);margin-top:9px;padding-left:.42em}
+.story_corps{flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;margin-top:20px;}
+.story .titre_geant{font-size:clamp(48px,13vw,62px);line-height:.88;}
+.filet_degrade{height:2px;width:min(320px,60%);background:var(--degrade);border-radius:2px;}
+.story_sous{font-family:'Chakra Petch',sans-serif;color:var(--cyan);font-weight:600;font-size:13px;letter-spacing:.18em;text-transform:uppercase;}
+.story_phrase{font-size:14.5px;line-height:1.6;color:rgba(255,255,255,.9);}
+.cyan{color:var(--cyan);font-weight:700}
+.story_liste{list-style:none;margin-top:6px;}
+.ligne_service{display:grid;grid-template-columns:56px 1px 1fr;gap:16px;align-items:center;padding:16px 0;border-bottom:1px solid rgba(139,92,255,.30);}
+.story_liste .ligne_service:last-child{border-bottom:0}
+.ligne_service .cercle{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;border:1.5px solid transparent;background:linear-gradient(var(--fond),var(--fond)) padding-box,linear-gradient(135deg,var(--violet-electrique),var(--bleu)) border-box;}
+.ligne_service .cercle .ic{width:20px;height:20px;color:var(--cyan)}
+.ligne_service .separateur{width:1px;height:40px;background:rgba(255,255,255,.2);}
+.ligne_service .titre{font-weight:700;text-transform:uppercase;letter-spacing:.02em;font-size:13px;display:block}
+.ligne_service .texte{color:rgba(255,255,255,.75);font-size:12.5px;display:block;margin-top:3px;line-height:1.4}
+.ligne_texte{min-width:0}
+
+/* ============ Popover, toasts, modale, pied ============ */
+.popover{position:fixed;z-index:220;width:min(280px,90vw);padding:10px;border-radius:18px;}
+.pop_titre{padding:8px 12px 6px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--texte-2);font-family:'Chakra Petch',sans-serif;}
+.pop_item{display:flex;gap:10px;align-items:center;width:100%;padding:11px 12px;border-radius:12px;font-size:13.5px;font-weight:600;color:#fff;text-align:left;transition:background .2s;}
+.pop_item:hover{background:rgba(255,255,255,.1)}
+.pop_item .ic{width:17px;height:17px;color:var(--cyan)}
+.pop_meta{margin-left:auto;font-size:11px;color:var(--texte-2);font-style:normal;white-space:nowrap}
+.zone_toasts{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:300;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;}
+@keyframes toastIn{from{opacity:0;transform:translateY(14px) scale(.95)}}
+.toast{display:flex;gap:10px;align-items:center;padding:12px 18px;border-radius:var(--r-pilule);font-size:14px;font-weight:600;animation:toastIn .35s cubic-bezier(.2,.8,.2,1);transition:opacity .3s,transform .3s;}
+.toast .ic{width:17px;height:17px;color:var(--cyan)}
+.toast.part{opacity:0;transform:translateY(10px)}
+.voile_modale{position:fixed;inset:0;z-index:250;display:grid;place-items:center;padding:20px;background:rgba(6,3,22,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .25s;}
+.voile_modale.ouvre{opacity:1;pointer-events:auto}
+.modale{width:min(460px,100%);padding:26px;transform:translateY(14px) scale(.98);transition:transform .3s cubic-bezier(.2,.8,.2,1);}
+.voile_modale.ouvre .modale{transform:none}
+.modale_tete{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.modale_tete h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:30px;text-transform:uppercase;}
+.grille_form{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.champ{display:flex;flex-direction:column;gap:6px;}
+.champ.large{grid-column:1/-1}
+.champ label{font-size:12px;font-weight:700;color:var(--texte-2);letter-spacing:.04em;text-transform:uppercase;font-family:'Chakra Petch',sans-serif;}
+.champ input,.champ textarea{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:12px 14px;color:#fff;outline:none;transition:border-color .25s;resize:vertical;min-height:0}
+.champ textarea{min-height:90px}
+.champ input:focus,.champ textarea:focus{border-color:var(--cyan)}
+.champ .err{display:none;font-size:12px;color:var(--fuchsia)}
+.champ.erreur input,.champ.erreur textarea{border-color:var(--fuchsia)}
+.champ.erreur .err{display:block}
+.actions_modale{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;}
+.pied{display:flex;align-items:center;justify-content:center;gap:12px;padding:46px 20px 54px;color:rgba(255,255,255,.6);font-size:13px;flex-wrap:wrap}
+.pied img{width:28px;height:28px;border-radius:50%;object-fit:contain;background:rgba(255,255,255,.1)}
+.pied .sep{opacity:.4}
+
+/* ============ Apparition au scroll, accessibilité ============ */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .7s,transform .7s;}
+.reveal.visible{opacity:1;transform:none;}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+
+/* ============ Points de rupture ============ */
+@media (max-width:1279px){.grille_accueil{grid-template-columns:1fr 1fr;grid-template-rows:auto;grid-template-areas:"hero hero" "recent athletes" "contact contact";}}
+@media (max-width:1023px){.dock{display:none}}
+@media (max-width:767px){
+  .ecran_desktop{padding:12px 12px 0!important}
+  .cadre{padding:0;border-radius:0;background:none;box-shadow:none}
+  .cadre::before{display:none}
+  .grille_accueil{display:block;}
+  .zone_hero{height:78svh;border-radius:0 0 36px 36px;}
+  .entete{display:flex;flex-wrap:wrap;gap:10px;padding:12px 14px;border-radius:0;}
+  .recherche{order:1;flex:1 1 100%;}
+  .onglets{order:2;overflow-x:auto;scrollbar-width:none}
+  .entete_actions{order:3;margin-left:auto;}
+  .zone_recent{margin-top:16px;padding:0 14px;}
+  .liste_recente{max-height:460px;mask-image:none;padding-bottom:12px}
+  .zone_athletes{margin-top:22px;padding:0 14px;}
+  .rangee_athletes{height:320px;flex:none}
+  .zone_contact{margin:22px 14px 24px;}
+  .hero_contenu{left:20px;right:20px;bottom:26px;}
+  .hero_nav{right:16px;bottom:16px}
+  .section_app,.section_stories{padding:80px 16px;}
+  .telephone{width:min(375px,94vw);height:740px;}
+}
+</style>
+</head>
+<body>
+
+<!-- Bibliothèque d icônes -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></symbol>
+  <symbol id="i-chevdown" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-chevleft" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+  <symbol id="i-chevright" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></symbol>
+  <symbol id="i-dl" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M7 4h3v16H7zM14 4h3v16h-3z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></symbol>
+  <symbol id="i-arrl" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></symbol>
+  <symbol id="i-arrr" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></symbol>
+  <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></symbol>
+  <symbol id="i-film" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5"/></symbol>
+  <symbol id="i-video" viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+  <symbol id="i-copie" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+</svg>
+
+<!-- Décor de fond -->
+<div class="fond" aria-hidden="true"><div class="tache a"></div><div class="tache b"></div><div class="tache c"></div></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="grille_fine" aria-hidden="true"></div>
+
+<!-- ================= ÉCRAN 1 : INTERFACE DESKTOP ================= -->
+<div class="ecran_desktop" style="padding:44px 24px 20px">
+  <div class="cadre verre">
+
+    <!-- Dock vertical flottant -->
+    <nav class="dock verre fort" aria-label="Navigation latérale">
+      <button class="icone actif" data-dock="accueil" aria-label="Accueil" title="Accueil"><svg class="ic"><use href="#i-home"/></svg></button>
+      <button class="icone" data-dock="favoris" aria-label="Favoris" title="Favoris"><svg class="ic"><use href="#i-heart"/></svg></button>
+      <button class="icone" data-dock="dl" aria-label="Téléchargements" title="Téléchargements"><svg class="ic"><use href="#i-dl"/></svg></button>
+      <button class="icone" data-dock="profil" aria-label="Profil" title="Profil"><svg class="ic"><use href="#i-user"/></svg></button>
+      <button class="icone" data-dock="reglages" aria-label="Réglages" title="Réglages"><svg class="ic"><use href="#i-gear"/></svg></button>
+    </nav>
+
+    <!-- En tête -->
+    <header class="entete verre leger">
+      <form class="recherche verre leger" role="search" id="form_recherche">
+        <svg class="ic" style="width:18px;height:18px"><use href="#i-search"/></svg>
+        <input id="champ_recherche" type="search" placeholder="Rechercher un match, un athlète…" aria-label="Rechercher">
+      </form>
+      <nav class="onglets" aria-label="Sections">
+        <button class="onglet actif" data-cible="top" data-block="start">Accueil</button>
+        <button class="onglet" data-cible="#zone_hero" data-block="center">Direct</button>
+        <button class="onglet" data-cible="#zone_recent" data-block="start">Résumés</button>
+        <button class="onglet" data-cible="#zone_athletes" data-block="start">Athlètes</button>
+        <button class="onglet" data-cible="#zone_contact" data-block="center">Contact</button>
+      </nav>
+      <div class="entete_actions">
+        <button class="bouton_rond verre leger" data-pop="bell" aria-label="Notifications" style="position:relative">
+          <svg class="ic" style="width:18px;height:18px"><use href="#i-bell"/></svg>
+          <span class="point_notif"></span>
+        </button>
+        <button class="pilule_profil" data-pop="profil">
+          <img src="j3.png" alt="Avatar de Amina Diallo">
+          <span><span class="pp_nom">Amina Diallo</span><br><span class="pp_id">@amina.dv</span></span>
+          <svg class="ic" style="width:16px;height:16px;color:var(--texte-2)"><use href="#i-chevdown"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Grille des 4 zones -->
+    <div class="grille_accueil">
+
+      <!-- Colonne gauche : Retour sur match -->
+      <aside class="zone_recent reveal" id="zone_recent">
+        <div class="carte_col un verre leger">
+          <div class="carte_tete">
+            <svg class="ic"><use href="#i-zap"/></svg>
+            <h3>Retour sur match</h3>
+            <button class="tri" id="btn_tri">Populaire</button>
+          </div>
+          <div class="liste_recente" id="liste_recente">
+            <article class="carte_photo" data-nom="Panier à trois points basket">
+              <img src="j5.png" alt="Joueur au tir à trois points">
+              <div class="texte_bas"><h4>Panier à trois points</h4></div>
+              <button class="mini_lecture" data-titre="Panier à trois points" aria-label="Lire Panier à trois points"><svg class="ic"><use href="#i-play"/></svg></button>
+            </article>
+            <article class="carte_photo" data-nom="Égalisation à la 89e football">
+              <img src="j1.png" alt="Égalisation en fin de match">
+              <div class="texte_bas"><h4>Égalisation à la 89e</h4></div>
+              <button class="mini_lecture" data-titre="Égalisation à la 89e" aria-label="Lire Égalisation à la 89e"><svg class="ic"><use href="#i-play"/></svg></button>
+            </article>
+            <article class="carte_photo" data-nom="Arrêt décisif gardien">
+              <img src="j6.png" alt="Gardien sur son arrêt décisif">
+              <div class="texte_bas"><h4>Arrêt décisif</h4></div>
+              <button class="mini_lecture" data-titre="Arrêt décisif" aria-label="Lire Arrêt décisif"><svg class="ic"><use href="#i-play"/></svg></button>
+            </article>
+            <article class="carte_photo" data-nom="Départ canon sprint">
+              <img src="j2.png" alt="Départ de sprint en bloc">
+              <div class="texte_bas"><h4>Départ canon</h4></div>
+              <button class="mini_lecture" data-titre="Départ canon" aria-label="Lire Départ canon"><svg class="ic"><use href="#i-play"/></svg></button>
+            </article>
+            <article class="carte_photo" data-nom="Dernier virage cyclisme">
+              <img src="j7.png" alt="Cycliste dans le dernier virage">
+              <div class="texte_bas"><h4>Dernier virage</h4></div>
+              <button class="mini_lecture" data-titre="Dernier virage" aria-label="Lire Dernier virage"><svg class="ic"><use href="#i-play"/></svg></button>
+            </article>
+          </div>
+        </div>
+        <div class="carte_col deux verre leger">
+          <div class="carte_tete">
+            <svg class="ic"><use href="#i-film"/></svg>
+            <h3>Clips courts</h3>
+            <span class="tri">3 min max</span>
+          </div>
+          <div class="une_liste">
+            <div class="item_compact">
+              <img src="j3.png" alt="Miniature du geste du mois">
+              <div><p class="ic_titre">Le geste du mois</p><p class="ic_sous">Il y a 12 min · 24 000 vues</p></div>
+              <button class="ic_btn" data-titre="Le geste du mois" aria-label="Lire Le geste du mois"><svg class="ic"><use href="#i-play"/></svg></button>
+            </div>
+            <div class="item_compact">
+              <img src="j4.png" alt="Miniature de la conférence d'après match">
+              <div><p class="ic_titre">Conférence d'après match</p><p class="ic_sous">Il y a 1 h · 8 200 vues</p></div>
+              <button class="ic_btn" data-titre="Conférence d'après match" aria-label="Lire Conférence d'après match"><svg class="ic"><use href="#i-play"/></svg></button>
+            </div>
+            <div class="item_compact">
+              <img src="j6.png" alt="Miniature des coulisses du vestiaire">
+              <div><p class="ic_titre">Coulisses du vestiaire</p><p class="ic_sous">Il y a 3 h · 15 000 vues</p></div>
+              <button class="ic_btn" data-titre="Coulisses du vestiaire" aria-label="Lire Coulisses du vestiaire"><svg class="ic"><use href="#i-play"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Hero vidéo -->
+      <section class="zone_hero reveal" id="zone_hero" aria-label="Vidéo à la une">
+        <video id="video_hero" src="herov.mp4" autoplay muted loop playsinline preload="metadata"></video>
+        <div class="hero_teinte"></div>
+        <div class="hero_lignes"></div>
+        <div class="hero_voile"></div>
+        <div class="hero_pastille">
+          <span class="pilule_info verre leger"><span class="point_direct"></span>Now Trending</span>
+        </div>
+        <div class="hero_contenu">
+          <div id="hero_swap">
+            <div class="hero_pilules" id="hero_chips"></div>
+            <h2 class="titre_sous" id="hero_titre">LA FINALE QUI ENTRE<br>DANS <span class="mot_degrade">L'HISTOIRE</span></h2>
+            <p class="hero_desc" id="hero_desc">Revivez les trente dernières secondes d'une finale entrée dans la légende, commentée par les deux camps.</p>
+          </div>
+          <div class="hero_actions">
+            <button class="btn_primaire" id="btn_regarder"><svg class="ic"><use href="#i-play" id="use_reg"/></svg><span id="lbl_reg">Regarder</span></button>
+            <button class="btn_verre" id="btn_ajouter"><svg class="ic"><use href="#i-bookmark" id="use_aj"/></svg><span id="lbl_aj">Ajouter</span></button>
+            <button class="bouton_rond verre leger" data-pop="dots" aria-label="Plus d'options"><svg class="ic" style="width:18px;height:18px"><use href="#i-dots"/></svg></button>
+          </div>
+        </div>
+        <div class="hero_nav">
+          <button class="bouton_rond verre leger" id="hero_prec" aria-label="Programme précédent"><svg class="ic" style="width:18px;height:18px"><use href="#i-arrl"/></svg></button>
+          <button class="bouton_rond verre leger" id="hero_suiv" aria-label="Programme suivant"><svg class="ic" style="width:18px;height:18px"><use href="#i-arrr"/></svg></button>
+        </div>
+      </section>
+
+      <!-- Rangée : Nos athlètes -->
+      <section class="zone_athletes reveal" id="zone_athletes" aria-label="Nos athlètes">
+        <div class="rang_tete">
+          <h2 class="titre_zone">Nos athlètes</h2>
+          <button class="btn_verre petit" id="btn_voir" style="margin-left:auto"><span id="lbl_voir">Voir tout</span><svg class="ic" style="width:15px;height:15px"><use href="#i-arrr"/></svg></button>
+        </div>
+        <div class="rangee_athletes" id="rangee_ath">
+          <article class="carte_photo" data-nom="Aya Traoré sprint">
+            <img src="j1.png" alt="Aya Traoré, sprinteuse">
+            <span class="pastille_haut chip">Sprint</span>
+            <button class="dots_carte" data-pop="dots" aria-label="Options pour Aya Traoré"><svg class="ic"><use href="#i-dots"/></svg></button>
+            <div class="texte_bas"><h4>Aya Traoré</h4><p>Sprint · 31 titres</p></div>
+            <button class="fleche" data-ath="aya" aria-label="Voir le profil de Aya Traoré"><svg class="ic" style="width:18px;height:18px"><use href="#i-play"/></svg></button>
+          </article>
+          <article class="carte_photo" data-nom="Karim Bensaïd natation">
+            <img src="j2.png" alt="Karim Bensaïd, nageur">
+            <span class="pastille_haut chip">Natation</span>
+            <button class="dots_carte" data-pop="dots" aria-label="Options pour Karim Bensaïd"><svg class="ic"><use href="#i-dots"/></svg></button>
+            <div class="texte_bas"><h4>Karim Bensaïd</h4><p>Natation · 12 titres</p></div>
+            <button class="fleche" data-ath="karim" aria-label="Voir le profil de Karim Bensaïd"><svg class="ic" style="width:18px;height:18px"><use href="#i-play"/></svg></button>
+          </article>
+          <article class="carte_photo" data-nom="Léa Marchand escalade">
+            <img src="j3.png" alt="Léa Marchand, grimpeuse">
+            <span class="pastille_haut chip">Escalade</span>
+            <button class="dots_carte" data-pop="dots" aria-label="Options pour Léa Marchand"><svg class="ic"><use href="#i-dots"/></svg></button>
+            <div class="texte_bas"><h4>Léa Marchand</h4><p>Escalade · 9 titres</p></div>
+            <button class="fleche" data-ath="lea" aria-label="Voir le profil de Léa Marchand"><svg class="ic" style="width:18px;height:18px"><use href="#i-play"/></svg></button>
+          </article>
+          <article class="carte_photo" data-nom="Théo Lambert basket">
+            <img src="j4.png" alt="Théo Lambert, basketteur">
+            <span class="pastille_haut chip">Basket</span>
+            <button class="dots_carte" data-pop="dots" aria-label="Options pour Théo Lambert"><svg class="ic"><use href="#i-dots"/></svg></button>
+            <div class="texte_bas"><h4>Théo Lambert</h4><p>Basket · 7 titres</p></div>
+            <button class="fleche" data-ath="theo" aria-label="Voir le profil de Théo Lambert"><svg class="ic" style="width:18px;height:18px"><use href="#i-play"/></svg></button>
+          </article>
+          <article class="carte_photo extra" data-nom="Nour Haddad escrime">
+            <img src="j5.png" alt="Nour Haddad, escrimeuse">
+            <span class="pastille_haut chip">Escrime</span>
+            <button class="dots_carte" data-pop="dots" aria-label="Options pour Nour Haddad"><svg class="ic"><use href="#i-dots"/></svg></button>
+            <div class="texte_bas"><h4>Nour Haddad</h4><p>Escrime · 5 titres</p></div>
+            <button class="fleche" data-ath="nour" aria-label="Voir le profil de Nour Haddad"><svg class="ic" style="width:18px;height:18px"><use href="#i-play"/></svg></button>
+          </article>
+          <article class="carte_photo extra" data-nom="Marc Delaunay cyclisme">
+            <img src="j6.png" alt="Marc Delaunay, cycliste">
+            <span class="pastille_haut chip">Cyclisme</span>
+            <button class="dots_carte" data-pop="dots" aria-label="Options pour Marc Delaunay"><svg class="ic"><use href="#i-dots"/></svg></button>
+            <div class="texte_bas"><h4>Marc Delaunay</h4><p>Cyclisme · 14 titres</p></div>
+            <button class="fleche" data-ath="marc" aria-label="Voir le profil de Marc Delaunay"><svg class="ic" style="width:18px;height:18px"><use href="#i-play"/></svg></button>
+          </article>
+          <article class="carte_photo extra" data-nom="Sofia Reyes tennis">
+            <img src="j7.png" alt="Sofia Reyes, tenniswoman">
+            <span class="pastille_haut chip">Tennis</span>
+            <button class="dots_carte" data-pop="dots" aria-label="Options pour Sofia Reyes"><svg class="ic"><use href="#i-dots"/></svg></button>
+            <div class="texte_bas"><h4>Sofia Reyes</h4><p>Tennis · 11 titres</p></div>
+            <button class="fleche" data-ath="sofia" aria-label="Voir le profil de Sofia Reyes"><svg class="ic" style="width:18px;height:18px"><use href="#i-play"/></svg></button>
+          </article>
+        </div>
+      </section>
+
+      <!-- Carte contact -->
+      <aside class="zone_contact verre leger reveal" id="zone_contact" aria-label="Contact">
+        <div class="contact_tete">
+          <div>
+            <p class="micro">Contact</p>
+            <h2 class="titre_zone" style="font-size:30px;margin-top:4px">Parlons sport</h2>
+          </div>
+          <button class="btn_primaire petit" id="btn_ecrire"><svg class="ic" style="width:14px;height:14px"><use href="#i-send"/></svg>Écrire</button>
+        </div>
+        <p class="contact_phrase">Une question, un partenariat, un résumé à proposer ? La réponse arrive vite.</p>
+        <div class="contact_lignes">
+          <button class="ligne_contact" id="copie_mail"><svg class="ic"><use href="#i-mail"/></svg>bonjour@sportvision.app</button>
+          <span class="ligne_contact"><svg class="ic"><use href="#i-phone"/></svg>+33 1 84 80 20 25</span>
+          <span class="ligne_contact"><svg class="ic"><use href="#i-pin"/></svg>Paris, France</span>
+          <p class="contact_fans">120 000 fans nous suivent déjà</p>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</div>
+
+<!-- ================= ÉCRAN 2 : APPLICATION MOBILE ================= -->
+<section class="section_app" id="application">
+  <div class="tete_section reveal">
+    <p class="micro">Application</p>
+    <h2 class="titre_section">LE STAD<span class="mot_degrade">E</span><br>DANS VOTRE POCHE</h2>
+    <p class="sous_section">Un écran d'accueil pour explorer les temps forts, un profil pour suivre vos champions. Faites défiler les deux téléphones, tout est vivant.</p>
+  </div>
+
+  <div class="telephones">
+    <!-- Téléphone 1 : accueil -->
+    <div class="bloc_tel reveal">
+      <div class="telephone" id="tel_accueil">
+        <div class="ecran">
+          <div class="island"></div>
+          <div class="tel_scroll">
+            <header class="app_entete">
+              <img class="logo_app" src="logov.jpeg" alt="Logo Sportvision">
+              <div class="app_actions">
+                <button class="btn_rond_sombre" id="cloche_mobile" aria-label="Notifications" style="position:relative">
+                  <svg class="ic"><use href="#i-bell"/></svg>
+                  <span class="point_notif"></span>
+                </button>
+                <button id="avatar_mobile" aria-label="Voir le profil"><img class="avatar_entete" src="j3.png" alt="Mon avatar"></button>
+              </div>
+            </header>
+            <p class="app_soustitre">À la une</p>
+            <div class="rang_avatars" id="rang_avatars">
+              <button class="avatar_btn carre fuchsia actif" data-ath="aya" aria-label="Profil de Aya Traoré"><img src="j1.png" alt="Aya Traoré"><span class="statut"></span></button>
+              <button class="avatar_btn" data-ath="karim" aria-label="Profil de Karim Bensaïd"><img src="j2.png" alt="Karim Bensaïd"><span class="statut"></span></button>
+              <button class="avatar_btn carre fuchsia" data-ath="lea" aria-label="Profil de Léa Marchand"><img src="j3.png" alt="Léa Marchand"><span class="statut"></span></button>
+              <button class="avatar_btn" data-ath="theo" aria-label="Profil de Théo Lambert"><img src="j4.png" alt="Théo Lambert"><span class="statut"></span></button>
+              <button class="avatar_btn" data-ath="nour" aria-label="Profil de Nour Haddad"><img src="j5.png" alt="Nour Haddad"><span class="statut"></span></button>
+              <button class="avatar_btn carre fuchsia" data-ath="marc" aria-label="Profil de Marc Delaunay"><img src="j6.png" alt="Marc Delaunay"><span class="statut"></span></button>
+              <button class="avatar_btn" data-ath="sofia" aria-label="Profil de Sofia Reyes"><img src="j7.png" alt="Sofia Reyes"><span class="statut"></span></button>
+            </div>
+            <p class="app_soustitre">Temps forts</p>
+            <div class="rail_mobile">
+              <article class="carte_photo">
+                <img src="j5.png" alt="Panier à trois points">
+                <div class="suivre_pilule verre leger">
+                  <img src="j1.png" alt="Aya Traoré">
+                  <span><span class="nom_chaine">Aya Traoré</span><br><span class="nb_abo" data-n="128000">128 000 abonnés</span></span>
+                  <button class="btn_suivre" data-nom="Aya Traoré">Suivre</button>
+                </div>
+                <h3 class="titre_carte_mobile">PANIER<br>À TROIS POINTS</h3>
+                <div class="pastilles">
+                  <span class="ph">Il y a 2 h</span>
+                  <span class="pv"><svg class="ic"><use href="#i-clock"/></svg>03:24</span>
+                  <span class="pv"><svg class="ic"><use href="#i-eye"/></svg>128 000</span>
+                  <span class="pile"><img src="j2.png" alt=""><img src="j3.png" alt=""><img src="j4.png" alt=""><span>+15</span></span>
+                </div>
+              </article>
+              <article class="carte_photo">
+                <img src="j6.png" alt="Record du cent mètres">
+                <div class="suivre_pilule verre leger">
+                  <img src="j2.png" alt="Karim Bensaïd">
+                  <span><span class="nom_chaine">Karim Bensaïd</span><br><span class="nb_abo" data-n="96000">96 000 abonnés</span></span>
+                  <button class="btn_suivre" data-nom="Karim Bensaïd">Suivre</button>
+                </div>
+                <h3 class="titre_carte_mobile">RECORD DU<br>CENT MÈTRES</h3>
+                <div class="pastilles">
+                  <span class="ph">Il y a 5 h</span>
+                  <span class="pv"><svg class="ic"><use href="#i-clock"/></svg>02:10</span>
+                  <span class="pv"><svg class="ic"><use href="#i-eye"/></svg>96 400</span>
+                  <span class="pile"><img src="j1.png" alt=""><img src="j3.png" alt=""><img src="j5.png" alt=""><span>+22</span></span>
+                </div>
+              </article>
+              <article class="carte_photo">
+                <img src="j7.png" alt="Mur de huit mètres">
+                <div class="suivre_pilule verre leger">
+                  <img src="j3.png" alt="Léa Marchand">
+                  <span><span class="nom_chaine">Léa Marchand</span><br><span class="nb_abo" data-n="88000">88 000 abonnés</span></span>
+                  <button class="btn_suivre" data-nom="Léa Marchand">Suivre</button>
+                </div>
+                <h3 class="titre_carte_mobile">MUR DE<br>HUIT MÈTRES</h3>
+                <div class="pastilles">
+                  <span class="ph">Il y a 1 j</span>
+                  <span class="pv"><svg class="ic"><use href="#i-clock"/></svg>04:56</span>
+                  <span class="pv"><svg class="ic"><use href="#i-eye"/></svg>240 000</span>
+                  <span class="pile"><img src="j1.png" alt=""><img src="j4.png" alt=""><img src="j6.png" alt=""><span>+15</span></span>
+                </div>
+              </article>
+            </div>
+          </div>
+          <nav class="nav_mobile verre fort" aria-label="Navigation de l application">
+            <button class="item actif" data-nav="accueil" aria-label="Accueil"><svg class="ic" style="width:21px;height:21px"><use href="#i-home"/></svg></button>
+            <button class="item" data-nav="favoris" aria-label="Favoris"><svg class="ic" style="width:21px;height:21px"><use href="#i-heart"/></svg></button>
+            <button class="item centre" data-nav="lecture" aria-label="Lecture"><svg class="ic"><use href="#i-play"/></svg></button>
+            <button class="item" data-nav="dl" aria-label="Téléchargements"><svg class="ic" style="width:21px;height:21px"><use href="#i-dl"/></svg></button>
+            <button class="item" data-nav="profil" aria-label="Profil"><svg class="ic" style="width:21px;height:21px"><use href="#i-user"/></svg></button>
+          </nav>
+        </div>
+      </div>
+      <p class="legende_tel">Écran d'accueil</p>
+    </div>
+
+    <!-- Téléphone 2 : profil -->
+    <div class="bloc_tel reveal">
+      <div class="telephone" id="tel_profil">
+        <div class="ecran">
+          <div class="island"></div>
+          <div class="tel_scroll">
+            <div class="profil_wrap">
+              <img id="profil_img" src="j1.png" alt="Photo de Aya Traoré">
+              <div class="viseur" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            </div>
+            <div class="profil_panneau verre fort montre" id="profil_panneau">
+              <span class="poignee"></span>
+              <h3 class="nom_profil" id="profil_nom">AYA<br>TRAORÉ</h3>
+              <p class="profil_id" id="profil_id">@aya.tr</p>
+              <p class="profil_desc" id="profil_desc">Championne nationale du 100 mètres. Elle court pour aller plus vite, encore et toujours.</p>
+              <div class="stats" id="profil_stats"></div>
+              <div class="profil_chips" id="profil_chips"></div>
+              <div class="vignettes" id="profil_vignettes" style="margin-top:18px">
+                <img src="j2.png" alt="Temps fort 1"><img src="j3.png" alt="Temps fort 2"><img src="j4.png" alt="Temps fort 3"><img src="j5.png" alt="Temps fort 4"><img src="j6.png" alt="Temps fort 5"><img src="j7.png" alt="Temps fort 6">
+              </div>
+              <div class="vignettes_nav">
+                <button class="fleche_ronde" id="vig_g" aria-label="Vignettes précédentes"><svg class="ic"><use href="#i-chevleft"/></svg></button>
+                <button class="fleche_ronde" id="vig_d" aria-label="Vignettes suivantes"><svg class="ic"><use href="#i-chevright"/></svg></button>
+              </div>
+              <div class="commentaire">
+                <img src="j2.png" alt="Avatar de Karim Bensaïd">
+                <div>
+                  <p class="com_texte">Ce départ est irréel. Huit enjambées et la course était déjà finie.</p>
+                  <p class="com_nom">Karim Bensaïd</p>
+                  <p class="com_id">@karim.bs</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="profil_actions">
+            <button class="btn_retour verre leger" id="btn_retour_profil" aria-label="Retour"><svg class="ic" style="width:19px;height:19px"><use href="#i-arrl"/></svg></button>
+            <button class="btn_noir" id="btn_suivre_profil"><svg class="ic"><use href="#i-plus"/></svg><span>Suivre</span></button>
+          </div>
+        </div>
+      </div>
+      <p class="legende_tel">Profil athlète</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ÉCRAN 3 : STORY DE LA MARQUE ================= -->
+<section class="section_stories" id="stories">
+  <div class="tete_section reveal">
+    <p class="micro">Stories</p>
+    <h2 class="titre_section">LE FORMAT QUI<br>FAIT RÉAGIR</h2>
+    <p class="sous_section">Un visuel vertical, cinq arguments, zéro temps mort. Voici la story officielle de la marque.</p>
+  </div>
+  <div class="reveal" style="margin-top:56px;display:flex;justify-content:center">
+    <article class="story" aria-label="Story de la marque Sportvision">
+      <div class="traits"></div>
+      <div class="story_interieur">
+        <header class="story_marque">
+          <div class="story_logo"><img src="logov.jpeg" alt="Logo Sportvision"></div>
+          <p class="story_nom">SPORTVISION</p>
+          <p class="story_slogan">voir le sport autrement</p>
+        </header>
+        <div class="story_corps">
+          <h3 class="titre_geant">LE SPORT<br>EN HAUTE<br><span class="mot_degrade">VISION</span></h3>
+          <div class="filet_degrade"></div>
+          <p class="story_sous">La plateforme des temps forts</p>
+          <p class="story_phrase">Chaque soir, vos matchs deviennent des <strong class="cyan">résumés de trois minutes</strong>, prêts à être partagés.</p>
+          <ul class="story_liste">
+            <li class="ligne_service">
+              <span class="cercle"><svg class="ic"><use href="#i-zap"/></svg></span>
+              <span class="separateur"></span>
+              <span class="ligne_texte"><span class="titre">Résumés express</span><span class="texte">L'essentiel du match en moins de trois minutes.</span></span>
+            </li>
+            <li class="ligne_service">
+              <span class="cercle"><svg class="ic"><use href="#i-video"/></svg></span>
+              <span class="separateur"></span>
+              <span class="ligne_texte"><span class="titre">Caméras intelligentes</span><span class="texte">Chaque action clé est détectée et découpée automatiquement.</span></span>
+            </li>
+            <li class="ligne_service">
+              <span class="cercle"><svg class="ic"><use href="#i-users"/></svg></span>
+              <span class="separateur"></span>
+              <span class="ligne_texte"><span class="titre">Profils d'athlètes</span><span class="texte">Statistiques, temps forts et progression de chaque joueur.</span></span>
+            </li>
+            <li class="ligne_service">
+              <span class="cercle"><svg class="ic"><use href="#i-dl"/></svg></span>
+              <span class="separateur"></span>
+              <span class="ligne_texte"><span class="titre">Mode hors ligne</span><span class="texte">Téléchargez vos résumés et regardez les partout.</span></span>
+            </li>
+            <li class="ligne_service">
+              <span class="cercle"><svg class="ic"><use href="#i-share"/></svg></span>
+              <span class="separateur"></span>
+              <span class="ligne_texte"><span class="titre">Partage instantané</span><span class="texte">Un geste et votre moment préféré est en ligne.</span></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<footer class="pied">
+  <img src="logov.jpeg" alt="Logo Sportvision">
+  <span style="font-weight:700;color:rgba(255,255,255,.85)">Sportvision</span>
+  <span class="sep">·</span><span>© 2025</span>
+  <span class="sep">·</span><span>Voir le sport autrement</span>
+</footer>
+
+<!-- Popover générique -->
+<div class="popover verre fort" id="popover" role="menu" hidden></div>
+
+<!-- Zone des toasts -->
+<div class="zone_toasts" id="toasts" aria-live="polite"></div>
+
+<!-- Modale contact -->
+<div class="voile_modale" id="modale_contact" role="dialog" aria-modal="true" aria-label="Écrire à Sportvision">
+  <div class="modale verre fort">
+    <div class="modale_tete">
+      <h3>Écrivez nous</h3>
+      <button class="bouton_rond verre leger" id="fermer_modale" aria-label="Fermer" style="width:38px;height:38px"><svg class="ic" style="width:16px;height:16px"><use href="#i-x"/></svg></button>
+    </div>
+    <form class="grille_form" id="form_contact" novalidate>
+      <div class="champ">
+        <label for="f_nom">Votre nom</label>
+        <input id="f_nom" name="nom" placeholder="Amina Diallo" autocomplete="name">
+        <span class="err">Ajoutez votre nom</span>
+      </div>
+      <div class="champ">
+        <label for="f_mail">Votre email</label>
+        <input id="f_mail" name="email" type="email" placeholder="amina@exemple.fr" autocomplete="email">
+        <span class="err">Cet email semble invalide</span>
+      </div>
+      <div class="champ large">
+        <label for="f_msg">Votre message</label>
+        <textarea id="f_msg" name="message" placeholder="Bonjour, je voudrais proposer un résumé…"></textarea>
+        <span class="err">Votre message est vide</span>
+      </div>
+      <div class="actions_modale large" style="grid-column:1/-1">
+        <button type="submit" class="btn_primaire"><svg class="ic" style="width:15px;height:15px"><use href="#i-send"/></svg>Envoyer le message</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+/* ===== Utilitaires ===== */
+const $=(s,c=document)=>c.querySelector(s);
+const $$=(s,c=document)=>[...c.querySelectorAll(s)];
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const scrollVers=(sel,block='start')=>{const el=typeof sel==='string'?$(sel):sel;if(el)el.scrollIntoView({behavior:reduced?'auto':'smooth',block});};
+
+/* Halo qui suit la souris sur les surfaces de verre */
+ $$('.verre').forEach(el=>{
+  el.addEventListener('pointermove',e=>{
+    const r=el.getBoundingClientRect();
+    el.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
+    el.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
+  });
+});
+
+/* Apparition au scroll */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}}),{threshold:.12});
+ $$('.reveal').forEach(el=>io.observe(el));
+
+/* ===== Toasts ===== */
+function toast(msg,ic='i-check'){
+  const z=$('#toasts'),t=document.createElement('div');
+  t.className='toast verre fort';
+  t.innerHTML=`<svg class="ic"><use href="#${ic}"/></svg><span></span>`;
+  t.lastElementChild.textContent=msg;
+  z.appendChild(t);
+  setTimeout(()=>{t.classList.add('part');setTimeout(()=>t.remove(),320);},2600);
+}
+
+/* ===== Popover générique ===== */
+const pop=$('#popover');
+let popOuvert=false;
+function openPopover(anchor,data){
+  pop.innerHTML='';
+  if(data.titre){const p=document.createElement('p');p.className='pop_titre';p.textContent=data.titre;pop.appendChild(p);}
+  data.items.forEach(it=>{
+    const b=document.createElement('button');b.className='pop_item';b.type='button';
+    b.innerHTML=`<svg class="ic"><use href="#${it.ic}"/></svg><span></span>`+(it.meta?`<em class="pop_meta"></em>`:'');
+    b.querySelector('span').textContent=it.label;
+    if(it.meta)b.querySelector('.pop_meta').textContent=it.meta;
+    b.addEventListener('click',()=>{fermerPop();it.act&&it.act();});
+    pop.appendChild(b);
+  });
+  pop.hidden=false;popOuvert=true;
+  const r=anchor.getBoundingClientRect(),w=pop.offsetWidth,h=pop.offsetHeight;
+  let left=Math.min(Math.max(12,r.left),innerWidth-w-12);
+  let top=r.bottom+10;
+  if(top+h>innerHeight-12)top=Math.max(12,r.top-h-10);
+  pop.style.left=left+'px';pop.style.top=top+'px';
+}
+function fermerPop(){pop.hidden=true;popOuvert=false;}
+document.addEventListener('click',e=>{
+  if(!popOuvert)return;
+  if(pop.contains(e.target)||e.target.closest('[data-pop]'))return;
+  fermerPop();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){fermerPop();fermerModale();}});
+
+const POPOVERS={
+  dots:{titre:'Options',items:[
+    {ic:'i-heart',label:'Ajouter aux favoris',act:()=>toast('Ajouté aux favoris','i-heart')},
+    {ic:'i-dl',label:'Télécharger le résumé',act:()=>toast('Résumé téléchargé','i-dl')},
+    {ic:'i-share',label:'Copier le lien',act:copierLien},
+  ]},
+  bell:{titre:'Notifications',items:[
+    {ic:'i-zap',label:'La finale commence, rejoignez le direct',meta:'à l instant',act:()=>{scrollVers('#zone_hero','center');jouerVideo();}},
+    {ic:'i-play',label:'Nouveau résumé de Aya Traoré',meta:'Il y a 12 min',act:()=>{loadProfil('aya');scrollVers('#tel_profil','center');}},
+    {ic:'i-eye',label:'Votre clip a dépassé 100 000 vues',meta:'Il y a 1 h',act:()=>toast('Bravo pour les vues !','i-eye')},
+  ]},
+  profil:{titre:'Amina Diallo',items:[
+    {ic:'i-user',label:'Mon profil',act:()=>{loadProfil('aya');scrollVers('#tel_profil','center');}},
+    {ic:'i-heart',label:'Mes favoris',act:()=>scrollVers('#zone_recent','start')},
+    {ic:'i-x',label:'Se déconnecter',act:()=>toast('À bientôt, Amina !','i-user')},
+  ]},
+};
+ $$('[data-pop]').forEach(b=>b.addEventListener('click',e=>{
+  e.stopPropagation();openPopover(b,POPOVERS[b.dataset.pop]);
+  if(b.dataset.pop==='bell')$$('.point_notif').forEach(p=>p.style.display='none');
+}));
+function copierLien(){
+  const lien='https://sportvision.app/finale';
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(lien).then(()=>toast('Lien copié')).catch(()=>toast('Lien copié'));
+  }else{toast('Lien copié');}
+}
+
+/* ===== Vidéo du hero et carrousel de programmes ===== */
+const video=$('#video_hero'),btnReg=$('#btn_regarder'),useReg=$('#use_reg'),lblReg=$('#lbl_reg');
+function jouerVideo(){video.play().catch(()=>{});}
+function majBoutonReg(){
+  useReg.setAttribute('href',video.paused?'#i-play':'#i-pause');
+  lblReg.textContent=video.paused?'Regarder':'Mettre en pause';
+}
+btnReg.addEventListener('click',()=>{video.paused?video.play():video.pause();majBoutonReg();});
+video.addEventListener('play',majBoutonReg);video.addEventListener('pause',majBoutonReg);
+window.addEventListener('load',()=>{video.play().catch(()=>{});setTimeout(majBoutonReg,600);});
+
+const SLIDES=[
+  {chips:['Basket','Finale','Direct'],t:'LA FINALE QUI ENTRE<br>DANS <span class="mot_degrade">L\u2019HISTOIRE</span>',d:"Revivez les trente dernières secondes d'une finale entrée dans la légende, commentée par les deux camps."},
+  {chips:['Athlétisme','Record'],t:'CENT MÈTRES<br>EN 9 SECONDES 84',d:'Le départ, la foulée, la ligne. Un record national tombe et le stade explose.'},
+  {chips:['Football','Remontada'],t:'UNE REMONTADA<br>POUR LA LÉGENDE',d:"Trois buts à zéro à la mi temps, quatre à trois à la fin. Le stade a vibré jusqu'au bout."},
+];
+let slideIdx=0;
+function renduSlide(i){
+  $('#hero_chips').innerHTML=SLIDES[i].chips.map(c=>`<span class="chip">${c}</span>`).join('');
+  $('#hero_titre').innerHTML=SLIDES[i].t;
+  $('#hero_desc').textContent=SLIDES[i].d;
+}
+function changerSlide(n){
+  slideIdx=(n+SLIDES.length)%SLIDES.length;
+  const sw=$('#hero_swap');
+  sw.classList.add('echange');
+  setTimeout(()=>{renduSlide(slideIdx);sw.classList.remove('echange');},250);
+}
+ $('#hero_prec').addEventListener('click',()=>changerSlide(slideIdx-1));
+ $('#hero_suiv').addEventListener('click',()=>changerSlide(slideIdx+1));
+
+/* Bouton Ajouter */
+const btnAj=$('#btn_ajouter');let ajoute=false;
+btnAj.addEventListener('click',()=>{
+  ajoute=!ajoute;
+  btnAj.classList.toggle('ajoute',ajoute);
+  $('#use_aj').setAttribute('href',ajoute?'#i-check':'#i-bookmark');
+  $('#lbl_aj').textContent=ajoute?'Ajouté':'Ajouter';
+  toast(ajoute?'Vidéo ajoutée à votre liste':'Retiré de votre liste',ajoute?'i-check':'i-bookmark');
+});
+
+/* ===== Onglets de l en tête ===== */
+ $$('.onglet').forEach(o=>o.addEventListener('click',()=>{
+  $$('.onglet').forEach(x=>x.classList.remove('actif'));o.classList.add('actif');
+  const c=o.dataset.cible;
+  if(c==='top'){window.scrollTo({top:0,behavior:reduced?'auto':'smooth'});return;}
+  scrollVers(c,o.dataset.block||'start');
+  if(c==='#zone_hero'){const h=$('#zone_hero');h.classList.remove('flash');void h.offsetWidth;h.classList.add('flash');jouerVideo();}
+}));
+
+/* ===== Dock vertical ===== */
+const docks={
+  accueil:()=>window.scrollTo({top:0,behavior:reduced?'auto':'smooth'}),
+  favoris:()=>scrollVers('#zone_recent','start'),
+  dl:()=>toast('Tous vos résumés sont déjà en ligne','i-dl'),
+  profil:()=>{loadProfil('aya');scrollVers('#tel_profil','center');},
+  reglages:()=>toast('Le thème sombre est déjà activé','i-gear'),
+};
+ $$('.dock .icone').forEach(b=>b.addEventListener('click',()=>{
+  $$('.dock .icone').forEach(x=>x.classList.remove('actif'));b.classList.add('actif');
+  docks[b.dataset.dock]&&docks[b.dataset.dock]();
+}));
+
+/* ===== Recherche : filtre en direct ===== */
+const ciblesFiltre=$$('.rangee_athletes .carte_photo, .liste_recente .carte_photo');
+ $('#champ_recherche').addEventListener('input',e=>{
+  const q=e.target.value.trim().toLowerCase();
+  ciblesFiltre.forEach(c=>{
+    const t=(c.dataset.nom||'').toLowerCase();
+    c.classList.toggle('cachee',!!q&&!t.includes(q));
+  });
+});
+ $('#form_recherche').addEventListener('submit',e=>e.preventDefault());
+
+/* ===== Tri de la liste récente ===== */
+const tri=$('#btn_tri'),listeR=$('#liste_recente');
+const ordreInitial=$$('#liste_recente .carte_photo');
+const modes=['Populaire','Récent','Aléatoire'];let mi=0;
+tri.addEventListener('click',()=>{
+  mi=(mi+1)%3;tri.textContent=modes[mi];
+  let ordre;
+  if(mi===0)ordre=ordreInitial.slice();
+  else if(mi===1)ordre=ordreInitial.slice().reverse();
+  else{ordre=ordreInitial.slice();for(let i=ordre.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[ordre[i],ordre[j]]=[ordre[j],ordre[i]];}}
+  ordre.forEach(c=>listeR.appendChild(c));
+});
+
+/* Boutons lecture des résumés */
+ $$('.mini_lecture,.ic_btn').forEach(b=>b.addEventListener('click',()=>toast(`Lecture : ${b.dataset.titre}`,'i-play')));
+
+/* ===== Rangée athlètes : voir tout ===== */
+const rangeeAth=$('#rangee_ath'),btnVoir=$('#btn_voir');let etendu=false;
+btnVoir.addEventListener('click',()=>{
+  etendu=!etendu;rangeeAth.classList.toggle('etendu',etendu);
+  $('#lbl_voir').textContent=etendu?'Réduire':'Voir tout';
+});
+
+/* ===== Données des athlètes et profil mobile ===== */
+const ATH={
+  aya:{img:'j1.png',l1:'AYA',l2:'TRAORÉ',id:'@aya.tr',desc:'Championne nationale du 100 mètres. Elle court pour aller plus vite, encore et toujours.',stats:[['124','Abonnements'],['2,4 M','Abonnés'],['31','Titres']],chips:['100 mètres','Relais 4 x 100','Championnat national','Dakar','Record personnel']},
+  karim:{img:'j2.png',l1:'KARIM',l2:'BENSAÏD',id:'@karim.bs',desc:"Nageur du club olympique. Il vise le mur comme d'autres visent la sortie.",stats:[['89','Abonnements'],['1,1 M','Abonnés'],['12','Titres']],chips:['200 mètres nage libre','Papillon','Jeux africains','Casablanca','Relais']},
+  lea:{img:'j3.png',l1:'LÉA',l2:'MARCHAND',id:'@lea.mh',desc:'Grimpeuse de haut niveau. La hauteur ne lui fait plus peur.',stats:[['210','Abonnements'],['640 000','Abonnés'],['9','Titres']],chips:['Bloc','Difficulté','Coupe du monde','Chamonix','Voie olympique']},
+  theo:{img:'j4.png',l1:'THÉO',l2:'LAMBERT',id:'@theo.lb',desc:'Meneur de jeu et capitaine à 23 ans. Il voit les passes avant tout le monde.',stats:[['74','Abonnements'],['512 000','Abonnés'],['7','Titres']],chips:['Basket','Meneur','Playoffs','Lyon','Trois points']},
+  nour:{img:'j5.png',l1:'NOUR',l2:'HADDAD',id:'@nour.hd',desc:'Escrimeuse au fleuret. Une main de fer et un sens de la feinte.',stats:[['58','Abonnements'],['322 000','Abonnés'],['5','Titres']],chips:['Fleuret','Épée','Grand prix','Tunis','Assaut']},
+  marc:{img:'j6.png',l1:'MARC',l2:'DELAUNAY',id:'@marc.dl',desc:"Cycliste sur route. Il compte les cols comme d'autres comptent les moutons.",stats:[['95','Abonnements'],['870 000','Abonnés'],['14','Titres']],chips:['Route','Contre la montre','Grand col','Grenoble','Maillot jaune']},
+  sofia:{img:'j7.png',l1:'SOFIA',l2:'REYES',id:'@sofia.ry',desc:'Tenniswoman au revers à deux mains. Elle adore les balles de match.',stats:[['141','Abonnements'],['998 000','Abonnés'],['11','Titres']],chips:['Simple dames','Terre battue',"Open d'Australie",'Valence','Tie break']},
+};
+let profilKey='aya';
+function loadProfil(k){
+  const a=ATH[k];if(!a)return;profilKey=k;
+  $('#profil_img').src=a.img;
+  $('#profil_img').alt='Photo de '+a.l1+' '+a.l2;
+  $('#profil_nom').innerHTML=a.l1+'<br>'+a.l2;
+  $('#profil_id').textContent=a.id;
+  $('#profil_desc').textContent=a.desc;
+  $('#profil_stats').innerHTML=a.stats.map(s=>`<div class="stat"><div class="chiffre">${s[0]}</div><div class="libelle">${s[1]}</div></div>`).join('');
+  $('#profil_chips').innerHTML=a.chips.map(c=>`<span class="chip">${c}</span>`).join('');
+  const bs=$('#btn_suivre_profil');bs.classList.remove('suivi');bs.querySelector('span').textContent='Suivre';
+  $('#profil_img').src=a.img;
+  const pan=$('#profil_panneau');pan.classList.remove('montre');void pan.offsetWidth;pan.classList.add('montre');
+}
+ $$('[data-ath]').forEach(b=>b.addEventListener('click',()=>{
+  loadProfil(b.dataset.ath);
+  $$('#rang_avatars .avatar_btn').forEach(x=>x.classList.toggle('actif',x.dataset.ath===b.dataset.ath));
+  scrollVers('#tel_profil','center');
+  const tel=$('#tel_profil');tel.classList.remove('pulse');void tel.offsetWidth;tel.classList.add('pulse');
+}));
+
+/* Vignettes et boutons du profil */
+ $('#vig_g').addEventListener('click',()=>$('#profil_vignettes').scrollBy({left:-150,behavior:'smooth'}));
+ $('#vig_d').addEventListener('click',()=>$('#profil_vignettes').scrollBy({left:150,behavior:'smooth'}));
+ $('#btn_retour_profil').addEventListener('click',()=>{
+  const pan=$('#profil_panneau');pan.classList.remove('montre');void pan.offsetWidth;pan.classList.add('montre');
+});
+const bsP=$('#btn_suivre_profil');let suiviP=false;
+bsP.addEventListener('click',()=>{
+  suiviP=!suiviP;bsP.classList.toggle('suivi',suiviP);
+  bsP.querySelector('span').textContent=suiviP?'Suivi':'Suivre';
+  bsP.querySelector('use').setAttribute('href',suiviP?'#i-check':'#i-plus');
+  const a=ATH[profilKey];
+  toast(suiviP?`Vous suivez ${a.l1.charAt(0)+a.l1.slice(1).toLowerCase()} ${a.l2.charAt(0)+a.l2.slice(1).toLowerCase()}`:'Suivi retiré','i-heart');
+});
+
+/* ===== Cartes mobiles : boutons suivre ===== */
+ $$('.btn_suivre').forEach(b=>b.addEventListener('click',e=>{
+  e.stopPropagation();
+  const suivi=b.classList.toggle('suivi');
+  b.textContent=suivi?'Suivi':'Suivre';
+  const nb=b.closest('.suivre_pilule').querySelector('.nb_abo');
+  let n=parseInt(nb.dataset.n,10)+(suivi?1:0);nb.dataset.n=n;
+  nb.textContent=n.toLocaleString('fr-FR')+' abonnés';
+  toast(suivi?`Vous suivez ${b.dataset.nom}`:'Suivi retiré','i-heart');
+}));
+
+/* ===== Téléphone : en tête et navigation ===== */
+ $('#cloche_mobile').addEventListener('click',()=>{
+  toast('3 nouvelles notifications','i-bell');
+  const p=$('#cloche_mobile .point_notif');if(p)p.style.display='none';
+});
+ $('#avatar_mobile').addEventListener('click',()=>{loadProfil('aya');scrollVers('#tel_profil','center');});
+ $$('#nav_mobile .item, .nav_mobile .item').forEach(b=>b.addEventListener('click',()=>{
+  $$('.nav_mobile .item').forEach(x=>{if(!x.classList.contains('centre'))x.classList.remove('actif');});
+  if(!b.classList.contains('centre'))b.classList.add('actif');
+  if(b.dataset.nav==='lecture')toast('Lecture du temps fort','i-play');
+  if(b.dataset.nav==='profil')scrollVers('#tel_profil','center');
+}));
+
+/* ===== Contact : copie d adresse et modale ===== */
+ $('#copie_mail').addEventListener('click',()=>{
+  const mail='bonjour@sportvision.app';
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(mail).then(()=>toast('Adresse copiée')).catch(()=>toast('Adresse copiée'));}
+  else toast('Adresse copiée');
+});
+const modale=$('#modale_contact');
+function ouvrirModale(){modale.classList.add('ouvre');setTimeout(()=>$('#f_nom').focus(),280);}
+function fermerModale(){modale.classList.remove('ouvre');}
+ $('#btn_ecrire').addEventListener('click',ouvrirModale);
+ $('#fermer_modale').addEventListener('click',fermerModale);
+modale.addEventListener('click',e=>{if(e.target===modale)fermerModale();});
+ $('#form_contact').addEventListener('submit',e=>{
+  e.preventDefault();
+  let ok=true;
+  const nom=$('#f_nom'),mail=$('#f_mail'),msg=$('#f_msg');
+  const set=(el,ok)=>el.closest('.champ').classList.toggle('erreur',!ok);
+  set(nom,nom.value.trim().length>1);ok=ok&&nom.value.trim().length>1;
+  const mOk=/.+@.+\..+/.test(mail.value.trim());set(mail,mOk);ok=ok&&mOk;
+  set(msg,msg.value.trim().length>0);ok=ok&&msg.value.trim().length>0;
+  if(!ok)return;
+  toast('Message envoyé, merci !','i-send');
+  e.target.reset();fermerModale();
+});
+ $$('#form_contact input,#form_contact textarea').forEach(el=>el.addEventListener('input',()=>el.closest('.champ').classList.remove('erreur')));
+
+/* ===== Inclinaison douce des téléphones et de la story ===== */
+if(matchMedia('(pointer:fine)').matches&&!reduced){
+  $$('.telephone,.story').forEach(el=>{
+    el.addEventListener('pointerenter',()=>{el.style.transition='transform .2s ease-out';});
+    el.addEventListener('pointermove',e=>{
+      const r=el.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+      el.style.transform=`perspective(1100px) rotateY(${(x*4).toFixed(2)}deg) rotateX(${(-y*4).toFixed(2)}deg)`;
+    });
+    el.addEventListener('pointerleave',()=>{el.style.transform='';});
+  });
+}
+</script>
+</body>
+</html>
