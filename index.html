@@ -84,7 +84,7 @@ body{background:var(--fond);color:#fff;font-family:'Manrope',sans-serif;overflow
 .recherche input{flex:1;background:none;border:0;outline:none;color:#fff;font-size:14px;min-width:0}
 .recherche input::placeholder{color:var(--texte-2)}
 .onglets{display:flex;gap:4px;}
-.onglet{padding:10px 20px;border-radius:var(--r-pilule);color:rgba(255,255,255,.7);font-weight:500;transition:background .25s,color .25s;white-space:nowrap;}
+.onglet{padding:10px 18px;border-radius:var(--r-pilule);color:rgba(255,255,255,.7);font-weight:500;transition:background .25s,color .25s;white-space:nowrap;}
 .onglet:hover{color:#fff;background:rgba(255,255,255,.08);}
 .onglet.actif{background:#fff;color:#1A0B5C;}
 .entete_actions{display:flex;align-items:center;gap:10px;justify-self:end;}
@@ -98,13 +98,13 @@ body{background:var(--fond);color:#fff;font-family:'Manrope',sans-serif;overflow
 .pp_id{font-size:11px;color:var(--texte-2);display:block;text-align:left}
 .chev{color:var(--texte-2)}
 
-/* ============ Grille accueil : hero agrandi ============ */
+/* ============ Grille accueil ============ */
 .grille_accueil{flex:1;display:grid;gap:var(--gap);grid-template-columns:23% 1fr;grid-template-rows:minmax(400px,58vh) auto;grid-template-areas:"recent hero" "recent app";min-height:0;}
 .zone_recent{grid-area:recent;min-height:0;display:flex;flex-direction:column;gap:16px;}
 .zone_hero{grid-area:hero;}
 .zone_app{grid-area:app;display:grid;grid-template-columns:minmax(0,1fr) clamp(300px,26vw,400px);gap:var(--gap);align-items:stretch;min-height:0;}
 
-/* ============ Hero vidéo agrandi ============ */
+/* ============ Hero vidéo ============ */
 .zone_hero{position:relative;overflow:hidden;border-radius:32px;background:linear-gradient(135deg,#123A1E,#0A0620);}
 .zone_hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(1.2) contrast(1.08) brightness(1.04);opacity:0;transition:opacity .8s ease;}
 .zone_hero video.pret{opacity:1;}
@@ -123,7 +123,7 @@ body{background:var(--fond);color:#fff;font-family:'Manrope',sans-serif;overflow
 @keyframes tap{50%{transform:scale(.99)}}
 .zone_hero.flash{animation:tap .35s ease}
 
-/* ============ Zone application : texte en haut, téléphone au milieu, raccourcis en bas ============ */
+/* ============ Zone application ============ */
 .app_infos{padding:24px;display:flex;flex-direction:column;gap:20px;min-height:0;}
 .app_texte{display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;flex:0 0 auto;}
 .app_texte .titre_zone{font-size:32px;}
@@ -138,7 +138,7 @@ body{background:var(--fond);color:#fff;font-family:'Manrope',sans-serif;overflow
 .carte_action b{display:block;font-size:14px;line-height:1.25}
 .carte_action p{display:block;font-size:12px;color:var(--texte-2);margin-top:4px;line-height:1.4}
 
-/* ============ Aperçu athlètes : grandes photos horizontales ============ */
+/* ============ Aperçu athlètes ============ */
 .zone_ath_mini{padding:18px;display:flex;flex-direction:column;gap:12px;min-height:0;}
 .zone_ath_mini .tete_mini{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
 .zone_ath_mini .titre_zone{font-size:24px;margin-top:4px;}
@@ -150,6 +150,49 @@ body{background:var(--fond);color:#fff;font-family:'Manrope',sans-serif;overflow
 .zone_ath_mini .carte_photo .texte_bas p{font-size:11px;margin-top:0;}
 .zone_ath_mini .btn_voir_mini{margin-top:auto;justify-content:center;}
 
+/* ============ Formules : section d accueil et page dédiée ============ */
+.section_formules{display:flex;flex-direction:column;gap:14px;flex:0 0 auto;}
+.formules_tete{text-align:center;padding:8px 12px 0;}
+.grille_formules{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap);}
+.formule{padding:26px 24px 24px;display:flex;flex-direction:column;gap:10px;}
+.formule.populaire{background:linear-gradient(rgba(32,13,98,.55),rgba(32,13,98,.30)) padding-box,var(--degrade) border-box;border:1.5px solid transparent;box-shadow:0 30px 80px rgba(20,6,80,.55),0 0 70px rgba(0,200,242,.16);padding-top:32px;}
+.formule .f_nom{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:30px;line-height:1;}
+.formule .f_prix{font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:40px;line-height:1;display:flex;align-items:baseline;gap:8px;}
+.formule .f_prix span{font-size:11.5px;color:var(--texte-2);font-weight:500;text-transform:uppercase;letter-spacing:.08em;}
+.formule .f_accroche{color:var(--texte-2);font-size:13.5px;line-height:1.5;}
+.f_liste{list-style:none;display:flex;flex-direction:column;gap:9px;margin:6px 0 auto;padding:12px 0 0;border-top:1px solid rgba(255,255,255,.1);}
+.f_liste li{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:rgba(255,255,255,.9);line-height:1.4;}
+.f_liste .ic{width:16px;height:16px;color:var(--cyan);flex:0 0 auto;margin-top:2px;}
+.formule .btn_primaire{justify-content:center;margin-top:16px;}
+.badge_pop{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--degrade);color:#fff;font-family:'Chakra Petch',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:7px 16px;border-radius:var(--r-pilule);box-shadow:0 8px 24px rgba(212,44,240,.35);white-space:nowrap;}
+.note_prix{text-align:center;color:var(--texte-2);font-size:13px;padding:2px 12px;}
+.note_prix b{color:var(--cyan);font-weight:700;}
+
+/* Page formules détaillée */
+.flux_formules{flex:1;display:flex;flex-direction:column;gap:22px;overflow-y:auto;scrollbar-width:none;min-height:0;}
+.flux_formules::-webkit-scrollbar{width:0}
+.etapes_conversion{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap);flex:0 0 auto;}
+.etape{padding:20px;display:flex;flex-direction:column;gap:10px;}
+.etape .num{width:42px;height:42px;border-radius:50%;background:var(--degrade);display:grid;place-items:center;font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:16px;color:#fff;box-shadow:0 10px 26px rgba(0,110,232,.35);}
+.etape b{font-size:15px;}
+.etape p{color:var(--texte-2);font-size:13px;line-height:1.5;}
+.grille_formules_large{display:grid;grid-template-columns:1fr;gap:14px;flex:0 0 auto;}
+.formule_large{padding:26px;display:grid;grid-template-columns:280px 1fr;gap:26px;align-items:start;}
+.formule_large.populaire{background:linear-gradient(rgba(32,13,98,.55),rgba(32,13,98,.30)) padding-box,var(--degrade) border-box;border:1.5px solid transparent;box-shadow:0 30px 80px rgba(20,6,80,.55),0 0 70px rgba(0,200,242,.16);}
+.badge_pop.statique{position:static;transform:none;align-self:flex-start;margin-bottom:2px;}
+.fl_gauche{display:flex;flex-direction:column;gap:8px;}
+.fl_gauche .f_nom{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:34px;line-height:1;}
+.fl_gauche .f_prix{font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:38px;line-height:1;display:flex;align-items:baseline;gap:8px;margin-top:2px;}
+.fl_gauche .f_prix span{font-size:11.5px;color:var(--texte-2);font-weight:500;text-transform:uppercase;letter-spacing:.08em;}
+.fl_gauche .f_accroche{color:var(--texte-2);font-size:13.5px;line-height:1.5;margin-top:4px;}
+.fl_droite{display:grid;grid-template-columns:1.2fr 1fr;gap:22px;}
+.fl_col h4{font-family:'Chakra Petch',sans-serif;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);margin-bottom:10px;}
+.fl_col ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.fl_col li{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;color:rgba(255,255,255,.9);line-height:1.4;}
+.fl_col li .ic{width:15px;height:15px;color:var(--cyan);flex:0 0 auto;margin-top:2px;}
+.fl_txt{font-size:13.5px;line-height:1.55;color:rgba(255,255,255,.85);}
+.fl_col .btn_primaire{margin-top:14px;}
+
 /* ============ Boutons ============ */
 .btn_primaire{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;border-radius:var(--r-pilule);background:#fff;color:#1A0B5C;font-weight:600;box-shadow:0 10px 30px rgba(255,255,255,.15);transition:transform .2s,background .25s;}
 .btn_primaire:hover{transform:translateY(-2px)}
@@ -160,7 +203,7 @@ body{background:var(--fond);color:#fff;font-family:'Manrope',sans-serif;overflow
 .btn_verre.petit{padding:10px 18px;font-size:13px}
 .btn_verre .ic{width:15px;height:15px}
 
-/* ============ Colonne gauche ============ */
+/* ============ Colonne gauche : nos réalisations et shorts ============ */
 .carte_col{padding:14px;display:flex;flex-direction:column;min-height:0;}
 .carte_col.un{flex:1.35}
 .carte_col.deux{flex:1}
@@ -462,6 +505,10 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
   .grille_accueil{grid-template-columns:32% 1fr;}
   .zone_app{grid-template-columns:1fr;}
   .app_raccourcis{grid-template-columns:repeat(2,1fr);}
+  .grille_formules{grid-template-columns:repeat(2,1fr);}
+  .formule_large{grid-template-columns:1fr;gap:18px;}
+  .fl_droite{grid-template-columns:1fr;}
+  .etapes_conversion{grid-template-columns:1fr;}
   .story_grille{grid-template-columns:1fr;}
   .story_grille .story{height:auto;width:min(430px,94vw);margin:0 auto;}
   .argument{flex:none}
@@ -470,9 +517,10 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
 }
 @media (max-width:1023px){
   .entete{grid-template-columns:auto auto 1fr;gap:10px;}
-  .recherche{width:170px;}
+  .recherche{width:150px;}
   .pp_txt{display:none}
   .pilule_profil{padding:5px}
+  .onglet{padding:10px 14px}
 }
 @media (max-width:767px){
   .ecran_desktop{padding:0}
@@ -502,6 +550,10 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
   .zone_recent{order:2;margin:0 14px;gap:14px}
   .liste_recente{max-height:420px}
   .une_liste{max-height:320px}
+  .section_formules{margin:18px 14px 0}
+  .grille_formules{grid-template-columns:1fr;}
+  .formule.populaire{margin-top:14px;}
+  .flux_formules{padding:0 14px;overflow:visible}
   .page{padding:0 0 18px}
   .page_tete{padding:20px 16px 0}
   .services_flux{padding:0 14px;gap:24px}
@@ -561,6 +613,7 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
   <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></symbol>
   <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></symbol>
   <symbol id="i-camera" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></symbol>
 </svg>
 
 <!-- Décor de fond -->
@@ -571,7 +624,7 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
 <div class="ecran_desktop" style="padding:28px 24px 12px">
   <div class="cadre verre">
 
-    <!-- En tête global -->
+    <!-- En tête global : un onglet Formules de plus -->
     <header class="entete verre leger">
       <div class="entete_gauche">
         <button class="bouton_logo" data-aller="accueil" aria-label="Aller à l accueil">
@@ -586,6 +639,7 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
         <button class="onglet actif" data-page="accueil">Accueil</button>
         <button class="onglet" data-page="athletes">Athlètes</button>
         <button class="onglet" data-page="services">Services</button>
+        <button class="onglet" data-page="formules">Formules</button>
         <button class="onglet" data-scroll="footer">Contact</button>
       </nav>
       <div class="entete_actions">
@@ -608,8 +662,8 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
         <aside class="zone_recent reveal">
           <div class="carte_col un verre leger">
             <div class="carte_tete">
-              <svg class="ic"><use href="#i-zap"/></svg>
-              <h3>Retour sur match</h3>
+              <svg class="ic"><use href="#i-trophy"/></svg>
+              <h3>Nos réalisations</h3>
               <button class="tri" id="btn_tri">Populaire</button>
             </div>
             <div class="liste_recente" id="liste_recente">
@@ -704,7 +758,7 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
           </div>
         </aside>
 
-        <!-- Hero vidéo agrandi -->
+        <!-- Hero vidéo -->
         <section class="zone_hero reveal" id="zone_hero" aria-label="Vidéo à la une">
           <video id="video_hero" src="herov.mp4" autoplay muted loop playsinline preload="auto"></video>
           <div class="hero_teinte"></div>
@@ -719,7 +773,7 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
           </div>
         </section>
 
-        <!-- Application : texte en haut, téléphone au milieu, raccourcis en bas -->
+        <!-- Application -->
         <section class="zone_app reveal" id="zone_app" aria-label="L application Sportvision et nos athlètes">
 
           <div class="app_infos verre leger">
@@ -812,9 +866,9 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
                 <span class="rond_ic"><svg class="ic"><use href="#i-play"/></svg></span>
                 <span><b>Shorts de 20 secondes</b><p>Un geste technique, un cadre vertical, une barre de progression.</p></span>
               </button>
-              <button class="carte_action verre leger" data-aller="services">
-                <span class="rond_ic"><svg class="ic"><use href="#i-star"/></svg></span>
-                <span><b>Nos services</b><p>Image, contenu et communication pour joueurs, clubs et événements.</p></span>
+              <button class="carte_action verre leger" data-aller="formules">
+                <span class="rond_ic"><svg class="ic"><use href="#i-tag"/></svg></span>
+                <span><b>Nos formules</b><p>Six offres claires avec des prix annoncés, pour chaque besoin.</p></span>
               </button>
               <button class="carte_action verre leger" data-aller="story">
                 <span class="rond_ic"><svg class="ic"><use href="#i-share"/></svg></span>
@@ -823,7 +877,7 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
             </div>
           </div>
 
-          <!-- Nos athlètes : quatre grandes photos horizontales qui remplissent tout l espace -->
+          <!-- Nos athlètes -->
           <aside class="zone_ath_mini verre leger" aria-label="Nos athlètes, aperçu">
             <div class="tete_mini">
               <div>
@@ -854,8 +908,18 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
           </aside>
 
         </section>
-
       </div>
+
+      <!-- Section formules : au dessus du pied de page, 3 cartes en haut, 3 en dessous -->
+      <section class="section_formules" aria-label="Nos formules et tarifs">
+        <div class="formules_tete reveal">
+          <p class="micro">Tarifs</p>
+          <h2 class="titre_section">NOS <span class="mot_degrade">FORMULES</span></h2>
+          <p class="sous_section">Trois formules pour les joueurs, trois pour les clubs et les événements. Des prix annoncés, sans surprise, et un devis sur mesure si votre besoin sort du cadre.</p>
+        </div>
+        <div class="grille_formules reveal" id="grille_formules_accueil"></div>
+        <p class="note_prix reveal">Prix indicatifs, sans engagement. Besoin d'autre chose ? <b>Un devis gratuit en 24 heures.</b></p>
+      </section>
     </section>
 
     <!-- ================= PAGE ATHLÈTES ================= -->
@@ -1040,8 +1104,46 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
         </section>
 
         <div class="services_cta reveal">
-          <button class="btn_primaire" data-scroll="footer"><svg class="ic" style="width:15px;height:15px"><use href="#i-send"/></svg>Parlons de votre projet</button>
-          <button class="btn_verre" data-aller="athletes"><svg class="ic" style="width:15px;height:15px"><use href="#i-users"/></svg>Voir nos athlètes</button>
+          <button class="btn_primaire" data-cta-sujet="Projet sur mesure"><svg class="ic" style="width:15px;height:15px"><use href="#i-send"/></svg>Parlons de votre projet</button>
+          <button class="btn_verre" data-aller="formules"><svg class="ic" style="width:15px;height:15px"><use href="#i-tag"/></svg>Voir nos formules</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= PAGE FORMULES ================= -->
+    <section class="page" id="page_formules" hidden>
+      <div class="page_tete reveal">
+        <p class="micro">Tarifs</p>
+        <h2 class="titre_section">CHOISIR VOTRE <span class="mot_degrade">FORMULE</span></h2>
+        <p class="sous_section">Six formules expliquées en détail : pour qui, ce qui est inclus, et ce qui se passe après votre clic. Le bouton de chaque formule prépare votre message, il ne reste qu'à l'envoyer.</p>
+      </div>
+      <div class="flux_formules">
+
+        <div class="etapes_conversion reveal">
+          <div class="etape verre leger">
+            <span class="num">1</span>
+            <b>Choisissez votre formule</b>
+            <p>Cliquez sur le bouton de la formule qui vous correspond : le sujet de votre message est préparé automatiquement dans le formulaire de contact.</p>
+          </div>
+          <div class="etape verre leger">
+            <span class="num">2</span>
+            <b>Nous vous rappelons</b>
+            <p>Sous 24 heures ouvrées, un appel permet de comprendre votre objectif, votre calendrier et de planifier le premier tournage.</p>
+          </div>
+          <div class="etape verre leger">
+            <span class="num">3</span>
+            <b>Vous brillez</b>
+            <p>Tournage, montage, livraison : vos contenus arrivent prêts à publier, au rythme de votre formule, via une plateforme sécurisée.</p>
+          </div>
+        </div>
+
+        <div class="grille_formules_large reveal" id="liste_formules"></div>
+
+        <p class="note_prix reveal">Tous les prix sont indicatifs et sans engagement. Votre besoin sort du cadre ? <b>Un devis sur mesure est gratuit et répond en 24 heures.</b></p>
+        <div class="services_cta reveal">
+          <button class="btn_primaire" data-cta-sujet="Projet sur mesure"><svg class="ic" style="width:15px;height:15px"><use href="#i-send"/></svg>Demander un devis sur mesure</button>
+          <button class="btn_verre" data-aller="services"><svg class="ic" style="width:15px;height:15px"><use href="#i-star"/></svg>Voir tous nos services</button>
         </div>
 
       </div>
@@ -1100,7 +1202,7 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
           </div>
           <div class="story_cta">
             <button class="btn_primaire" data-scroll="footer"><svg class="ic" style="width:15px;height:15px"><use href="#i-send"/></svg>Nous écrire</button>
-            <button class="btn_verre" data-aller="services"><svg class="ic" style="width:15px;height:15px"><use href="#i-star"/></svg>Nos services</button>
+            <button class="btn_verre" data-aller="formules"><svg class="ic" style="width:15px;height:15px"><use href="#i-tag"/></svg>Nos formules</button>
           </div>
         </div>
       </div>
@@ -1162,6 +1264,7 @@ button.ligne_contact:hover{background:rgba(255,255,255,.08)}
       <button class="lien_pied" data-aller="accueil"><svg class="ic"><use href="#i-home"/></svg>Accueil</button>
       <button class="lien_pied" data-aller="athletes"><svg class="ic"><use href="#i-users"/></svg>Nos athlètes</button>
       <button class="lien_pied" data-aller="services"><svg class="ic"><use href="#i-star"/></svg>Nos services</button>
+      <button class="lien_pied" data-aller="formules"><svg class="ic"><use href="#i-tag"/></svg>Nos formules</button>
       <button class="lien_pied" data-aller="story"><svg class="ic"><use href="#i-play"/></svg>Notre story</button>
       <p class="f_copy">Sportvision · © 2025</p>
     </nav>
@@ -1302,6 +1405,82 @@ const ATH={
     com:["Son centre a trouvé la tête du numéro 9 au millimètre.",'theo']},
 };
 
+/* ===== Données : six formules avec prix fictifs ===== */
+const FORMULES={
+  decouverte:{nom:'Découverte',prix:'149 €',periode:'par mois',cible:'Joueurs et débutants',accroche:"Pour faire vos premières armes en ligne et sortir vos premières vidéos.",avantages:['1 résumé de match par mois','2 shorts verticaux de 20 secondes','Étalonnage couleur et sound design','Miniature prête pour les réseaux','Livraison sous 72 heures']},
+  ambition:{nom:'Ambition',prix:'349 €',periode:'par mois',cible:'Joueurs confirmés',accroche:"La formule des joueurs qui veulent être repérés par les clubs.",pop:true,avantages:['2 résumés de match par mois','4 shorts verticaux de 20 secondes','1 interview courte chaque mois','Visuel dédié pour chaque publication','Livraison sous 48 heures']},
+  signature:{nom:'Signature',prix:'749 €',periode:'par mois',cible:'Talents en vue',accroche:"L'accompagnement complet de votre image, de bout en bout.",avantages:['4 résumés de match par mois','8 shorts verticaux chaque mois','1 interview longue et un inside','Profil joueur mis à jour chaque mois','Livraison sous 24 heures']},
+  club:{nom:'Club',prix:'890 €',periode:'par mois',cible:'Clubs et associations',accroche:"Votre communication prise en main, semaine après semaine.",avantages:['Gestion complète des réseaux sociaux','2 reportages par mois','Couverture d un match par semaine','Espace partenaires valorisé','Livraison sous 48 heures']},
+  evenement:{nom:'Événement',prix:'690 €',periode:'la journée',cible:'Stages et tournois',accroche:"Stages, tournois, journées portes ouvertes : tout est capté.",avantages:['Une journée complète de captation','Reportage photo et vidéo','Publication en temps réel pendant l événement','Banque de vidéos livrée','Livraison sous 5 jours']},
+  saison:{nom:'Saison',prix:'1 490 €',periode:'par mois',cible:'Académies et effectifs',accroche:"Un film de votre saison, match après match, joueur après joueur.",avantages:['Suivi de tout l effectif','Profils de joueurs inclus','Tous les matchs à domicile couverts','1 film de fin de saison','Accompagnement dédié toute l année']},
+};
+/* Les trois du haut, puis les trois du bas, sur l accueil comme sur la page formules */
+const ORDRE_FORMULES=['decouverte','ambition','signature','club','evenement','saison'];
+
+/* ===== Rendu des cartes formules ===== */
+function carteFormule(k){
+  const f=FORMULES[k];
+  const el=document.createElement('article');
+  el.className='formule verre leger'+(f.pop?' populaire':'');
+  el.innerHTML=`
+    ${f.pop?'<span class="badge_pop">La plus choisie</span>':''}
+    <span class="micro">${f.cible}</span>
+    <h3 class="f_nom">${f.nom}</h3>
+    <p class="f_prix">${f.prix}<span>${f.periode}</span></p>
+    <p class="f_accroche">${f.accroche}</p>
+    <ul class="f_liste">${f.avantages.map(a=>`<li><svg class="ic"><use href="#i-check"/></svg>${a}</li>`).join('')}</ul>
+    <button class="btn_primaire" data-formule="${k}">Choisir cette formule<svg class="ic" style="width:15px;height:15px"><use href="#i-arrr"/></svg></button>`;
+  return el;
+}
+function formuleLarge(k){
+  const f=FORMULES[k];
+  const el=document.createElement('article');
+  el.className='formule_large verre leger'+(f.pop?' populaire':'');
+  el.innerHTML=`
+    <div class="fl_gauche">
+      ${f.pop?'<span class="badge_pop statique">La plus choisie</span>':''}
+      <span class="micro">${f.cible}</span>
+      <h3 class="f_nom">${f.nom}</h3>
+      <p class="f_prix">${f.prix}<span>${f.periode}</span></p>
+      <p class="f_accroche">${f.accroche}</p>
+    </div>
+    <div class="fl_droite">
+      <div class="fl_col">
+        <h4>Ce qui est inclus</h4>
+        <ul>${f.avantages.map(a=>`<li><svg class="ic"><use href="#i-check"/></svg>${a}</li>`).join('')}</ul>
+      </div>
+      <div class="fl_col">
+        <h4>Et ensuite</h4>
+        <p class="fl_txt">Vous cliquez, votre message est préparé avec le nom de la formule. Nous vous rappelons sous 24 heures, le premier tournage est planifié dans la semaine, puis les livraisons suivent le rythme de votre offre.</p>
+        <button class="btn_primaire petit" data-formule="${k}">Choisir cette formule<svg class="ic" style="width:14px;height:14px"><use href="#i-arrr"/></svg></button>
+      </div>
+    </div>`;
+  return el;
+}
+ORDRE_FORMULES.forEach(k=>$('#grille_formules_accueil').appendChild(carteFormule(k)));
+ORDRE_FORMULES.forEach(k=>$('#liste_formules').appendChild(formuleLarge(k)));
+
+/* ===== Conversion : un clic sur une formule prépare le message de contact ===== */
+function convertirFormule(k){
+  const f=FORMULES[k];if(!f)return;
+  $('#f_sujet').value='Formule '+f.nom+' ('+f.prix+' '+f.periode+')';
+  toast('Formule '+f.nom+' sélectionnée, dites nous en plus !','i-tag');
+  scrollVers('#footer_contact','start');
+  setTimeout(()=>$('#f_msg').focus({preventScroll:true}),750);
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-formule]');
+  if(!b)return;
+  convertirFormule(b.dataset.formule);
+});
+/* Boutons avec sujet préparé, comme le devis sur mesure des pages services et formules */
+ $$('[data-cta-sujet]').forEach(b=>b.addEventListener('click',()=>{
+  $('#f_sujet').value=b.dataset.ctaSujet;
+  toast('Sujet préparé : '+b.dataset.ctaSujet,'i-tag');
+  scrollVers('#footer_contact','start');
+  setTimeout(()=>$('#f_msg').focus({preventScroll:true}),750);
+}));
+
 /* ===== Fabrique des cartes joueurs ===== */
 function carteAthlete(k){
   const a=ATH[k];
@@ -1321,10 +1500,8 @@ function carteAthlete(k){
     <span class="fleche"><svg class="ic" style="width:18px;height:18px"><use href="#i-arrr"/></svg></span>`;
   return el;
 }
-/* Catalogue complet, uniquement sur la page athlètes */
 const grilleAth=$('#grille_ath');
 Object.keys(ATH).forEach(k=>grilleAth.appendChild(carteAthlete(k)));
-/* Filtres par ligne de jeu */
 const groupes=['Tous','Attaque','Milieu','Défense','Gardien'];
 const contFiltres=$('#filtres_sports');
 groupes.forEach((g,i)=>{
@@ -1415,7 +1592,6 @@ function voisin(k,d){const i=clesAth.indexOf(k);return clesAth[(i+d+clesAth.leng
  $('#pg_prev').addEventListener('click',()=>loadProfil(voisin(profilKey,-1)));
  $('#pg_next').addEventListener('click',()=>loadProfil(voisin(profilKey,1)));
 
-/* Un seul point d entrée : tout ce qui porte data ath ouvre le profil sur la page */
 document.addEventListener('click',e=>{
   const el=e.target.closest('[data-ath]');
   if(!el)return;
@@ -1426,8 +1602,8 @@ document.addEventListener('keydown',e=>{
   if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('[data-ath][role="button"]')){e.preventDefault();openProfil(e.target.dataset.ath);}
 });
 
-/* ===== Router en verre : accueil, athlètes, services, story ; contact dans le pied de page ===== */
-const PAGES=['accueil','athletes','services','story'];
+/* ===== Router : accueil, athlètes, services, formules, story ; contact dans le pied de page ===== */
+const PAGES=['accueil','athletes','services','formules','story'];
 function pageDepuisHash(){
   const h=(location.hash||'').replace(/^#\/?/,'').toLowerCase();
   return PAGES.includes(h)?h:'accueil';
@@ -1597,7 +1773,7 @@ const POPOVERS={
   bell:{titre:'Notifications',items:[
     {ic:'i-zap',label:'Le match de la journée 32 commence, rejoignez le direct',meta:'à l instant',act:()=>{aller('accueil');setTimeout(()=>{const h=$('#zone_hero');h.classList.remove('flash');void h.offsetWidth;h.classList.add('flash');scrollVers('#zone_hero','center');},90);}},
     {ic:'i-play',label:'Nouveau résumé de Aya Traoré',meta:'Il y a 12 min',act:()=>openProfil('aya')},
-    {ic:'i-eye',label:'Votre court a dépassé 100 000 vues',meta:'Il y a 1 h',act:()=>toast('Bravo pour les vues !','i-eye')},
+    {ic:'i-tag',label:'La formule Ambition est à 349 € ce mois ci',meta:'Il y a 2 h',act:()=>aller('formules')},
   ]},
   profil:{titre:'Amina Diallo',items:[
     {ic:'i-user',label:'Mon profil',act:()=>openProfil('aya')},
@@ -1620,7 +1796,7 @@ function copierLien(texte='https://sportvision.app/journee32',msg='Lien copié')
 });
  $('#form_recherche').addEventListener('submit',e=>e.preventDefault());
 
-/* ===== Tri de la liste retour sur match ===== */
+/* ===== Tri de la liste nos réalisations ===== */
 const tri=$('#btn_tri'),listeR=$('#liste_recente');
 const ordreInitial=$$('#liste_recente .carte_recente');
 const modes=['Populaire','Récent','Aléatoire'];let mi=0;
