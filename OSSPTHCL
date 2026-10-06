@@ -1,0 +1,63 @@
+export const C = {
+  fond: "#0A0620",
+  surface: "#140A3C",
+  surfaceHaute: "#20105A",
+  bordure: "rgba(255,255,255,.10)",
+  bordureForte: "rgba(255,255,255,.20)",
+
+  texte: "#FFFFFF",
+  texteDoux: "rgba(255,255,255,.80)",
+  texteFaible: "rgba(255,255,255,.66)",
+
+  accent: "#4B20D9",
+  accentClair: "#006FE8",
+  cyan: "#00C8F2",
+  violet: "#3514A8",
+  violetVif: "#D42CF0",
+  fuchsia: "#F04BE8",
+
+  succes: "#12B76A",
+  alerte: "#E8A33D",
+  danger: "#F0445E",
+
+  succesTexte: "#9FE8C6",
+  alerteTexte: "#F3D49B",
+  alerteTexteChaud: "#F0CE96",
+  dangerTexte: "#FFB4BD",
+  violetTexte: "#C9A7FF",
+  cyanTexte: "#A9E8F8",
+} as const;
+
+/** Dégradé du CSS proposé : cyan, bleu, violet électrique, magenta. */
+export const DEGRADE = [
+  C.cyan,
+  C.accentClair,
+  C.accent,
+  C.violetVif,
+] as const;
+
+export const DEGRADE_DOUX = [
+  "rgba(0,200,242,.28)",
+  "rgba(0,111,232,.40)",
+  "rgba(75,32,217,.55)",
+  "rgba(212,44,240,.42)",
+] as const;
+
+/** Cartes de 24 px et cadres de 36 px, comme dans la référence. */
+export const R = {
+  s: 10,
+  m: 16,
+  l: 24,
+  xl: 36,
+  pill: 999,
+} as const;
+
+export const E = {
+  xs: 6,
+  s: 10,
+  m: 16,
+  l: 24,
+  xl: 32,
+} as const;
+
+export const TOUCHE = 44;
